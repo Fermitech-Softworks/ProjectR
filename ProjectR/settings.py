@@ -37,7 +37,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'character_manager'
+    'character_manager',
+    'bard'
 ]
 
 MIDDLEWARE = [
