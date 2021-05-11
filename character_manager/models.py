@@ -66,12 +66,12 @@ class Personaggio(models.Model):
     carisma = models.IntegerField()
     costituzione = models.IntegerField()
     note = models.TextField(null=True)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    oggetti = models.ManyToManyField(Oggetto, through="Possiede")
-    abilita = models.ManyToManyField(Abilita, through="SaFare")
-    classi = models.ManyToManyField(Classe, through="IstruitoA")
-    incantesimi = models.ManyToManyField(Incantesimo, through="Lancia")
-    specie = models.ForeignKey(Specie, on_delete=models.PROTECT, null=False)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="characters")
+    oggetti = models.ManyToManyField(Oggetto, through="Possiede", related_name="zaino")
+    abilita = models.ManyToManyField(Abilita, through="SaFare", related_name="abilita")
+    classi = models.ManyToManyField(Classe, through="IstruitoA", related_name="classi")
+    incantesimi = models.ManyToManyField(Incantesimo, through="Lancia", related_name="incantesimi")
+    specie = models.ForeignKey(Specie, on_delete=models.PROTECT, null=False, related_name="specie")
 
     def __repr__(self):
         return f"[Personaggio] {self.nome}, di {self.user.username}"
