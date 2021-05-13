@@ -1,6 +1,6 @@
 {
   "short_name": "Rasanhal",
-  "name": "A PbC DnD application",
+  "name": "Rasanhal",
   "icons": [
     {
       "src": "favicon.ico",
@@ -20,6 +20,6 @@
   ],
   "start_url": ".",
   "display": "standalone",
-  "theme_color": "#000000",
-  "background_color": "#ffffff"
+  "background_color": "#254D61",
+  "theme_color": "#282c34"
 }

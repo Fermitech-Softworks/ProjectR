@@ -6,7 +6,7 @@ import Container from "react-bootstrap/Container";
 import Nav from 'react-bootstrap/Nav'
 import React, {useEffect, useState} from "react";
 import {AppContext} from "./libs/Context"
-import { useHistory } from "react-router-dom";
+import {useHistory} from "react-router-dom";
 
 
 function App() {
@@ -14,6 +14,7 @@ function App() {
     const [token, userToken] = useState("")
     const [refresh, refreshToken] = useState("")
     let history = useHistory()
+
     function logoff() {
         userHasAuth(false);
         userToken("");
@@ -28,8 +29,8 @@ function App() {
     }, []);
 
 
-    function onLoad(){
-        if(localStorage.getItem("token")){
+    function onLoad() {
+        if (localStorage.getItem("token")) {
             userToken(localStorage.getItem("token"))
             refreshToken(localStorage.getItem("refresh"))
             userHasAuth(true)
@@ -37,8 +38,8 @@ function App() {
     }
 
     return (
-        <div className="App">
-            <Navbar expand="lg" variant="light" bg="light">
+        <div>
+            <Navbar expand="lg" variant="dark" bg="dark">
                 <Navbar.Brand href="#">Rasanhal</Navbar.Brand>
                 <Navbar.Toggle/>
                 <Navbar.Collapse className="justify-content-end">
@@ -55,9 +56,11 @@ function App() {
                     )}
                 </Navbar.Collapse>
             </Navbar>
-            <AppContext.Provider value={{isAuth, userHasAuth, userToken, refreshToken}}>
-                <Routes/>
-            </AppContext.Provider>
+            <div className="App">
+                <AppContext.Provider value={{isAuth, userHasAuth, userToken, refreshToken}}>
+                    <Routes/>
+                </AppContext.Provider>
+            </div>
         </div>
     );
 }

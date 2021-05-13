@@ -1,5 +1,11 @@
 .App {
   text-align: center;
+  margin-right: 1rem;
+  margin-left: 1rem;
+}
+
+.Navbar{
+  padding-bottom: 1rem;
 }
 
 .App-logo {
