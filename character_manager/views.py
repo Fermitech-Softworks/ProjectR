@@ -15,6 +15,18 @@ class UserViewSet(viewsets.ModelViewSet):
     permission_classes = [AdminOrSelf]
 
 
+class UserDetailViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint that allows to get details about users
+    """
+    serializer_class = UserSerializer
+    permission_classes = [AdminOrSelf]
+
+    def get_queryset(self):
+        user = User.objects.filter(id=self.request.user.id).all()
+        return user
+
+
 class CharacterViewSet(viewsets.ModelViewSet):
     """
     API endpoint that allows characters to be viewed or edited.
@@ -25,3 +37,9 @@ class CharacterViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         characters = Personaggio.objects.filter(user_id=self.request.user.id).all()
         return characters
+
+class CampaignViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint that allows campaigns to be listed
+    """
+    pass

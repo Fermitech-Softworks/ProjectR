@@ -11,6 +11,7 @@ export default function Login() {
     const {userHasAuth} = useAppContext()
     const {userToken} = useAppContext()
     const {refreshToken} = useAppContext()
+    const {userName} = useAppContext()
     const history = useHistory();
 
     function validateForm() {
@@ -32,6 +33,22 @@ export default function Login() {
         return cookieValue;
     }
 
+    async function getUsername(){
+        let token = localStorage.getItem("token")
+        const response = await fetch("http://127.0.0.1:8000/artificier/user/", {
+            method: "GET",
+            credentials:"include",
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'X-CSRFToken': "",
+                'Authorization': "Bearer "+token
+            },
+        }).then(function(response){return response.json()}).then(function(values){
+            userName(values.results[0].username)
+        }).then(function(){history.push("/dashboard")})
+    }
+
     async function HandleSubmit(event) {
         event.preventDefault();
         const csrftoken = getCookie('csrftoken');
@@ -46,15 +63,20 @@ export default function Login() {
                 'X-CSRFToken': csrftoken
             },
             body: JSON.stringify({"username": username, "password": password}),
+        }).then(function(response){
+            return response.json()}).then(function(values){
+            console.log(values)
+            localStorage.setItem("token", values['access'])
+            localStorage.setItem("refresh", values['refresh'])
+            userHasAuth(true)
+            userToken(values['access'])
+            refreshToken(values['refresh'])
+            getUsername()
         });
-        let values = response.json()
-        localStorage.setItem("token", values['access'])
-        localStorage.setItem("refresh", values['refresh'])
-        userHasAuth(true)
-        userToken(values['access'])
-        refreshToken(values['refresh'])
-        history.push("/dashboard")
+
     }
+
+
 
     return (
         <div className="Login">

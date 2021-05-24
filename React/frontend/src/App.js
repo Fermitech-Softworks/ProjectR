@@ -13,6 +13,7 @@ function App() {
     const [isAuth, userHasAuth] = useState(false);
     const [token, userToken] = useState("")
     const [refresh, refreshToken] = useState("")
+    const [username, userName] = useState("")
     let history = useHistory()
 
     function logoff() {
@@ -57,7 +58,7 @@ function App() {
                 </Navbar.Collapse>
             </Navbar>
             <div className="App">
-                <AppContext.Provider value={{isAuth, userHasAuth, userToken, refreshToken}}>
+                <AppContext.Provider value={{isAuth, userHasAuth, userToken, refreshToken, userName}}>
                     <Routes/>
                 </AppContext.Provider>
             </div>
