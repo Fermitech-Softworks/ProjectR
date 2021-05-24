@@ -7,11 +7,11 @@ import CharacterEntry from "./CharacterEntry";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 export default function CharacterList() {
-    const [characterList, setCharacterList] = useState(null);
+    const [characterList, setCharacterList] = useState([]);
     const {userToken} = useAppContext()
 
     useEffect(() => {
-        generateContent();
+        onLoad();
     }, []);
 
     async function onLoad() {
@@ -26,17 +26,10 @@ export default function CharacterList() {
                 'X-CSRFToken': "",
                 'Authorization': "Bearer "+token
             },
-        }).then(function(response){
-            return response.json()
-        }).then(function(values){
-            setCharacterList(values['results'])
-        });
-    }
-
-    async function generateContent(){
-        await onLoad().then(function (){
-
         })
+        const values = await response.json()
+        console.debug(values)
+        setCharacterList(values['results'])
     }
 
 
@@ -45,7 +38,7 @@ export default function CharacterList() {
             <Jumbotron>
                 <h3>I tuoi personaggi </h3>
                 <ListGroup>
-
+                    {characterList.map(char => <CharacterEntry {...char}/>)}
                 </ListGroup>
             </Jumbotron>
         </div>

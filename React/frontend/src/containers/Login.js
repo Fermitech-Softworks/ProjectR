@@ -42,11 +42,11 @@ export default function Login() {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json',
                 'X-CSRFToken': "",
-                'Authorization': "Bearer "+token
-            },
-        }).then(function(response){return response.json()}).then(function(values){
-            userName(values.results[0].username)
-        }).then(function(){history.push("/dashboard")})
+                'Authorization': "Bearer " + token
+            }})
+        const values = await response.json()
+        userName(values.results[0].username)
+        console.log(values)
     }
 
     async function HandleSubmit(event) {
@@ -63,17 +63,16 @@ export default function Login() {
                 'X-CSRFToken': csrftoken
             },
             body: JSON.stringify({"username": username, "password": password}),
-        }).then(function(response){
-            return response.json()}).then(function(values){
-            console.log(values)
-            localStorage.setItem("token", values['access'])
-            localStorage.setItem("refresh", values['refresh'])
-            userHasAuth(true)
-            userToken(values['access'])
-            refreshToken(values['refresh'])
-            getUsername()
-        });
-
+        })
+        const values = await response.json()
+        console.log(values)
+        localStorage.setItem("token", values['access'])
+        localStorage.setItem("refresh", values['refresh'])
+        userHasAuth(true)
+        userToken(values['access'])
+        refreshToken(values['refresh'])
+        const data = await getUsername()
+        history.push("/dashboard")
     }
 
 

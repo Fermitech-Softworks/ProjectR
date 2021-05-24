@@ -3,11 +3,11 @@ import "./Dashboard.css";
 import {useAppContext} from "../libs/Context";
 import Jumbotron from "react-bootstrap/Jumbotron";
 import {ListGroup} from "react-bootstrap";
-export default function CharacterEntry(props) {
+export default function CharacterEntry({nome,...props}) {
 
     return (
         <div className="CharacterEntry">
-            <ListGroup.Item>props.character.name</ListGroup.Item>
+            <ListGroup.Item>{nome}</ListGroup.Item>
         </div>
     );
 }

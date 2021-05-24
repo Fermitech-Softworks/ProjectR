@@ -46,7 +46,7 @@ function App() {
                 <Navbar.Collapse className="justify-content-end">
                     {isAuth ? (
                         <Nav>
-                            <Nav.Link onClick={logoff} href="/">Disconnettiti</Nav.Link>
+                            <Nav.Link onClick={logoff}>Disconnettiti</Nav.Link>
                         </Nav>
                     ) : (
                         <>
@@ -58,7 +58,7 @@ function App() {
                 </Navbar.Collapse>
             </Navbar>
             <div className="App">
-                <AppContext.Provider value={{isAuth, userHasAuth, userToken, refreshToken, userName}}>
+                <AppContext.Provider value={{isAuth, userHasAuth, userToken, refreshToken, userName, token, refresh, username}}>
                     <Routes/>
                 </AppContext.Provider>
             </div>
