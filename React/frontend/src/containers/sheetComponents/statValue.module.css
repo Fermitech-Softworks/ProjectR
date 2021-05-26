@@ -13,15 +13,13 @@
 .Sfondo{
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
+    align-items: center;
     padding: 9px 20px;
 
-    position: static;
     width: 123px;
-    height: 160px;
     left: 0px;
     top: 0px;
-
+    justify-content: center;
     background: rgba(178, 206, 223, 0.75);
     border-radius: 19px;
 
@@ -36,15 +34,14 @@
 .Modificatore{
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
+    align-items: center;
     padding: 21px 30px;
 
-    position: static;
     width: 83px;
     height: 84px;
     left: 20px;
     top: 33px;
-
+    justify-content: center;
     background: #B2CEDF;
     border-radius: 12px;
 
@@ -57,11 +54,6 @@
 }
 
 .ModificatoreTesto{
-    position: static;
-    left: 36.14%;
-    right: 36.14%;
-    top: 25%;
-    bottom: 25%;
 
     font-style: normal;
     font-weight: normal;
@@ -70,7 +62,7 @@
     display: flex;
     align-items: center;
     text-align: center;
-
+    justify-content: center;
     color: #000000;
 
 
@@ -83,7 +75,6 @@
 }
 
 .NomeCaratteristica{
-    position: relative;
     left: 16.26%;
     right: 16.26%;
     top: 5.62%;
@@ -94,7 +85,7 @@
     font-size: 12px;
     line-height: 14px;
     text-align: center;
-
+    justify-content: center;
     color: #000000;
 
 
@@ -109,15 +100,13 @@
 .ValoreCaratteristica{
     display: flex;
     flex-direction: row;
-    align-items: flex-start;
-    padding: 4px 37px;
+    align-items: center;
 
-    position: static;
     width: 82px;
     height: 22px;
     left: 20px;
     top: 129px;
-
+    justify-content: center;
     background: #B2CEDF;
     border-radius: 12px;
 
@@ -130,7 +119,6 @@
 }
 
 .ValoreTesto{
-    position: static;
     left: 45.12%;
     right: 45.12%;
     top: 18.18%;
@@ -153,4 +141,7 @@
     order: 3;
     flex-grow: 0;
     margin: 0px 10px;
+    width: -webkit-fill-available;
+    background: transparent;
+    border: transparent;
 }

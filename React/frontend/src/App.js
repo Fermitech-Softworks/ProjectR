@@ -6,7 +6,7 @@ import Container from "react-bootstrap/Container";
 import Nav from 'react-bootstrap/Nav'
 import React, {useEffect, useState} from "react";
 import {AppContext} from "./libs/Context"
-import {useHistory} from "react-router-dom";
+import {Link, useHistory} from "react-router-dom";
 
 
 
@@ -52,7 +52,7 @@ function App() {
         <div>
             <Navbar expand="lg" variant="dark" bg="dark">
                 {isAuth ? (
-                    <Navbar.Brand>Rasanhal</Navbar.Brand>
+                    <Navbar.Brand><Link to="/dashboard">Rasanhal</Link></Navbar.Brand>
                 ) : (
                     <Navbar.Brand href="/">Rasanhal</Navbar.Brand>
                 )}
