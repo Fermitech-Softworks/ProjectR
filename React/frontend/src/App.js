@@ -9,17 +9,20 @@ import {AppContext} from "./libs/Context"
 import {useHistory} from "react-router-dom";
 
 
+
 function App() {
-    const [isAuth, userHasAuth] = useState(false);
-    const [token, userToken] = useState("")
-    const [refresh, refreshToken] = useState("")
-    const [username, userName] = useState("")
+    const [isAuth, setUserHasAuth] = useState(false);
+    const [token, setUserToken] = useState("")
+    const [refresh, setRefreshToken] = useState("")
+    const [username, setUsername] = useState("")
+    const [address, setAddress] = useState("")
+    const [isSuper, setSuperUser] = useState("")
     let history = useHistory()
 
     function logoff() {
-        userHasAuth(false);
-        userToken("");
-        refreshToken("");
+        setUserHasAuth(false);
+        setUserToken("");
+        setRefreshToken("");
         localStorage.removeItem("token")
         localStorage.removeItem("refresh")
         history.push("/")
@@ -31,17 +34,28 @@ function App() {
 
 
     function onLoad() {
+        console.log("reloading...")
+        if (localStorage.getItem("serverAddress")){
+            setAddress(localStorage.getItem("serverAddress"))
+        }
         if (localStorage.getItem("token")) {
-            userToken(localStorage.getItem("token"))
-            refreshToken(localStorage.getItem("refresh"))
-            userHasAuth(true)
+            setUserToken(localStorage.getItem("token"))
+            setRefreshToken(localStorage.getItem("refresh"))
+            setUserHasAuth(true)
+            setUsername(localStorage.getItem("username"))
+            setSuperUser(localStorage.getItem("isSuperUser"))
+            history.push("/dashboard")
         }
     }
 
     return (
         <div>
             <Navbar expand="lg" variant="dark" bg="dark">
-                <Navbar.Brand href="#">Rasanhal</Navbar.Brand>
+                {isAuth ? (
+                    <Navbar.Brand>Rasanhal</Navbar.Brand>
+                ) : (
+                    <Navbar.Brand href="/">Rasanhal</Navbar.Brand>
+                )}
                 <Navbar.Toggle/>
                 <Navbar.Collapse className="justify-content-end">
                     {isAuth ? (
@@ -58,7 +72,7 @@ function App() {
                 </Navbar.Collapse>
             </Navbar>
             <div className="App">
-                <AppContext.Provider value={{isAuth, userHasAuth, userToken, refreshToken, userName, token, refresh, username}}>
+                <AppContext.Provider value={{isAuth, isSuper, setSuperUser, setUserHasAuth, setUserToken, setRefreshToken, setUsername, setAddress, address, token, refresh, username}}>
                     <Routes/>
                 </AppContext.Provider>
             </div>

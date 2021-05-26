@@ -1,17 +1,20 @@
 import React, {useState} from "react";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
-import "./Login.css";
+import Style from "./Login.module.css";
 import {useAppContext} from "../libs/Context";
-import { useHistory } from "react-router-dom";
+import {useHistory} from "react-router-dom";
 
 export default function Login() {
-    const [username, setUsername] = useState("");
+    const [username, setUsernameF] = useState("");
     const [password, setPassword] = useState("");
-    const {userHasAuth} = useAppContext()
-    const {userToken} = useAppContext()
-    const {refreshToken} = useAppContext()
-    const {userName} = useAppContext()
+    const {setUserHasAuth} = useAppContext()
+    const {setUserToken} = useAppContext()
+    const {setRefreshToken} = useAppContext()
+    const {setUsername} = useAppContext()
+    const {address} = useAppContext()
+    const {setAddress} = useAppContext()
+    const {setSuperUser} = useAppContext()
     const history = useHistory();
 
     function validateForm() {
@@ -33,19 +36,24 @@ export default function Login() {
         return cookieValue;
     }
 
-    async function getUsername(){
+    async function getUsername() {
         let token = localStorage.getItem("token")
-        const response = await fetch("http://127.0.0.1:8000/artificier/user/", {
+        const response = await fetch(address + "/artificier/user/", {
             method: "GET",
-            credentials:"include",
+            credentials: "include",
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json',
                 'X-CSRFToken': "",
                 'Authorization': "Bearer " + token
-            }})
+            }
+        })
         const values = await response.json()
-        userName(values.results[0].username)
+        console.debug(values)
+        setUsername(values.results[0].username)
+        setSuperUser(values.results[0].is_superuser)
+        localStorage.setItem("username", values.results[0].username)
+        localStorage.setItem("isSuperUser", values.results[0].is_superuser)
         console.log(values)
     }
 
@@ -54,39 +62,58 @@ export default function Login() {
         const csrftoken = getCookie('csrftoken');
         var h = new Headers();
         h.append('X-CSRFToken', "csrftoken");
-        const response = await fetch("http://127.0.0.1:8000/api/token/", {
-            method: "POST",
-            credentials:"include",
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-                'X-CSRFToken': csrftoken
-            },
-            body: JSON.stringify({"username": username, "password": password}),
-        })
-        const values = await response.json()
-        console.log(values)
-        localStorage.setItem("token", values['access'])
-        localStorage.setItem("refresh", values['refresh'])
-        userHasAuth(true)
-        userToken(values['access'])
-        refreshToken(values['refresh'])
-        const data = await getUsername()
-        history.push("/dashboard")
+        try {
+            const response = await fetch(address + "/api/token/", {
+                method: "POST",
+                credentials: "include",
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': csrftoken
+                },
+                body: JSON.stringify({"username": username, "password": password}),
+            })
+            if (response.status === 200) {
+                const values = await response.json()
+                console.log(values)
+                localStorage.setItem("token", values['access'])
+                localStorage.setItem("refresh", values['refresh'])
+                localStorage.setItem("serverAddress", address)
+
+                setUserHasAuth(true)
+                setUserToken(values['access'])
+                setRefreshToken(values['refresh'])
+                const data = await getUsername()
+                history.push("/dashboard")
+            } else {
+                alert("Le credenziali inserite non sono corrette.")
+            }
+        } catch (e) {
+            alert("Il server non risponde. Verificare l'indirizzo dell'istanza.")
+        }
+
     }
 
 
-
     return (
-        <div className="Login">
+        <div className={Style.Login}>
             <Form onSubmit={HandleSubmit}>
+                <Form.Group size="lg" controlId="instanceIp">
+                    <Form.Label>Indirizzo del server</Form.Label>
+                    <Form.Control
+                        autoFocus
+                        type="text"
+                        value={address}
+                        onChange={(e) => setAddress(e.target.value)}
+                    />
+                </Form.Group>
                 <Form.Group size="lg" controlId="email">
                     <Form.Label>Username</Form.Label>
                     <Form.Control
                         autoFocus
                         type="text"
                         value={username}
-                        onChange={(e) => setUsername(e.target.value)}
+                        onChange={(e) => setUsernameF(e.target.value)}
                     />
                 </Form.Group>
                 <Form.Group size="lg" controlId="password">

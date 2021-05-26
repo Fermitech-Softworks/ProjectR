@@ -8,7 +8,7 @@ from character_manager.models import *
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ("id", "email", "username", "characters")
+        fields = ("id", "email", "username", "characters", "is_superuser")
 
 
 class AbilitaSerializer(serializers.HyperlinkedModelSerializer):

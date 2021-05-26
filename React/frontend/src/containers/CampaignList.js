@@ -1,5 +1,5 @@
 import React, {useState} from "react";
-import "./Dashboard.css";
+import Style from "./Dashboard.module.css";
 import {useAppContext} from "../libs/Context";
 import Jumbotron from "react-bootstrap/Jumbotron";
 export default function CampaignList() {

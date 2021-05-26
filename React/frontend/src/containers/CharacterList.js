@@ -1,23 +1,39 @@
 import React, {useEffect, useState} from "react";
-import "./Dashboard.css";
+import Style from "./Dashboard.module.css";
 import {useAppContext} from "../libs/Context";
 import Jumbotron from "react-bootstrap/Jumbotron";
 import {ListGroup} from "react-bootstrap";
 import CharacterEntry from "./CharacterEntry";
+import CharacterTable from "./tables/characterTable";
+
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
+import {Link, useHistory} from "react-router-dom";
+
 export default function CharacterList() {
     const [characterList, setCharacterList] = useState([]);
     const {userToken} = useAppContext()
+    const {address} = useAppContext()
+    let history = useHistory()
 
     useEffect(() => {
         onLoad();
-    }, []);
+    }, [userToken]);
+
+    function compare( a, b ) {
+        if ( a.nome < b.nome ){
+            return -1;
+        }
+        if ( a.nome > b.nome ){
+            return 1;
+        }
+        return 0;
+    }
 
     async function onLoad() {
         let token = localStorage.getItem("token")
         console.log(token)
-        const response = await fetch("http://127.0.0.1:8000/artificier/characters/", {
+        const response = await fetch(address+"/artificier/characters/", {
             method: "GET",
             credentials: "include",
             headers: {
@@ -28,15 +44,19 @@ export default function CharacterList() {
             },
         })
         const values = await response.json()
-        console.debug(values)
+        let charData = values['results']
+        charData.sort(compare)
         setCharacterList(values['results'])
     }
 
+    const redirect = (path) =>{
+        history.push(path)
+    }
 
     return (
         <div className="CampaignList">
             <Jumbotron>
-                <h3>I tuoi personaggi </h3>
+                <h3>I tuoi personaggi  <Link to="/character/new">+</Link></h3>
                 <ListGroup>
                     {characterList.map(char => <CharacterEntry {...char}/>)}
                 </ListGroup>
@@ -44,25 +64,3 @@ export default function CharacterList() {
         </div>
     );
 }
-//function GetToken(){
-//    const {userToken} = useAppContext()
-//    return {userToken}
-//}
-//
-//export class CharacterList extends React.Component{
-//
-//    componentDidMount() {
-//        console.log(GetToken)
-//    }
-//
-//    render() {
-//        return(
-//        <div className="CampaignList">
-//            <Jumbotron>
-//                <h3>I tuoi personaggi {GetToken}</h3>
-//            </Jumbotron>
-//        </div>)
-//    }
-//}
-//
-//export default CharacterList

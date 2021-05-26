@@ -1,0 +1,156 @@
+.Container{
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    padding: 0px;
+    margin-top: 1rem;
+    margin-bottom: 4rem;
+    position: relative;
+    width: 123px;
+    height: 160px;
+}
+
+.Sfondo{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 9px 20px;
+
+    position: static;
+    width: 123px;
+    height: 160px;
+    left: 0px;
+    top: 0px;
+
+    background: rgba(178, 206, 223, 0.75);
+    border-radius: 19px;
+
+    /* Inside Auto Layout */
+
+    flex: none;
+    order: 0;
+    flex-grow: 0;
+    margin: 0px 10px;
+}
+
+.Modificatore{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 21px 30px;
+
+    position: static;
+    width: 83px;
+    height: 84px;
+    left: 20px;
+    top: 33px;
+
+    background: #B2CEDF;
+    border-radius: 12px;
+
+    /* Inside Auto Layout */
+
+    flex: none;
+    order: 1;
+    flex-grow: 0;
+    margin: 12px 0px;
+}
+
+.ModificatoreTesto{
+    position: static;
+    left: 36.14%;
+    right: 36.14%;
+    top: 25%;
+    bottom: 25%;
+
+    font-style: normal;
+    font-weight: normal;
+    font-size: 36px;
+    line-height: 42px;
+    display: flex;
+    align-items: center;
+    text-align: center;
+
+    color: #000000;
+
+
+    /* Inside Auto Layout */
+
+    flex: none;
+    order: 0;
+    flex-grow: 0;
+    margin: 10px 0px;
+}
+
+.NomeCaratteristica{
+    position: relative;
+    left: 16.26%;
+    right: 16.26%;
+    top: 5.62%;
+    bottom: 86.88%;
+
+    font-style: normal;
+    font-weight: normal;
+    font-size: 12px;
+    line-height: 14px;
+    text-align: center;
+
+    color: #000000;
+
+
+    /* Inside Auto Layout */
+
+    flex: none;
+    order: 0;
+    flex-grow: 0;
+    margin: 12px 0px;
+}
+
+.ValoreCaratteristica{
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    padding: 4px 37px;
+
+    position: static;
+    width: 82px;
+    height: 22px;
+    left: 20px;
+    top: 129px;
+
+    background: #B2CEDF;
+    border-radius: 12px;
+
+    /* Inside Auto Layout */
+
+    flex: none;
+    order: 2;
+    flex-grow: 0;
+    margin: 12px 0px;
+}
+
+.ValoreTesto{
+    position: static;
+    left: 45.12%;
+    right: 45.12%;
+    top: 18.18%;
+    bottom: 18.18%;
+
+    font-style: normal;
+    font-weight: normal;
+    font-size: 12px;
+    line-height: 14px;
+    /* identical to box height */
+
+    text-align: center;
+
+    color: #000000;
+
+
+    /* Inside Auto Layout */
+
+    flex: none;
+    order: 3;
+    flex-grow: 0;
+    margin: 0px 10px;
+}
