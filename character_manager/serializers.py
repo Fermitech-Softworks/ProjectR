@@ -17,10 +17,10 @@ class AbilitaSerializer(serializers.HyperlinkedModelSerializer):
         depth = 0
 
 
-class ClasseSerializer(serializers.HyperlinkedModelSerializer):
+class ClasseSerializer(serializers.ModelSerializer):
     class Meta:
         model = Classe
-        depth = 0
+        fields = "__all__"
 
 
 class IncantesimoSerializer(serializers.HyperlinkedModelSerializer):
@@ -29,7 +29,7 @@ class IncantesimoSerializer(serializers.HyperlinkedModelSerializer):
         depth = 0
 
 
-class SpecieSerializer(serializers.HyperlinkedModelSerializer):
+class SpecieSerializer(serializers.ModelSerializer):
     class Meta:
         model = Specie
         fields = "__all__"

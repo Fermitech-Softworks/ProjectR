@@ -2,8 +2,14 @@ from django.contrib.auth.models import User
 from .models import *
 from rest_framework import viewsets
 from rest_framework import permissions
-from character_manager.serializers import UserSerializer, PersonaggioSerializer
+from character_manager.serializers import UserSerializer, PersonaggioSerializer, SpecieSerializer, ClasseSerializer
 from .permissions import AdminOrSelf
+from rest_framework.permissions import BasePermission, IsAuthenticated, SAFE_METHODS
+
+
+class ReadOnly(BasePermission):
+    def has_permission(self, request, view):
+        return request.method in SAFE_METHODS
 
 
 class UserViewSet(viewsets.ModelViewSet):
@@ -37,6 +43,25 @@ class CharacterViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         characters = Personaggio.objects.filter(user_id=self.request.user.id).all()
         return characters
+
+
+class SpecieViewSet(viewsets.ModelViewSet):
+    """
+    Api endpoint that allows the retrival of specie data
+    """
+    queryset = Specie.objects.all()
+    serializer_class = SpecieSerializer
+    permission_classes = [IsAuthenticated|ReadOnly]
+
+
+class ClassViewSet(viewsets.ModelViewSet):
+    """
+    Api endpoint that allows the retrival of specie data
+    """
+    queryset = Classe.objects.all()
+    serializer_class = ClasseSerializer
+    permission_classes = [IsAuthenticated|ReadOnly]
+
 
 class CampaignViewSet(viewsets.ModelViewSet):
     """
