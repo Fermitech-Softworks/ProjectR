@@ -35,7 +35,7 @@ export default function CharacterWizard() {
     const [proficiency, setProficiency] = useState(0)
     const [classeArmatura, setClasseArmatura] = useState(10)
     const [specie, setSpecie] = useState({})
-    const [classe, setClasse] = useState([{nome:"Default", dettagli:"Test"},])
+    const [classe, setClasse] = useState([])
 
     const exporter = {
         nome, setNome, pvAttuali, setPvAttuali, pvMax, setPvMax, livello, setLivello,

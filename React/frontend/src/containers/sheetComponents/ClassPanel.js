@@ -25,7 +25,7 @@ export default function ClassePanel({classe, setClasse}) {
                     <ClassSelector {...exporter}/>
                     <div>
                         <Accordion>
-                            {classe.map(c => <ClassDetails {...c}/>)}
+                            {classe.map(c => <ClassDetails classe={c} setClasse={setClasse} listaClassi={classe}/>)}
                         </Accordion>
                     </div>
                 </div>

@@ -10,17 +10,49 @@ import SpecieSelector from "./SpecieSelector";
 import React from "react";
 import ClassSelector from "./ClassSelector";
 
-export default function ClasseDetails({nome, dettagli, id}) {
+export default function ClasseDetails(props) {
+
+    function setLevel(value){
+        console.debug(value)
+        if(value===""){
+            value="0"
+        }
+        value = parseInt(value)
+        if(value<=-1 || value>20){
+            return
+        }
+        console.debug(value)
+        props.setClasse(classe => {
+            classe.forEach(function(entry) {
+                if (entry.classe_id === props.classe.classe_id) {
+                    console.debug(entry)
+                    entry.livello = value
+                }
+            })
+            return classe}
+        )
+        console.log()
+        console.debug(props.listaClassi)
+    }
     return (
         <Card>
             <Card.Header>
-                <Accordion.Toggle as={Button} variant="link" eventKey="0">
-                    {nome}
+                <Accordion.Toggle as={Button} variant="link" eventKey={props.classe.classe_id}>
+                    {props.classe.classe.nome} (lv. {props.classe.livello})
                 </Accordion.Toggle>
             </Card.Header>
-            <Accordion.Collapse eventKey="0">
+            <Accordion.Collapse eventKey={props.classe.classe_id}>
                 <div className={Style.GeneralitaPanel}>
-                    {dettagli}
+                    <Form.Group size="lg" controlId="email">
+                        <Form.Label>Livello</Form.Label>
+                        <Form.Control
+                            autoFocus
+                            type="number"
+                            value={props.classe.livello}
+                            onChange={(e) => setLevel(e.target.value)}
+                        />
+                    </Form.Group>
+                    {props.classe.classe.dettagli}
                 </div>
             </Accordion.Collapse>
         </Card>)
