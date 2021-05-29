@@ -12,28 +12,30 @@ import ClassSelector from "./ClassSelector";
 
 export default function ClasseDetails(props) {
 
-    function setLevel(value){
+    function setLevel(value) {
         console.debug(value)
-        if(value===""){
-            value="0"
+        if (value === "") {
+            value = "0"
         }
         value = parseInt(value)
-        if(value<=-1 || value>20){
+        if (value <= -1 || value > 20) {
             return
         }
         console.debug(value)
         props.setClasse(classe => {
-            classe.forEach(function(entry) {
-                if (entry.classe_id === props.classe.classe_id) {
-                    console.debug(entry)
-                    entry.livello = value
-                }
-            })
-            return classe}
+                classe = classe.map(function (entry) {
+                    if (entry.classe_id === props.classe.classe_id) {
+                        console.debug(entry)
+                        entry.livello = value
+                    }
+                    return entry
+                })
+                return classe
+            }
         )
-        console.log()
         console.debug(props.listaClassi)
     }
+
     return (
         <Card>
             <Card.Header>
@@ -52,7 +54,9 @@ export default function ClasseDetails(props) {
                             onChange={(e) => setLevel(e.target.value)}
                         />
                     </Form.Group>
-                    {props.classe.classe.dettagli}
+                    <div className={Style.DescriptionContainer}>
+                        {props.classe.classe.dettagli}
+                    </div>
                 </div>
             </Accordion.Collapse>
         </Card>)

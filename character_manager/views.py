@@ -2,7 +2,8 @@ from django.contrib.auth.models import User
 from .models import *
 from rest_framework import viewsets
 from rest_framework import permissions
-from character_manager.serializers import UserSerializer, PersonaggioSerializer, SpecieSerializer, ClasseSerializer
+from character_manager.serializers import UserSerializer, PersonaggioSerializer, SpecieSerializer, ClasseSerializer, \
+    AbilitaSerializer
 from .permissions import AdminOrSelf
 from rest_framework.permissions import BasePermission, IsAuthenticated, SAFE_METHODS
 
@@ -51,7 +52,7 @@ class SpecieViewSet(viewsets.ModelViewSet):
     """
     queryset = Specie.objects.all()
     serializer_class = SpecieSerializer
-    permission_classes = [IsAuthenticated|ReadOnly]
+    permission_classes = [IsAuthenticated | ReadOnly]
 
 
 class ClassViewSet(viewsets.ModelViewSet):
@@ -60,7 +61,7 @@ class ClassViewSet(viewsets.ModelViewSet):
     """
     queryset = Classe.objects.all()
     serializer_class = ClasseSerializer
-    permission_classes = [IsAuthenticated|ReadOnly]
+    permission_classes = [IsAuthenticated | ReadOnly]
 
 
 class CampaignViewSet(viewsets.ModelViewSet):
@@ -68,3 +69,9 @@ class CampaignViewSet(viewsets.ModelViewSet):
     API endpoint that allows campaigns to be listed
     """
     pass
+
+
+class AbilitaViewSet(viewsets.ModelViewSet):
+    queryset = Abilita.objects.all()
+    serializer_class = AbilitaSerializer
+    permission_classes = [IsAuthenticated | ReadOnly]

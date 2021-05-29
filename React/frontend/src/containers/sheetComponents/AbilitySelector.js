@@ -9,13 +9,14 @@ import {useAppContext} from "../../libs/Context";
 import CharacterEntry from "../CharacterEntry";
 import Button from "react-bootstrap/Button";
 
-export default function ClassSelector({classe, setClasse}) {
+export default function AbilitaSelector({abilita, setAbilita}) {
 
-    const [classList, setClassList] = useState([])
+    const [abilitaList, setAbilitaList] = useState([])
     const [descrizione, setDescrizione] = useState("")
     const {userToken} = useAppContext()
     const {address} = useAppContext()
-    const [classeId, setClasseId] = useState(0)
+    const [abilitaId, setAbilitaId] = useState(0)
+    const [grado, setGrado] = useState(2)
 
     useEffect(() => {
         onLoad();
@@ -36,7 +37,7 @@ export default function ClassSelector({classe, setClasse}) {
     async function onLoad() {
         let token = localStorage.getItem("token")
         console.debug(address)
-        const response = await fetch(address + "/artificier/classes/", {
+        const response = await fetch(address + "/artificier/abilities/", {
             method: "GET",
             credentials: "include",
             headers: {
@@ -47,9 +48,9 @@ export default function ClassSelector({classe, setClasse}) {
             },
         })
         const values = await response.json()
-        let classData = values['results']
-        classData.sort(compare)
-        setClassList(classData)
+        let abilitaData = values['results']
+        abilitaData.sort(compare)
+        setAbilitaList(abilitaData)
     }
 
     function update(event) {
@@ -59,30 +60,35 @@ export default function ClassSelector({classe, setClasse}) {
             setDescrizione("")
             return
         }
-        setClasseId(value)
-        classList.forEach(function (entry) {
+        setAbilitaId(value)
+        abilitaList.forEach(function (entry) {
             if (entry.id == value) {
-                setDescrizione(entry.dettagli)
+                setDescrizione(entry.descrizione+" Caratteristica: "+entry.attributo)
             }
         })
     }
 
-    function addClass(event){
+    function addAbilita(event){
         let present = false;
-        classe.forEach(function (entry){
-            if(classeId == entry.classe_id){
+        console.debug(abilita)
+        console.debug(typeof abilita[0])
+
+        abilita.forEach(function (entry){
+            if(typeof entry !== 'undefined'){
+            if(abilitaId == entry.abilita_id){
                 present = true;
-            }
+            }}
         })
         if(!present){
-            classList.forEach(function (entry) {
-                if (entry.id == classeId) {
-                    setClasse(classe => [...classe, {
-                        livello: 1,
-                        classe_id: classeId,
-                        classe:{
+            abilitaList.forEach(function (entry) {
+                if (entry.id == abilitaId) {
+                    setAbilita(abilita => [...abilita, {
+                        grado: grado,
+                        abilita_id: abilitaId,
+                        abilita:{
                             nome: entry.nome,
-                            dettagli: entry.dettagli
+                            dettagli: entry.descrizione,
+                            attributo: entry.attributo
                         }
                     }])
 
@@ -94,26 +100,32 @@ export default function ClassSelector({classe, setClasse}) {
     return (
         <div>
             <Form.Group controlId="exampleForm.ControlSelect1">
-
-                        <Form.Label>Aggiungi una classe</Form.Label>
+                        <Form.Label>Aggiungi un'abilità in cui il personaggio ha esperienza.</Form.Label>
                 <Row>
 
                     <Col>
                         <Form.Control as="select" onChange={event => {
                             update(event)
                         }}>
-                            <option value="-1">Scegli una classe...</option>
-                            {classList.map(classe => <option value={classe.id}>{classe.nome}</option>)}
+                            <option value="-1">Scegli un'abilità...</option>
+                            {abilitaList.map(abilita => <option value={abilita.id}>{abilita.nome}</option>)}
                         </Form.Control>
                     </Col>
                     <Col>
-                        <Button block type="submit" disabled={!descrizione} onClick={event => {addClass(event)}}>
+                        <Form.Control as="select" onChange={event => {setGrado(parseInt(event.target.value))}} value={grado}>
+                            <option value="1">Mezza proficiency</option>
+                            <option value="2">Proficiency</option>
+                            <option value="3">Expertise</option>
+                        </Form.Control>
+                    </Col>
+                    <Col>
+                        <Button block type="submit" disabled={!descrizione} onClick={event => {addAbilita(event)}}>
                             Aggiungi
                         </Button>
                     </Col>
                 </Row>
             </Form.Group>
-            <div className={Style.DescriptionContainer} hidden={!descrizione}>
+            <div className={Style.DescriptionContainerShort} hidden={!descrizione}>
                 {descrizione}
             </div>
         </div>

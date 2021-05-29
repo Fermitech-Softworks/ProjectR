@@ -17,8 +17,8 @@ class Oggetto(models.Model):
 class Abilita(models.Model):
     nome = models.CharField(max_length=64)
     descrizione = models.TextField()
-    attributo_choices = [('STR', 'Forza'), ('DEX', 'Destrezza'), ('INT', 'Intelligenza'), ('WIS', 'Saggezza'),
-                         ('CHA', 'Carisma'), ('COS', 'Costituzione')]
+    attributo_choices = [('STR', 'forza'), ('DEX', 'destrezza'), ('INT', 'intelligenza'), ('WIS', 'saggezza'),
+                         ('CHA', 'carisma'), ('COS', 'costituzione')]
     attributo = models.CharField(max_length=3, choices=attributo_choices, default="STR")
 
     def __repr__(self):
@@ -89,8 +89,8 @@ class Possiede(models.Model):
 class SaFare(models.Model):
     personaggio = models.ForeignKey(Personaggio, on_delete=models.CASCADE)
     abilita = models.ForeignKey(Abilita, on_delete=models.CASCADE)
-    proficiencies_choices = [(0, "No"), (1, "Mezza proficiency"), (2, "Proficiency"), (3, "Expertise")]
-    grado = models.IntegerField(choices=proficiencies_choices, default=0)
+    proficiencies_choices = [(1, "Mezza proficiency"), (2, "Proficiency"), (3, "Expertise")]
+    grado = models.IntegerField(choices=proficiencies_choices, default=2)
 
     def __repr__(self):
         return f"[SaFare] {self.personaggio_id} - {self.abilita_id}"

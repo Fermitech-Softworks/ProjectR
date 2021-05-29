@@ -8,9 +8,12 @@ import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import SpecieSelector from "./SpecieSelector";
 import React from "react";
+import AbilitaSelector from "./AbilitySelector";
+import ClassDetails from "./ClassDetails";
+import AbilitaDetails from "./AbilitaDetails";
 
-export default function ClassePanel() {
-
+export default function AbilitaPanel({abilita, setAbilita}) {
+    const exporter = {abilita, setAbilita}
     return (
         <Card>
             <Card.Header>
@@ -20,8 +23,10 @@ export default function ClassePanel() {
             </Card.Header>
             <Accordion.Collapse eventKey="0">
                 <div className={Style.GeneralitaPanel}>
-
+                    <AbilitaSelector {...exporter} />
+                    {abilita.map(c => <AbilitaDetails abilita={c} setAbilita={setAbilita} listaAbilita={abilita}/>)}
                 </div>
+
             </Accordion.Collapse>
         </Card>)
 }

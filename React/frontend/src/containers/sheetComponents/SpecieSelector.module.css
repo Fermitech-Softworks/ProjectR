@@ -7,4 +7,17 @@
     padding-top: 10px;
     padding-right: 10px;
     padding-bottom: 10px;
+    margin-bottom: 10px;
+}
+
+.DescriptionContainerShort{
+    overflow-y: scroll;
+    height: 10vh;
+    background: rgba(178, 206, 223, 0.75);
+    border-radius: 19px;
+    padding-left: 10px;
+    padding-top: 10px;
+    padding-right: 10px;
+    padding-bottom: 10px;
+    margin-bottom: 10px;
 }

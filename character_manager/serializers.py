@@ -11,10 +11,10 @@ class UserSerializer(serializers.ModelSerializer):
         fields = ("id", "email", "username", "characters", "is_superuser")
 
 
-class AbilitaSerializer(serializers.HyperlinkedModelSerializer):
+class AbilitaSerializer(serializers.ModelSerializer):
     class Meta:
         model = Abilita
-        depth = 0
+        fields = "__all__"
 
 
 class ClasseSerializer(serializers.ModelSerializer):

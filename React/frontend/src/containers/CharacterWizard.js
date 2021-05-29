@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import Style from "./CharacterWizard.module.css";
 import CampaignList from "./CampaignList";
 import CharacterList from "./CharacterList";
@@ -18,6 +18,7 @@ import ClassPanel from "./sheetComponents/ClassPanel";
 import AbilitaPanel from "./sheetComponents/AbilitaPanel";
 import IncantesimiPanel from "./sheetComponents/IncantesimiPanel";
 import InventarioPanel from "./sheetComponents/InventarioPanel";
+import AbilitaList from "./sheetComponents/AbilitaList";
 
 export default function CharacterWizard() {
     const {username} = useAppContext()
@@ -36,12 +37,44 @@ export default function CharacterWizard() {
     const [classeArmatura, setClasseArmatura] = useState(10)
     const [specie, setSpecie] = useState({})
     const [classe, setClasse] = useState([])
+    const [abilita, setAbilita] = useState([])
+
+    useEffect(() => {
+        updateLevel();
+    }, [classe]);
+
+    useEffect(() =>{
+        updateProficiency();
+    }, [livello])
+
+    function updateLevel(){
+        let livello = 0
+        classe.forEach(function(entry){
+            livello += parseInt(entry.livello)
+        })
+        setLivello(livello)
+    }
+
+    function updateProficiency(){
+        if(livello === 0){
+            setProficiency(0)
+            return
+        }
+        let value = Math.floor(livello/4)+2
+        setProficiency(value)
+    }
 
     const exporter = {
         nome, setNome, pvAttuali, setPvAttuali, pvMax, setPvMax, livello, setLivello,
         proficiency, setProficiency, classeArmatura, setClasseArmatura, specie, setSpecie
     }
     const exporter_classe = {classe, setClasse}
+
+    const exporter_abilita = {abilita, setAbilita}
+
+    const statistiche = {forza, destrezza, costituzione, intelligenza, saggezza, carisma}
+
+    const exporter_abilita_list = {abilita, setAbilita, statistiche, proficiency}
 
     return (
         <div className={Style.Wizard}>
@@ -55,7 +88,7 @@ export default function CharacterWizard() {
                             <ClassPanel {...exporter_classe}/>
                         </Accordion>
                         <Accordion>
-                            <AbilitaPanel/>
+                            <AbilitaPanel {...exporter_abilita}/>
                         </Accordion>
                         <Accordion>
                             <IncantesimiPanel/>
@@ -88,6 +121,7 @@ export default function CharacterWizard() {
                             </Col>
                         </Row>
                     </Jumbotron>
+                    <AbilitaList {...exporter_abilita_list}/>
                 </Col>
             </Row>
         </div>
