@@ -16,6 +16,7 @@ export default function GeneralitaPanel({nome, setNome, pvAttuali, setPvAttuali,
     const exporter = {specie, setSpecie}
 
     return (
+        <Accordion defaultActiveKey="0">
         <Card>
             <Card.Header>
                 <Accordion.Toggle as={Button} variant="link" eventKey="0">
@@ -97,5 +98,6 @@ export default function GeneralitaPanel({nome, setNome, pvAttuali, setPvAttuali,
                     </div>
                 </div>
             </Accordion.Collapse>
-        </Card>)
+
+        </Card></Accordion>)
 }

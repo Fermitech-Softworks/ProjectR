@@ -43,24 +43,24 @@ export default function CharacterWizard() {
         updateLevel();
     }, [classe]);
 
-    useEffect(() =>{
+    useEffect(() => {
         updateProficiency();
     }, [livello])
 
-    function updateLevel(){
+    function updateLevel() {
         let livello = 0
-        classe.forEach(function(entry){
+        classe.forEach(function (entry) {
             livello += parseInt(entry.livello)
         })
         setLivello(livello)
     }
 
-    function updateProficiency(){
-        if(livello === 0){
+    function updateProficiency() {
+        if (livello === 0) {
             setProficiency(0)
             return
         }
-        let value = Math.floor(livello/4)+2
+        let value = Math.floor(livello / 4) + 2
         setProficiency(value)
     }
 
@@ -81,9 +81,7 @@ export default function CharacterWizard() {
             <Row>
                 <Col md={4} sm={12}>
                     <div className={Style.BottomMargin}>
-                        <Accordion>
-                            <GeneralitaPanel {...exporter}/>
-                        </Accordion>
+                        <GeneralitaPanel {...exporter}/>
                         <Accordion>
                             <ClassPanel {...exporter_classe}/>
                         </Accordion>
@@ -99,31 +97,39 @@ export default function CharacterWizard() {
                     </div>
                 </Col>
                 <Col md={8} sm={12}>
-                    <Jumbotron>
-                        <Row>
-                            <Col>
-                                <StatValue nome="Forza" value={forza} setValue={setForza}/>
-                            </Col>
-                            <Col>
-                                <StatValue nome="Destrezza" value={destrezza} setValue={setDestrezza}/>
-                            </Col>
-                            <Col>
-                                <StatValue nome="Costituzione" value={costituzione} setValue={setCostituzione}/>
-                            </Col>
-                            <Col>
-                                <StatValue nome="Intelligenza" value={intelligenza} setValue={setIntelligenza}/>
-                            </Col>
-                            <Col>
-                                <StatValue nome="Saggezza" value={saggezza} setValue={setSaggezza}/>
-                            </Col>
-                            <Col>
-                                <StatValue nome="Carisma" value={carisma} setValue={setCarisma}/>
-                            </Col>
-                        </Row>
-                    </Jumbotron>
-                    <AbilitaList {...exporter_abilita_list}/>
+                    <Row>
+                        <Col>
+                            <StatValue nome="Forza" value={forza} setValue={setForza}/>
+                        </Col>
+                        <Col>
+                            <StatValue nome="Destrezza" value={destrezza} setValue={setDestrezza}/>
+                        </Col>
+                        <Col>
+                            <StatValue nome="Costituzione" value={costituzione} setValue={setCostituzione}/>
+                        </Col>
+                        <Col>
+                            <StatValue nome="Intelligenza" value={intelligenza} setValue={setIntelligenza}/>
+                        </Col>
+                        <Col>
+                            <StatValue nome="Saggezza" value={saggezza} setValue={setSaggezza}/>
+                        </Col>
+                        <Col>
+                            <StatValue nome="Carisma" value={carisma} setValue={setCarisma}/>
+                        </Col>
+                    </Row>
+                    <Row>
+                        <Col md={4} sm={12}>
+                            <div className={Style.BottomMargin}>
+                                <AbilitaList {...exporter_abilita_list}/>
+                            </div>
+                        </Col>
+                    </Row>
+
                 </Col>
+
             </Row>
+
+
         </div>
     );
 }

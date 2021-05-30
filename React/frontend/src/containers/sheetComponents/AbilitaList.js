@@ -37,7 +37,7 @@ export default function AbilitaList({abilita, setAbilita, statistiche, proficien
 
     useEffect(() => {
         draw()
-    }, [abilita|proficiency|statistiche])
+    }, [abilita, proficiency, statistiche, abilitaList])
 
     async function onLoad() {
         let token = localStorage.getItem("token")
@@ -56,18 +56,21 @@ export default function AbilitaList({abilita, setAbilita, statistiche, proficien
         let abilitaData = values['results']
         abilitaData.sort(compare)
         setAbilitaList(abilitaData)
+        console.debug("Ottenute abilità per elaborazione lista")
         draw()
     }
 
     function draw() {
+        console.debug("Elaborazione lista...")
         setElements(elements => {
             elements = abilitaList.map(function (entry) {
                 let grado = 0;
                 abilita.forEach(function (data) {
-                    if(typeof data != 'undefined'){
-                    if (entry.id === data.abilita_id) {
-                        grado = data.grado
-                    }}
+                    if (typeof data !== 'undefined') {
+                        if (entry.id === parseInt(data.abilita_id)) {
+                            grado = data.grado
+                        }
+                    }
                 })
                 let value = 0
                 switch (entry.attributo) {
@@ -91,28 +94,35 @@ export default function AbilitaList({abilita, setAbilita, statistiche, proficien
                 }
                 switch (grado) {
                     case 1:
-                        value += Math.floor(proficiency / 2)
+                        value = value + Math.floor(proficiency / 2)
+                        console.debug("HP")
                         break;
                     case 2:
-                        value += proficiency
+                        value = value + proficiency
+                        console.debug("FP")
                         break;
                     case 3:
-                        value += proficiency * 2
+                        value = value + proficiency * 2
+                        console.debug("E")
                         break;
                 }
                 let data = {
                     abilita: entry,
                     value: value
                 }
+                console.debug(data)
                 return data;
             })
-            return elements})
+            return elements
+        })
         console.debug(elements)
     }
 
     return (
-        <ListGroup>
-            {elements.map(elem => <AbilitaListElement {...elem}/>)}
-        </ListGroup>
+        <div>
+            <ListGroup>
+                {elements.map(elem => <AbilitaListElement {...elem}/>)}
+            </ListGroup>
+        </div>
     )
 }

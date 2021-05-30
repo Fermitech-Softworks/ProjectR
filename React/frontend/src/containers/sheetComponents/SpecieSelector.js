@@ -68,13 +68,12 @@ export default function SpecieSelector({specie, setSpecie}) {
     return (
         <div>
             <Form.Group controlId="exampleForm.ControlSelect1">
-                <Form.Label>Specie</Form.Label>
                 <Form.Control as="select" onChange={event => {update(event)}}>
-                    <option value="-1">Scegli una razza...</option>
+                    <option value="-1">Scegli una specie...</option>
                     {specieList.map(spec => <option value={spec.id}>{spec.nome}</option>)}
                 </Form.Control>
             </Form.Group>
-            <div className={Style.DescriptionContainer}>
+            <div className={Style.DescriptionContainer} hidden={!descrizione}>
                 {descrizione}
             </div>
         </div>
