@@ -8,19 +8,29 @@ import Input from "reactstrap";
 import {useAppContext} from "../../libs/Context";
 import CharacterEntry from "../CharacterEntry";
 import Button from "react-bootstrap/Button";
+import Select from "react-select";
 
-export default function AbilitaSelector({abilita, setAbilita}) {
+export default function AbilitaSelector({incantesimi, setIncantesimi}) {
 
-    const [abilitaList, setAbilitaList] = useState([])
+    const [incantesimiList, setIncantesimiList] = useState([])
     const [descrizione, setDescrizione] = useState("")
+    const [scuola, setScuola] = useState("")
+    const [dadi, setDadi] = useState("")
     const {userToken} = useAppContext()
     const {address} = useAppContext()
-    const [abilitaId, setAbilitaId] = useState(0)
-    const [grado, setGrado] = useState(2)
+    const [incantesimoId, setIncantesimoId] = useState(0)
+    const [preparato, setPreparato] = useState(false)
+    const [selectInput, setSelectInput] = useState([])
 
     useEffect(() => {
         onLoad();
     }, []);
+
+    useEffect(() =>{
+        setSelectInput(incantesimiList.map(function(entry){
+            return {label: entry.nome, value:entry.id}
+        }))
+    }, [incantesimiList])
 
 
     function compare(a, b) {
@@ -37,7 +47,7 @@ export default function AbilitaSelector({abilita, setAbilita}) {
     async function onLoad() {
         let token = localStorage.getItem("token")
         console.debug(address)
-        const response = await fetch(address + "/artificier/abilities/", {
+        const response = await fetch(address + "/artificier/spells/", {
             method: "GET",
             credentials: "include",
             headers: {
@@ -48,84 +58,80 @@ export default function AbilitaSelector({abilita, setAbilita}) {
             },
         })
         const values = await response.json()
-        let abilitaData = values['results']
-        abilitaData.sort(compare)
-        setAbilitaList(abilitaData)
+        let incantesimiData = values['results']
+        incantesimiData.sort(compare)
+        setIncantesimiList(incantesimiData)
+
     }
 
     function update(event) {
-        let value = event.target.value
+        console.debug(incantesimi)
+        let value = event.value
         console.debug(value)
         if (value < 0) {
             setDescrizione("")
             return
         }
-        setAbilitaId(value)
-        abilitaList.forEach(function (entry) {
+        setIncantesimoId(value)
+        incantesimiList.forEach(function (entry) {
             if (entry.id == value) {
-                setDescrizione(entry.descrizione+" Caratteristica: "+entry.attributo)
+                setDescrizione(entry.descrizione)
+                setDadi(entry.dadi)
+                setScuola(entry.scuola)
             }
         })
     }
 
-    function addAbilita(event){
+    function addIncantesimo(event){
         let present = false;
-        console.debug(abilita)
-        console.debug(typeof abilita[0])
-
-        abilita.forEach(function (entry){
+        console.log(incantesimi)
+        incantesimi.forEach(function (entry){
             if(typeof entry !== 'undefined'){
-            if(abilitaId == entry.abilita_id){
+            if(incantesimoId == entry.incantesimo_id){
                 present = true;
             }}
         })
         if(!present){
-            abilitaList.forEach(function (entry) {
-                if (entry.id == abilitaId) {
-                    setAbilita(abilita => [...abilita, {
-                        grado: grado,
-                        abilita_id: abilitaId,
-                        abilita:{
+            incantesimiList.forEach(function (entry) {
+                if (entry.id == incantesimoId) {
+                    setIncantesimi(incantesimi => [...incantesimi, {
+                        preparata: true,
+                        incantesimo_id: incantesimoId,
+                        incantesimo:{
                             nome: entry.nome,
                             dettagli: entry.descrizione,
-                            attributo: entry.attributo
+                            scuola: entry.scuola,
+                            componenti: entry.componenti,
+                            dadi: entry.dadi
                         }
                     }])
-
                 }
             })
+            console.log(incantesimi)
         }
     }
 
     return (
         <div>
             <Form.Group controlId="exampleForm.ControlSelect1">
-                        <Form.Label>Aggiungi un'abilità in cui il personaggio ha esperienza.</Form.Label>
+                        <Form.Label>Aggiungi un incantesimo noto al personaggio.</Form.Label>
                 <Row>
 
-                    <Col>
-                        <Form.Control as="select" onChange={event => {
+                    <Col md={8} sm={12}>
+                        <Select  options={selectInput} name="incantesimi" placeholder="..." onChange={event => {
                             update(event)
-                        }}>
-                            <option value="-1">Scegli un'abilità...</option>
-                            {abilitaList.map(abilita => <option value={abilita.id}>{abilita.nome}</option>)}
-                        </Form.Control>
+                        }}/>
                     </Col>
-                    <Col>
-                        <Form.Control as="select" onChange={event => {setGrado(parseInt(event.target.value))}} value={grado}>
-                            <option value="1">Mezza proficiency</option>
-                            <option value="2">Proficiency</option>
-                            <option value="3">Expertise</option>
-                        </Form.Control>
-                    </Col>
-                    <Col>
-                        <Button block type="submit" disabled={!descrizione} onClick={event => {addAbilita(event)}}>
+                    <Col md={4} sm={12}>
+                        <Button block type="submit" disabled={!descrizione} onClick={event => {addIncantesimo(event)}}>
                             Aggiungi
                         </Button>
                     </Col>
                 </Row>
             </Form.Group>
             <div className={Style.DescriptionContainerShort} hidden={!descrizione}>
+                Scuola: {scuola} <br/>
+                Dadi: {dadi} <br/>
                 {descrizione}
             </div>
         </div>

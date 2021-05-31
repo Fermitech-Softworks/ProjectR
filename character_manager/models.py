@@ -38,6 +38,7 @@ class Incantesimo(models.Model):
     scuola = models.CharField(max_length=64)
     componenti = models.TextField()
     dadi = models.TextField()
+    descrizione = models.TextField()
 
     def __repr__(self):
         return f"[Incantesimo] {self.nome}"

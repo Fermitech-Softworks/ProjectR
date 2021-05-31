@@ -3,7 +3,7 @@ from .models import *
 from rest_framework import viewsets
 from rest_framework import permissions
 from character_manager.serializers import UserSerializer, PersonaggioSerializer, SpecieSerializer, ClasseSerializer, \
-    AbilitaSerializer
+    AbilitaSerializer, IncantesimoSerializer
 from .permissions import AdminOrSelf
 from rest_framework.permissions import BasePermission, IsAuthenticated, SAFE_METHODS
 
@@ -74,4 +74,10 @@ class CampaignViewSet(viewsets.ModelViewSet):
 class AbilitaViewSet(viewsets.ModelViewSet):
     queryset = Abilita.objects.all()
     serializer_class = AbilitaSerializer
+    permission_classes = [IsAuthenticated | ReadOnly]
+
+
+class IncantesimoViewSet(viewsets.ModelViewSet):
+    queryset = Incantesimo.objects.all()
+    serializer_class = IncantesimoSerializer
     permission_classes = [IsAuthenticated | ReadOnly]

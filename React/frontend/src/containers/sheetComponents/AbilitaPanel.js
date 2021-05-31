@@ -8,7 +8,7 @@ import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import SpecieSelector from "./SpecieSelector";
 import React from "react";
-import AbilitaSelector from "./AbilitySelector";
+import AbilitaSelector from "./AbilitaSelector";
 import ClassDetails from "./ClassDetails";
 import AbilitaDetails from "./AbilitaDetails";
 

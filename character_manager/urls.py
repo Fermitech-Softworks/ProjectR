@@ -9,5 +9,6 @@ router.register(r'characters', CharacterViewSet, basename='characters')
 router.register(r'species', SpecieViewSet, basename="species")
 router.register(r'classes', ClassViewSet, basename="classes")
 router.register(r'abilities', AbilitaViewSet, basename="abilities")
+router.register(r'spells', IncantesimoViewSet, basename="spells")
 
 urlpatterns = router.urls

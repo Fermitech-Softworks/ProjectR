@@ -1,6 +1,7 @@
 .DescriptionContainer{
     overflow-y: scroll;
-    height: 20vh;
+    overflow-x: hidden;
+    height: 40vh;
     background: rgba(178, 206, 223, 0.75);
     border-radius: 19px;
     padding-left: 10px;
@@ -8,17 +9,25 @@
     padding-right: 10px;
     padding-bottom: 10px;
     margin-bottom: 10px;
+    align-items: center;
 }
 
 .DescriptionContainerShort{
     overflow-y: scroll;
+
     height: 10vh;
     background: rgba(178, 206, 223, 0.75);
     border-radius: 19px;
-    padding-left: 10px;
+    padding-left: 20px;
     padding-top: 10px;
-    padding-right: 10px;
+    padding-right: 20px;
     padding-bottom: 10px;
     margin-bottom: 10px;
 }
 
+.AbilitaEntry{
+    width: -webkit-fill-available;
+    margin-top: 10px;
+    background: #B2CEDF;
+    border-radius: 12px;
+}

@@ -23,10 +23,10 @@ class ClasseSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
-class IncantesimoSerializer(serializers.HyperlinkedModelSerializer):
+class IncantesimoSerializer(serializers.ModelSerializer):
     class Meta:
         model = Incantesimo
-        depth = 0
+        fields = "__all__"
 
 
 class SpecieSerializer(serializers.ModelSerializer):

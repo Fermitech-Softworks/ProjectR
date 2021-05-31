@@ -2,7 +2,7 @@ import Card from "react-bootstrap/Card";
 import Accordion from "react-bootstrap/Accordion";
 import Button from "react-bootstrap/Button";
 import {Jumbotron, ListGroup} from "react-bootstrap";
-import Style from "./GeneralitaPanel.module.css";
+import Style from "./AbilitaList.module.css";
 import Form from "react-bootstrap/Form";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
@@ -17,13 +17,11 @@ export default function AbilitaListElement({abilita, value}) {
 
 
     return (
-        <div>
-            <ListGroup.Item>
+        <div className={Style.AbilitaEntry}>
                 <Row>
-                    <Col>{abilita.nome} ({abilita.attributo})</Col>
+                    <Col>{abilita.nome}</Col>
                     <Col>{value}</Col>
                 </Row>
-            </ListGroup.Item>
         </div>
     )
 }

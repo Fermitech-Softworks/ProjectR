@@ -38,6 +38,7 @@ export default function CharacterWizard() {
     const [specie, setSpecie] = useState({})
     const [classe, setClasse] = useState([])
     const [abilita, setAbilita] = useState([])
+    const [incantesimi, setIncantesimi] = useState([])
 
     useEffect(() => {
         updateLevel();
@@ -76,6 +77,8 @@ export default function CharacterWizard() {
 
     const exporter_abilita_list = {abilita, setAbilita, statistiche, proficiency}
 
+    const exporter_incantesimi = {incantesimi, setIncantesimi}
+
     return (
         <div className={Style.Wizard}>
             <Row>
@@ -89,7 +92,7 @@ export default function CharacterWizard() {
                             <AbilitaPanel {...exporter_abilita}/>
                         </Accordion>
                         <Accordion>
-                            <IncantesimiPanel/>
+                            <IncantesimiPanel {...exporter_incantesimi}/>
                         </Accordion>
                         <Accordion>
                             <InventarioPanel/>
@@ -118,7 +121,7 @@ export default function CharacterWizard() {
                         </Col>
                     </Row>
                     <Row>
-                        <Col md={4} sm={12}>
+                        <Col md={6} sm={12}>
                             <div className={Style.BottomMargin}>
                                 <AbilitaList {...exporter_abilita_list}/>
                             </div>
