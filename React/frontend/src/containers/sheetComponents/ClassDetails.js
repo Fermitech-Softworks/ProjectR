@@ -37,9 +37,9 @@ export default function ClasseDetails(props) {
     }
 
     return (
-        <Card>
+        <Card className={Style.CustomCard}>
             <Card.Header>
-                <Accordion.Toggle as={Button} variant="link" eventKey={props.classe.classe_id}>
+                <Accordion.Toggle as={Button} className={Style.CustomAccordionHeaderText} variant="link" eventKey={props.classe.classe_id}>
                     {props.classe.classe.nome} (lv. {props.classe.livello})
                 </Accordion.Toggle>
             </Card.Header>

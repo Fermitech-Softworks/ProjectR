@@ -16,14 +16,13 @@ import IncantesimiDetails from "./IncantesimiDetails";
 export default function ClassePanel({incantesimi, setIncantesimi}) {
     const exporter = {incantesimi, setIncantesimi}
     return (
-        <Card>
+        <Card className={Style.CustomCard}>
             <Card.Header>
-                <Accordion.Toggle as={Button} variant="link" eventKey="0">
+                <Accordion.Toggle as={Button} className={Style.CustomAccordionHeaderText} variant="link" eventKey="3">
                     Incantesimi
                 </Accordion.Toggle>
             </Card.Header>
-            <Accordion.Collapse eventKey="0">
-                <div className={Style.GeneralitaPanel}>
+            <Accordion.Collapse eventKey="3">
                     <div className={Style.GeneralitaPanel}>
                         <IncantesimiSelector {...exporter} />
                         <Accordion>
@@ -32,7 +31,6 @@ export default function ClassePanel({incantesimi, setIncantesimi}) {
                                                                                 listaIncantesimi={incantesimi}/>)}
                         </Accordion>
                     </div>
-                </div>
             </Accordion.Collapse>
         </Card>)
 }

@@ -41,7 +41,6 @@ export default function AbilitaList({abilita, setAbilita, statistiche, proficien
 
     async function onLoad() {
         let token = localStorage.getItem("token")
-        console.debug(address)
         const response = await fetch(address + "/artificier/abilities/", {
             method: "GET",
             credentials: "include",
@@ -56,12 +55,10 @@ export default function AbilitaList({abilita, setAbilita, statistiche, proficien
         let abilitaData = values['results']
         abilitaData.sort(compare)
         setAbilitaList(abilitaData)
-        console.debug("Ottenute abilità per elaborazione lista")
         draw()
     }
 
     function draw() {
-        console.debug("Elaborazione lista...")
         setElements(elements => {
             elements = abilitaList.map(function (entry) {
                 let grado = 0;
@@ -110,12 +107,10 @@ export default function AbilitaList({abilita, setAbilita, statistiche, proficien
                     abilita: entry,
                     value: value
                 }
-                console.debug(data)
                 return data;
             })
             return elements
         })
-        console.debug(elements)
     }
 
     return (

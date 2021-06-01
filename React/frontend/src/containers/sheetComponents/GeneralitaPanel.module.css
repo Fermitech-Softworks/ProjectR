@@ -6,6 +6,11 @@
     padding-left: 10px;
     padding-bottom: 10px;
     text-align: left;
+    background: white;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    height: 40vh;
+    gap: 4px;
 }
 
 .DescriptionContainer{
@@ -22,4 +27,21 @@
 
 .LeftAlign{
     text-align: left;
+}
+
+.CustomCard{
+    background: rgba(178, 206, 223, 0.75);
+    border-radius: 19px;
+}
+
+.CustomAccordionContent{
+    background: white;
+}
+
+.CustomAccordionHeaderText{
+    background: rgba(178, 206, 223, 0.75);
+    border-radius: 19px;
+    padding-left: 10px;
+    padding-right: 10px;
+    color: black;
 }

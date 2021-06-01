@@ -14,13 +14,13 @@ import ClassDetails from "./ClassDetails";
 export default function ClassePanel({classe, setClasse}) {
     const exporter = {classe, setClasse}
     return (
-        <Card>
+        <Card className={Style.CustomCard}>
             <Card.Header>
-                <Accordion.Toggle as={Button} variant="link" eventKey="0">
+                <Accordion.Toggle as={Button} className={Style.CustomAccordionHeaderText} variant="link" eventKey="1">
                     Classi
                 </Accordion.Toggle>
             </Card.Header>
-            <Accordion.Collapse eventKey="0">
+            <Accordion.Collapse eventKey="1">
                 <div className={Style.GeneralitaPanel}>
                     <ClassSelector {...exporter}/>
                     <div>

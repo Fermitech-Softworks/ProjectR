@@ -3,7 +3,7 @@ from .models import *
 from rest_framework import viewsets
 from rest_framework import permissions
 from character_manager.serializers import UserSerializer, PersonaggioSerializer, SpecieSerializer, ClasseSerializer, \
-    AbilitaSerializer, IncantesimoSerializer
+    AbilitaSerializer, IncantesimoSerializer, OggettoSerializer, PersonaggioSerializerId
 from .permissions import AdminOrSelf
 from rest_framework.permissions import BasePermission, IsAuthenticated, SAFE_METHODS
 
@@ -46,6 +46,15 @@ class CharacterViewSet(viewsets.ModelViewSet):
         return characters
 
 
+class CharacterCreationViewSet(viewsets.ModelViewSet):
+    serializer_class = PersonaggioSerializerId
+    permission_classes = [AdminOrSelf]
+
+    def get_queryset(self):
+        characters = Personaggio.objects.filter(user_id=self.request.user.id).all()
+        return characters
+
+
 class SpecieViewSet(viewsets.ModelViewSet):
     """
     Api endpoint that allows the retrival of specie data
@@ -80,4 +89,10 @@ class AbilitaViewSet(viewsets.ModelViewSet):
 class IncantesimoViewSet(viewsets.ModelViewSet):
     queryset = Incantesimo.objects.all()
     serializer_class = IncantesimoSerializer
+    permission_classes = [IsAuthenticated | ReadOnly]
+
+
+class OggettiViewSet(viewsets.ModelViewSet):
+    queryset = Oggetto.objects.all()
+    serializer_class = OggettoSerializer
     permission_classes = [IsAuthenticated | ReadOnly]

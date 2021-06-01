@@ -39,6 +39,8 @@ export default function CharacterWizard() {
     const [classe, setClasse] = useState([])
     const [abilita, setAbilita] = useState([])
     const [incantesimi, setIncantesimi] = useState([])
+    const [inventario, setInventario] = useState([])
+    const [note, setNote] = useState("")
 
     useEffect(() => {
         updateLevel();
@@ -79,23 +81,19 @@ export default function CharacterWizard() {
 
     const exporter_incantesimi = {incantesimi, setIncantesimi}
 
+    const exporter_inventario = {inventario, setInventario}
+
     return (
         <div className={Style.Wizard}>
             <Row>
                 <Col md={4} sm={12}>
                     <div className={Style.BottomMargin}>
-                        <GeneralitaPanel {...exporter}/>
                         <Accordion>
+                            <GeneralitaPanel {...exporter}/>
                             <ClassPanel {...exporter_classe}/>
-                        </Accordion>
-                        <Accordion>
                             <AbilitaPanel {...exporter_abilita}/>
-                        </Accordion>
-                        <Accordion>
                             <IncantesimiPanel {...exporter_incantesimi}/>
-                        </Accordion>
-                        <Accordion>
-                            <InventarioPanel/>
+                            <InventarioPanel {...exporter_inventario}/>
                         </Accordion>
                     </div>
                 </Col>
@@ -124,6 +122,14 @@ export default function CharacterWizard() {
                         <Col md={6} sm={12}>
                             <div className={Style.BottomMargin}>
                                 <AbilitaList {...exporter_abilita_list}/>
+                            </div>
+                        </Col>
+                        <Col md={6} sm={12}>
+                            <div className={Style.LeftAlign}>
+                            <Form.Group className="mb-3" controlId="exampleForm.ControlTextarea1">
+                                <Form.Label>Note</Form.Label>
+                                <Form.Control as="textarea" rows={13} onChange={setNote}/>
+                            </Form.Group>
                             </div>
                         </Col>
                     </Row>

@@ -53,9 +53,9 @@ export default function AbilitaDetails(props) {
 
     if (props.incantesimo) {
         return (
-            <Card>
+            <Card className={Style.CustomCard}>
                 <Card.Header>
-                    <Accordion.Toggle as={Button} variant="link" eventKey={props.incantesimo.incantesimo_id}>
+                    <Accordion.Toggle as={Button} className={Style.CustomAccordionHeaderText} variant="link" eventKey={props.incantesimo.incantesimo_id}>
                         {props.incantesimo.incantesimo.nome}
                     </Accordion.Toggle>
                 </Card.Header>

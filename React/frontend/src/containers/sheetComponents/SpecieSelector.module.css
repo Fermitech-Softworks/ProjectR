@@ -22,3 +22,19 @@
     margin-bottom: 10px;
 }
 
+.CustomCard{
+    background: rgba(178, 206, 223, 0.75);
+    border-radius: 19px;
+}
+
+.CustomAccordionContent{
+    background: white;
+}
+
+.CustomAccordionHeaderText{
+    background: rgba(178, 206, 223, 0.75);
+    border-radius: 19px;
+    padding-left: 10px;
+    padding-right: 10px;
+    color: black;
+}
