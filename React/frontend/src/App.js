@@ -15,6 +15,7 @@ function App() {
     const [token, setUserToken] = useState("")
     const [refresh, setRefreshToken] = useState("")
     const [username, setUsername] = useState("")
+    const [uid, setUid] = useState(0)
     const [address, setAddress] = useState("")
     const [isSuper, setSuperUser] = useState("")
     let history = useHistory()
@@ -44,6 +45,7 @@ function App() {
             setUserHasAuth(true)
             setUsername(localStorage.getItem("username"))
             setSuperUser(localStorage.getItem("isSuperUser"))
+            setUid(parseInt(localStorage.getItem("uid")))
             history.push("/dashboard")
         }
     }
@@ -72,7 +74,7 @@ function App() {
                 </Navbar.Collapse>
             </Navbar>
             <div className="App">
-                <AppContext.Provider value={{isAuth, isSuper, setSuperUser, setUserHasAuth, setUserToken, setRefreshToken, setUsername, setAddress, address, token, refresh, username}}>
+                <AppContext.Provider value={{isAuth, isSuper, setSuperUser, setUserHasAuth, setUserToken, setRefreshToken, setUsername, setAddress, address, token, refresh, username, uid, setUid}}>
                     <Routes/>
                 </AppContext.Provider>
             </div>

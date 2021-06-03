@@ -19,6 +19,10 @@ export default function SpecieSelector({specie, setSpecie}) {
         onLoad();
     }, []);
 
+    useEffect(() => {
+        setDescrizione(specie.dettagli)
+    }, [specie])
+
 
     function compare(a, b) {
         if (a.nome < b.nome) {
@@ -53,12 +57,12 @@ export default function SpecieSelector({specie, setSpecie}) {
     function update(event) {
         let value = event.target.value
         console.debug(value)
-        if(value < 0){
+        if (value < 0) {
             setDescrizione("")
             return
         }
-        specieList.forEach(function(entry){
-            if(entry.id==value){
+        specieList.forEach(function (entry) {
+            if (entry.id == value) {
                 setSpecie(entry)
                 setDescrizione(entry.dettagli)
             }
@@ -68,13 +72,18 @@ export default function SpecieSelector({specie, setSpecie}) {
     return (
         <div>
             <Form.Group controlId="exampleForm.ControlSelect1">
-                <Form.Control as="select" onChange={event => {update(event)}}>
-                    <option value="-1">Scegli una specie...</option>
+                <Form.Control as="select" onChange={event => {
+                    update(event)
+                }}>
+                    <option value="-1">Cambia specie...</option>
                     {specieList.map(spec => <option value={spec.id}>{spec.nome}</option>)}
                 </Form.Control>
             </Form.Group>
-            <div className={Style.DescriptionContainer} hidden={!descrizione}>
-                {descrizione}
+            <div hidden={!descrizione}>
+                {specie.nome}
+                <div className={Style.DescriptionContainer}>
+                    {descrizione}
+                </div>
             </div>
         </div>
     );

@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import Style from "./statValue.module.css";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col"
@@ -9,6 +9,11 @@ import Input from "reactstrap";
 export default function StatValue(props) {
 
     const [modifier, setModifier] = useState(0)
+
+    useEffect(()=>{
+        let val = Math.floor((props.value - 10)/2)
+        setModifier(val)
+    }, [props.value])
 
     function update(e){
         if(isNaN(e.target.value) || e.target.value <= 0 || e.target.value > 30){

@@ -105,13 +105,19 @@ class LanciaSerializerId(serializers.ModelSerializer):
         fields = ("id", "preparato", "incantesimo")
 
 
-class PersonaggioSerializer(serializers.ModelSerializer):
+class PersonaggioSerializerReadOnly(serializers.ModelSerializer):
     specie = SpecieSerializer(many=False, read_only=True)
     oggetti = PossiedeSerializer(many=True, source="possiede_set")
     abilita = SaFareSerializer(many=True, source="safare_set")
     classi = IstruitoASerializer(many=True, source="istruitoa_set")
     incantesimi = LanciaSerializer(many=True, source="lancia_set")
 
+    class Meta:
+        model = Personaggio
+        fields = "__all__"
+
+
+class PersonaggioSerializer(serializers.ModelSerializer):
     class Meta:
         model = Personaggio
         fields = "__all__"
@@ -144,7 +150,7 @@ class PersonaggioSerializerId(serializers.ModelSerializer):
         instance.note = validated_data.get("note", instance.note)
         instance.specie = validated_data.get("specie", instance.specie)
         for elem in list(set([e['id'] for e in instance.oggetti.values()]) - set(
-                [oggetto.get('id') for oggetto in validated_data.get('possiede_set')])):
+                [oggetto.get('oggetto').id for oggetto in validated_data.get('possiede_set')])):
             possiede = Possiede.objects.get(oggetto_id=elem, personaggio_id=instance.id)
             possiede.delete()
         for oggetto in validated_data.get('possiede_set'):
@@ -158,9 +164,13 @@ class PersonaggioSerializerId(serializers.ModelSerializer):
                 if not elem:
                     pass
                 else:
-                    if elem['id'] not in [e['id'] for e in instance.oggetti.values()]:
+                    if elem.id not in [e['id'] for e in instance.oggetti.values()]:
                         Possiede.objects.create(quantita=oggetto.get("quantita"), oggetto_id=elem.id,
                                                 personaggio_id=instance.id)
+        for elem in list(set([e['id'] for e in instance.classi.values()]) - set(
+                    [classe.get('classe').id for classe in validated_data.get('istruitoa_set')])):
+            istruito = IstruitoA.objects.get(oggetto_id=elem, personaggio_id=instance.id)
+            istruito.delete()
         for classe in validated_data.get('istruitoa_set'):
             istruito_id = classe.get("id")
             if istruito_id:
@@ -175,6 +185,10 @@ class PersonaggioSerializerId(serializers.ModelSerializer):
                     if elem.id not in [e['id'] for e in instance.classi.values()]:
                         IstruitoA.objects.create(livello=classe.get("livello"), classe_id=elem.id,
                                                  personaggio_id=instance.id)
+        for elem in list(set([e['id'] for e in instance.abilita.values()]) - set(
+                [abilita.get('abilita').id for abilita in validated_data.get('safare_set')])):
+            abilita = SaFare.objects.get(oggetto_id=elem, personaggio_id=instance.id)
+            abilita.delete()
         for abilita in validated_data.get('safare_set'):
             safare_id = abilita.get("id")
             if safare_id:
@@ -189,7 +203,10 @@ class PersonaggioSerializerId(serializers.ModelSerializer):
                     if elem.id not in [e['id'] for e in instance.abilita.values()]:
                         SaFare.objects.create(grado=abilita.get("grado"), abilita_id=elem.id,
                                               personaggio_id=instance.id)
-
+        for elem in list(set([e['id'] for e in instance.incantesimi.values()]) - set(
+                [incantesimo.get('incantesimo').id for incantesimo in validated_data.get('lancia_set')])):
+            incantesimo = Lancia.objects.get(oggetto_id=elem, personaggio_id=instance.id)
+            incantesimo.delete()
         for incantesimo in validated_data.get('lancia_set'):
             lancia_id = incantesimo.get("id")
             if lancia_id:
@@ -204,4 +221,5 @@ class PersonaggioSerializerId(serializers.ModelSerializer):
                     if elem.id not in [e['id'] for e in instance.incantesimi.values()]:
                         Lancia.objects.create(preparato=incantesimo.get("preparato"), incantesimo_id=elem.id,
                                               personaggio_id=instance.id)
+        instance.save()
         return instance

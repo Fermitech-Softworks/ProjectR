@@ -90,6 +90,7 @@ export default function ClassSelector({inventario, setInventario}) {
                     setInventario(inventario => [...inventario, {
                         quantita: 1,
                         oggetto_id: oggettoId,
+                        id: null,
                         oggetto:{
                             nome: entry.nome,
                             dettagli: entry.dettagli,

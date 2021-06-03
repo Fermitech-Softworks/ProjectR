@@ -97,6 +97,7 @@ export default function AbilitaSelector({incantesimi, setIncantesimi}) {
                     setIncantesimi(incantesimi => [...incantesimi, {
                         preparata: true,
                         incantesimo_id: incantesimoId,
+                        id: null,
                         incantesimo:{
                             nome: entry.nome,
                             dettagli: entry.descrizione,

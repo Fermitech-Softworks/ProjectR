@@ -93,6 +93,7 @@ export default function AbilitaSelector({abilita, setAbilita}) {
                     setAbilita(abilita => [...abilita, {
                         grado: grado,
                         abilita_id: abilitaId,
+                        id: null,
                         abilita:{
                             nome: entry.nome,
                             dettagli: entry.descrizione,

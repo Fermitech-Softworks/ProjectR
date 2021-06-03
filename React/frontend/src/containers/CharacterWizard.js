@@ -20,9 +20,11 @@ import IncantesimiPanel from "./sheetComponents/IncantesimiPanel";
 import InventarioPanel from "./sheetComponents/InventarioPanel";
 import AbilitaList from "./sheetComponents/AbilitaList";
 
-export default function CharacterWizard() {
+export default function CharacterWizard({id}) {
     const {username} = useAppContext()
+    const {uid} = useAppContext()
     let history = useHistory()
+    const {address} = useAppContext()
     const [forza, setForza] = useState(10)
     const [destrezza, setDestrezza] = useState(10)
     const [costituzione, setCostituzione] = useState(10)
@@ -41,6 +43,7 @@ export default function CharacterWizard() {
     const [incantesimi, setIncantesimi] = useState([])
     const [inventario, setInventario] = useState([])
     const [note, setNote] = useState("")
+    const [charId, setCharId] = useState(0)
 
     useEffect(() => {
         updateLevel();
@@ -49,6 +52,14 @@ export default function CharacterWizard() {
     useEffect(() => {
         updateProficiency();
     }, [livello])
+
+    useEffect(()=> {
+        if(id !== undefined){
+            setCharId(id)
+            console.debug("Found id.")
+            loadCharData(id)
+        }
+    }, [])
 
     function updateLevel() {
         let livello = 0
@@ -82,6 +93,186 @@ export default function CharacterWizard() {
     const exporter_incantesimi = {incantesimi, setIncantesimi}
 
     const exporter_inventario = {inventario, setInventario}
+
+    async function loadCharData(id) {
+        console.debug("Loading data for character " + id)
+        console.debug("Connecting...")
+        let token = localStorage.getItem("token")
+        const response = await fetch(address + "/artificier/characters/full/" + id + "/", {
+            method: "GET",
+            credentials: "include",
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'X-CSRFToken': "",
+                'Authorization': "Bearer " + token
+            },
+        })
+        const values = await response.json()
+        console.debug("Now saving data...")
+        console.debug(values)
+        setNome(values['nome'])
+        setPvAttuali(values['pv_attuali'])
+        setPvMax(values['pv_max'])
+        setClasseArmatura(values['classe_armatura'])
+        setProficiency(values['capacita'])
+        setLivello(values['livello'])
+        console.debug(livello)
+        setForza(values['forza'])
+        setDestrezza(values['destrezza'])
+        setIntelligenza(values['intelligenza'])
+        setSaggezza(values['saggezza'])
+        console.debug(values['saggezza'])
+        setCarisma(values['carisma'])
+        setCostituzione(values['costituzione'])
+        setNote(values['note'])
+        setSpecie({id:values['specie']['id'], nome:values['specie']['nome'], dettagli:values['specie']['dettagli']})
+        let inv = []
+        values['oggetti'].forEach(function(entry){
+            inv.push({id: entry['id'], quantita:entry['quantita'], oggetto_id:entry['oggetto']['id'], oggetto:{
+                nome: entry['oggetto']['nome'], dettagli: entry['oggetto']['dettagli'], costo: entry['oggetto']['costo']
+                }})
+        })
+        let abi = []
+        values['abilita'].forEach(function(entry){
+            abi.push({id: entry['id'], grado:entry['grado'], abilita_id:entry['abilita']['id'], abilita:{
+                nome: entry['abilita']['nome'], dettagli: entry['abilita']['dettagli'], attributo: entry['abilita']['attributo']
+                }})
+        })
+        let cla = []
+        values['classi'].forEach(function(entry){
+            cla.push({id: entry['id'], livello:entry['livello'], classe_id:entry['classe']['id'], classe:{
+                nome:entry['classe']['nome'], dettagli:entry['classe']['dettagli']
+                }})
+        })
+        let inc = []
+        values['incantesimi'].forEach(function (entry){
+            inc.push({id: entry['id'], preparata:entry['preparato'], incantesimo_id:entry['incantesimo']['id'], incantesimo:{
+                nome:entry['incantesimo']['nome'] , dettagli:entry['incantesimo']['descrizione'] , scuola:entry['incantesimo']['scuola'] , componenti:entry['incantesimo']['componenti'] , dadi:entry['incantesimo']['dadi']
+                }})
+        })
+        setInventario(inv)
+        setAbilita(abi)
+        setClasse(cla)
+        setIncantesimi(inc)
+    }
+
+    async function create(event) {
+        if(charId !== 0){
+            await update(charId)
+            return
+        }
+        let token = localStorage.getItem("token")
+        console.debug("Saving...")
+        const response = await fetch(address + "/artificier/characters/", {
+            method: "POST",
+            credentials: "include",
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'X-CSRFToken': "",
+                'Authorization': "Bearer " + token
+            },
+            body: JSON.stringify({
+                nome: nome,
+                pv_max: pvMax,
+                pv_attuali: pvAttuali,
+                classe_armatura: classeArmatura,
+                capacita: proficiency,
+                livello: livello,
+                forza: forza,
+                destrezza: destrezza,
+                intelligenza: intelligenza,
+                saggezza: saggezza,
+                carisma: carisma,
+                costituzione: costituzione,
+                user: uid,
+                specie: specie.id
+            })
+        })
+        const values = await response.json()
+        console.debug(values)
+        setCharId(values.id)
+        console.debug(values.id)
+        await update(values.id)
+    }
+
+    function check() {
+        return !(nome || forza || destrezza || costituzione || intelligenza || saggezza || carisma || pvAttuali || pvMax || livello || proficiency || classeArmatura || specie || note)
+    }
+
+    async function update(id) {
+        console.debug("updating...")
+        let oggetti_upload = []
+        inventario.forEach(function (entry) {
+            if(entry !== undefined){
+            oggetti_upload.push({
+                id: entry.id,
+                quantita: entry.quantita,
+                oggetto: entry.oggetto_id
+            })}
+        })
+        let classi_upload = []
+        classe.forEach(function (entry) {
+            if(entry!== undefined){
+            classi_upload.push({
+                id: entry.id,
+                livello: entry.livello,
+                classe: entry.classe_id
+            })}
+        })
+        let abilita_upload = []
+        abilita.forEach(function (entry) {
+            if(entry!== undefined){
+            abilita_upload.push({
+                id: entry.id,
+                grado: entry.grado,
+                abilita: entry.abilita_id
+            })}
+        })
+        let incantesimi_upload = []
+        incantesimi.forEach(function (entry) {
+            if(entry!==undefined){
+            incantesimi_upload.push({
+                id: entry.id,
+                preparato: entry.preparata,
+                incantesimo: entry.incantesimo_id
+            })}
+        })
+        let token = localStorage.getItem("token")
+        const response = await fetch(address + "/artificier/characters/details/"+id+"/", {
+            method: "PUT",
+            credentials: "include",
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'X-CSRFToken': "",
+                'Authorization': "Bearer " + token
+            },
+            body: JSON.stringify({
+                nome: nome,
+                pv_max: pvMax,
+                pv_attuali: pvAttuali,
+                classe_armatura: classeArmatura,
+                capacita: proficiency,
+                livello: livello,
+                forza: forza,
+                destrezza: destrezza,
+                intelligenza: intelligenza,
+                saggezza: saggezza,
+                carisma: carisma,
+                costituzione: costituzione,
+                user: uid,
+                specie: specie.id,
+                oggetti: oggetti_upload,
+                abilita: abilita_upload,
+                classi: classi_upload,
+                incantesimi: incantesimi_upload
+            })
+        })
+        const values = await response.json()
+        console.debug(values)
+    }
 
     return (
         <div className={Style.Wizard}>
@@ -126,10 +317,10 @@ export default function CharacterWizard() {
                         </Col>
                         <Col md={6} sm={12}>
                             <div className={Style.LeftAlign}>
-                            <Form.Group className="mb-3" controlId="exampleForm.ControlTextarea1">
-                                <Form.Label>Note</Form.Label>
-                                <Form.Control as="textarea" rows={13} onChange={setNote}/>
-                            </Form.Group>
+                                <Form.Group className="mb-3" controlId="exampleForm.ControlTextarea1">
+                                    <Form.Label>Note</Form.Label>
+                                    <Form.Control as="textarea" rows={13} onChange={setNote}/>
+                                </Form.Group>
                             </div>
                         </Col>
                     </Row>
@@ -137,8 +328,7 @@ export default function CharacterWizard() {
                 </Col>
 
             </Row>
-
-
+            <Button onClick={event => create(event)}>Salva le modifiche</Button>
         </div>
     );
 }

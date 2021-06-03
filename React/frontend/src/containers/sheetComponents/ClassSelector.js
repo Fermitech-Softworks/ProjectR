@@ -87,6 +87,7 @@ export default function ClassSelector({classe, setClasse}) {
                 if (entry.id == classeId) {
                     setClasse(classe => [...classe, {
                         livello: 1,
+                        id: null,
                         classe_id: classeId,
                         classe:{
                             nome: entry.nome,

@@ -5,6 +5,7 @@ import Login from "./containers/Login";
 import NotFound from "./containers/NotFound";
 import Dashboard from "./containers/Dashboard";
 import CharacterWizard from "./containers/CharacterWizard";
+import CharacterDetails from "./containers/CharacterDetails.htm";
 
 export default function Routes() {
     return (
@@ -18,6 +19,7 @@ export default function Routes() {
             <Route exact path="/character/new">
                 <CharacterWizard />
             </Route>
+            <Route exact path="/character/details/:id" children={<CharacterDetails/>}/>
             <Route exact path="/dashboard">
                 <Dashboard />
             </Route>
