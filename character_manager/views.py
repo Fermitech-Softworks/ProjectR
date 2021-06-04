@@ -19,7 +19,7 @@ class UserViewSet(viewsets.ModelViewSet):
     """
     queryset = User.objects.all()
     serializer_class = UserSerializer
-    permission_classes = [AdminOrSelf]
+    permission_classes = [ReadOnly]
 
 
 class UserDetailViewSet(viewsets.ModelViewSet):

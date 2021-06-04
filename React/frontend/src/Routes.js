@@ -6,6 +6,7 @@ import NotFound from "./containers/NotFound";
 import Dashboard from "./containers/Dashboard";
 import CharacterWizard from "./containers/CharacterWizard";
 import CharacterDetails from "./containers/CharacterDetails.htm";
+import CampaignWizard from "./containers/CampaignWizard";
 
 export default function Routes() {
     return (
@@ -24,7 +25,7 @@ export default function Routes() {
                 <Dashboard />
             </Route>
             <Route exact path="/campaign/new">
-                <
+                <CampaignWizard/>
             </Route>
             <Route>
                 <NotFound />

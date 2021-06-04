@@ -54,6 +54,15 @@ class CampagnaViewSet(viewsets.ModelViewSet):
         return campaigns
 
 
+class CampagnaCreateViewSet(viewsets.ModelViewSet):
+    serializer_class = CampagnaCreateSerializer
+    permission_classes = [IsDM]
+
+    def get_queryset(self):
+        campaigns = Campagna.objects.filter(campagna_partecipa__utente=self.request.user).all()
+        return campaigns
+
+
 class MessaggioViewSet(viewsets.ModelViewSet):
     serializer_class = MessaggioSerializer
     permission_classes = [IsMember]

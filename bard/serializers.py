@@ -3,9 +3,17 @@ from bard.models import *
 from character_manager.serializers import PersonaggioSerializer, UserSerializer
 
 
-class CampagnaSerializer(serializers.ModelSerializer):
+class PartecipaSerializerUserDetails(serializers.ModelSerializer):
+    utente = UserSerializer(many=False, read_only=True)
+
     class Meta:
-        model = Campagna
+        model = Partecipa
+        fields = "__all__"
+
+
+class GruppoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Gruppo
         fields = "__all__"
 
 
@@ -15,17 +23,23 @@ class PartecipaSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
+class CampagnaCreateSerializer(serializers.ModelSerializer):
+    utenti = PartecipaSerializer(many=True, read_only=False, source="campagna_partecipa")
+    gruppi = GruppoSerializer(many=True, read_only=False, source="campagna_gruppo")
+    class Meta:
+        model = Campagna
+        fields = ["id", "titolo", "descrizione", "utenti", "gruppi"]
+
+
+class CampagnaSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Campagna
+        fields = ["id", "titolo", "descrizione"]
+
+
 class PartecipaSerializerDetails(serializers.ModelSerializer):
     utente = UserSerializer(many=False, read_only=True)
     campagna = CampagnaSerializer(many=False, read_only=True)
-
-    class Meta:
-        model = Partecipa
-        fields = "__all__"
-
-
-class PartecipaSerializerUserDetails(serializers.ModelSerializer):
-    utente = UserSerializer(many=False, read_only=True)
 
     class Meta:
         model = Partecipa
@@ -41,10 +55,7 @@ class CampagnaSerializerDetails(serializers.ModelSerializer):
         fields = ("id", "titolo", "descrizione", "utenti", "personaggi")
 
 
-class GruppoSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Gruppo
-        fields = "__all__"
+
 
 
 class GruppoSerializerDetails(serializers.ModelSerializer):
