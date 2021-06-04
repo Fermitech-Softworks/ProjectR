@@ -15,7 +15,7 @@ import Navbar from "react-bootstrap/Navbar";
 import {Link} from "react-router-dom";
 
 
-export default function AbilitaDetails(props) {
+export default function IncantesimoDetails(props) {
 
     function update(event) {
         props.setIncantesimi(incantesimi => {
@@ -37,7 +37,8 @@ export default function AbilitaDetails(props) {
                 incantesimi = incantesimi.map(function (entry) {
                     if (typeof entry !== 'undefined') {
                         if (entry.incantesimo_id === props.incantesimo.incantesimo_id) {
-
+                            console.debug(entry.incantesimo_id)
+                            console.debug(props.incantesimo.incantesimo_id)
                         } else {
                             return entry
                         }
@@ -46,7 +47,7 @@ export default function AbilitaDetails(props) {
                 return incantesimi
             }
         )
-        if (!props.incantesimi) {
+        if (!props.incantesimo) {
             props.setIncantesimi([])
         }
     }

@@ -1,6 +1,11 @@
-from django.urls import path, include
 from .views import *
+from rest_framework import routers
 
-urlpatterns = [
+router = routers.DefaultRouter()
+router.register(r'campaign', CampagnaViewSet, basename='campaign')
+router.register(r'campaign/details', CampagnaDetailsViewSet, basename='campaign/details')
+router.register(r'group', GruppoViewSet, basename="group")
+router.register(r'group/details', GruppoDetailsViewSet, basename="group/details")
+router.register(r'messages', MessaggioViewSet, basename="messages")
 
-]
+urlpatterns = router.urls

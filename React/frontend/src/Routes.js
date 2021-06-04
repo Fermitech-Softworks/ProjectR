@@ -23,7 +23,9 @@ export default function Routes() {
             <Route exact path="/dashboard">
                 <Dashboard />
             </Route>
-
+            <Route exact path="/campaign/new">
+                <
+            </Route>
             <Route>
                 <NotFound />
             </Route>

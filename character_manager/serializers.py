@@ -205,7 +205,7 @@ class PersonaggioSerializerId(serializers.ModelSerializer):
                                               personaggio_id=instance.id)
         for elem in list(set([e['id'] for e in instance.incantesimi.values()]) - set(
                 [incantesimo.get('incantesimo').id for incantesimo in validated_data.get('lancia_set')])):
-            incantesimo = Lancia.objects.get(oggetto_id=elem, personaggio_id=instance.id)
+            incantesimo = Lancia.objects.get(incantesimo_id=elem, personaggio_id=instance.id)
             incantesimo.delete()
         for incantesimo in validated_data.get('lancia_set'):
             lancia_id = incantesimo.get("id")

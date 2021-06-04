@@ -9,21 +9,21 @@ from character_manager.models import Personaggio
 class Campagna(models.Model):
     titolo = models.CharField(max_length=64)
     descrizione = models.TextField()
-    utenti = models.ManyToManyField(User, through="Partecipa")
-    personaggi = models.ManyToManyField(Personaggio)
+    utenti = models.ManyToManyField(User, through="Partecipa", related_name="partecipanti_campagna")
+    personaggi = models.ManyToManyField(Personaggio, related_name="personaggi_campagna")
 
 
 class Partecipa(models.Model):
     comeDm = models.BooleanField(default=False)
-    campagna = models.ForeignKey(Campagna, on_delete=models.CASCADE)
-    utente = models.ForeignKey(User, on_delete=models.CASCADE)
+    campagna = models.ForeignKey(Campagna, on_delete=models.CASCADE, related_name="campagna_partecipa")
+    utente = models.ForeignKey(User, on_delete=models.CASCADE, related_name="utente_partecipa")
 
 
 class Gruppo(models.Model):
     nome = models.CharField(max_length=64)
     attivo = models.BooleanField(default=False)
-    campagna = models.ForeignKey(Campagna, on_delete=models.CASCADE)
-    users = models.ManyToManyField(User)
+    campagna = models.ForeignKey(Campagna, on_delete=models.CASCADE, related_name="campagna_gruppo")
+    users = models.ManyToManyField(User, related_name="utenti_gruppo")
 
 
 class Messaggio(models.Model):
@@ -31,5 +31,6 @@ class Messaggio(models.Model):
     tipo = models.PositiveSmallIntegerField(choices=messaggi_tipo, default=1)
     contenuto = models.TextField()
     ora = models.DateTimeField()
-    in_risposta = models.ForeignKey('self', null=True, on_delete=models.CASCADE)
-    gruppo = models.ForeignKey(Gruppo, on_delete=models.CASCADE)
+    in_risposta = models.ForeignKey('self', null=True, on_delete=models.CASCADE, related_name="risposta")
+    gruppo = models.ForeignKey(Gruppo, on_delete=models.CASCADE, related_name="gruppo_messaggio")
+    utente = models.ForeignKey(User, on_delete=models.CASCADE, related_name="utente_messaggio")
