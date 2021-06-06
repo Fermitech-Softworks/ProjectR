@@ -7,7 +7,7 @@ import {useAppContext} from "../../libs/Context";
 import Button from "react-bootstrap/Button";
 import Select from "react-select";
 
-export default function PlayerSelector({players, setPlayers}) {
+export default function PlayerSelector({players, setPlayers, playerList}) {
 
     const [userList, setUserList] = useState([])
     const {userToken} = useAppContext()
@@ -17,8 +17,12 @@ export default function PlayerSelector({players, setPlayers}) {
     const {uid} = useAppContext()
 
     useEffect(() => {
-        onLoad();
-    }, []);
+        if(playerList!==undefined){
+            setUserList(playerList)
+        }
+        else{
+        onLoad()};
+    }, [playerList]);
 
     useEffect(() => {
         setSelectInput(userList.map(function (entry) {
@@ -54,7 +58,17 @@ export default function PlayerSelector({players, setPlayers}) {
         const values = await response.json()
         let userData = values['results']
         userData.sort(compare)
-        setUserList(userData)
+        console.debug(userData)
+        let array = []
+        userData.forEach(function(entry){
+            if(entry.id===uid){
+
+            }
+            else{
+                array.push(entry)
+            }
+        })
+        setUserList(array)
     }
 
     function update(event) {

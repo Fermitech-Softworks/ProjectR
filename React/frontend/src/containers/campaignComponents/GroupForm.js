@@ -7,6 +7,7 @@ import {useAppContext} from "../../libs/Context";
 import Button from "react-bootstrap/Button";
 import Select from "react-select";
 import {C} from "react-select/dist/index-4bd03571.esm";
+import {func} from "prop-types";
 
 export default function GroupForm({groups, setGroups}) {
 
@@ -20,9 +21,23 @@ export default function GroupForm({groups, setGroups}) {
             id: null,
             players: [{
                 username: username,
-                uid: uid
-            },]
+                utente: uid
+            }]
         }])
+    }
+
+    function validator(){
+        let check = true
+        if(!nome){
+            check = false
+        }
+        groups.forEach(function(entry){
+            if(entry.nome===nome){
+                check=false
+                return
+            }
+        })
+        return check
     }
 
     return (
@@ -40,7 +55,7 @@ export default function GroupForm({groups, setGroups}) {
                         />
                     </Col>
                     <Col>
-                        <Button block onClick={event => addGroup(event)}>Aggiungi</Button>
+                        <Button block onClick={event => addGroup(event)} disabled={!validator()}>Aggiungi</Button>
                     </Col>
                 </Row>
             </Form.Group>

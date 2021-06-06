@@ -22,7 +22,7 @@ export default function CampaignWizard(props) {
     const [groups, setGroups] = useState([])
 
     const export_players = {players, setPlayers}
-    const export_groups = {groups, setGroups}
+    const export_groups = {groups, setGroups, players}
 
 
     function validate_creation(){
