@@ -8,6 +8,7 @@ import CharacterWizard from "./containers/CharacterWizard";
 import CharacterDetails from "./containers/CharacterDetails.htm";
 import CampaignWizard from "./containers/CampaignWizard";
 import CampaignDetails from "./containers/CampaignDetails";
+import ChatRoom from "./containers/ChatRoom";
 
 export default function Routes() {
     return (
@@ -29,6 +30,7 @@ export default function Routes() {
                 <CampaignWizard/>
             </Route>
             <Route exact path="/campaign/details/:id" children={<CampaignDetails/>}/>
+            <Route exact path="/campaign/chat/:id" children={<ChatRoom/>}/>
             <Route>
                 <NotFound />
             </Route>
