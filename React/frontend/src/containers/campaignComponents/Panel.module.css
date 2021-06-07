@@ -13,6 +13,22 @@
     gap: 4px;
 }
 
+.GeneralitaPanelSmall{
+    padding-top: 10px;
+    padding-right: 10px;
+    border-bottom-width: 10px;
+    border-left-width: 10px;
+    padding-left: 10px;
+    padding-bottom: 10px;
+    text-align: left;
+    background: white;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    height: 20vh;
+    gap: 4px;
+}
+
+
 .DescriptionContainer{
     overflow-y: scroll;
     height: 20vh;
@@ -44,4 +60,8 @@
     padding-left: 10px;
     padding-right: 10px;
     color: black;
+}
+
+.BottomMargin{
+    margin-bottom: 10px;
 }

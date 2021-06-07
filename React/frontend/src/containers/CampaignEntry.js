@@ -14,6 +14,13 @@ export default function CharacterEntry({titolo, id,...props}) {
         <div className={Style.CharacterEntry}>
                     <ListGroup.Item><Row>
                         <Col>{titolo}</Col>
+                        <Col>
+                            <Link to={link}>
+                                <FontAwesomeIcon icon={faPencilAlt}/>
+                            </Link>
+                            &nbsp;
+                            <FontAwesomeIcon icon={faTrashAlt}/>
+                        </Col>
                     </Row></ListGroup.Item>
 
         </div>

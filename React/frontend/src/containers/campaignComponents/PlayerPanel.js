@@ -6,6 +6,7 @@ import {ListGroup} from "react-bootstrap";
 
 export default function PlayerPanel({players, setPlayers}) {
     const exporter = {players, setPlayers}
+    if(players !== undefined){
     return (
                 <div className={Style.GeneralitaPanel}>
                     <PlayerSelector {...exporter}/>
@@ -15,5 +16,6 @@ export default function PlayerPanel({players, setPlayers}) {
                         </ListGroup>
                     </div>
                 </div>
-    )
+    )}
+    return (<div></div>)
 }

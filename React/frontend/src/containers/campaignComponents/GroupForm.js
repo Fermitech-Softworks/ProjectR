@@ -19,22 +19,25 @@ export default function GroupForm({groups, setGroups}) {
         setGroups(groups => [...groups, {
             nome: nome,
             id: null,
-            players: [{
+            attivo: false,
+            users: [{
                 username: username,
                 utente: uid
             }]
         }])
     }
 
-    function validator(){
+    function validator() {
         let check = true
-        if(!nome){
+        if (!nome) {
             check = false
         }
-        groups.forEach(function(entry){
-            if(entry.nome===nome){
-                check=false
-                return
+        groups.forEach(function (entry) {
+            if (entry !== undefined) {
+                if (entry.nome === nome) {
+                    check = false
+                    return
+                }
             }
         })
         return check
@@ -43,7 +46,7 @@ export default function GroupForm({groups, setGroups}) {
     return (
         <div>
 
-            <Form.Group size="lg" controlId="nome">
+            <Form.Group size="lg" controlId="nomeGruppo">
                 <Form.Label>Nome gruppo</Form.Label>
                 <Row>
                     <Col>
