@@ -12,9 +12,11 @@ import Form from "react-bootstrap/Form";
 
 export default function GroupElement(props) {
 
-    function activate(event){
-        props.setChannelId(props.group.id)
-
+    function activate(event) {
+        props.setChannelId({id: props.group.id, type: "standard"})
+    }
+    function move(event){
+        props.setChannelId({id: props.group.id, type: "master"})
     }
 
     if (props.group !== undefined) {
@@ -24,10 +26,15 @@ export default function GroupElement(props) {
                     <Col>{props.group.nome}</Col>
                     <Col>
                         <div className={Style.Options}>
+                            <Button variant={"primary"} onClick={event => {
+                                move(event)
+                            }}>
+                                Spostati
+                            </Button>
                             <Button variant={"info"} onClick={event => {
                                 activate(event)
                             }}>
-                                Sposta i giocatori nel canale
+                                Sposta
                             </Button>
                         </div>
                     </Col>

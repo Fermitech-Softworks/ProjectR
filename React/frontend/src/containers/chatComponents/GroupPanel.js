@@ -11,6 +11,7 @@ export default function GroupPanel({groups, setGroups, channelId, setChannelId})
     if (groups !== undefined) {
         return (
             <div className={Style.GeneralitaPanel}>
+
                 <div>
                     {groups.map(group => <GroupElement group={group} groups={groups} setGroups={setGroups}
                                                        channelId={channelId} setChannelId={setChannelId}/>)}
