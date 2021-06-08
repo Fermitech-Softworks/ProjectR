@@ -10,13 +10,13 @@ import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Form from "react-bootstrap/Form";
 import {useAppContext} from "../../libs/Context";
+import GroupPanel from "./GroupPanel";
 
 export default function Message(props) {
 
     const [user, setUser] = useState("")
-    const uid = useAppContext()
-    const [sm1, setSm1] = useState(10)
-    const [sm2, setSm2] = useState(2)
+    const {uid} = useAppContext()
+    const [isSelf, setIsSelf] = useState(false)
 
     function getUser() {
         props.listaPlayer.forEach(function (entry) {
@@ -24,8 +24,7 @@ export default function Message(props) {
                 console.debug(entry.utente)
                 setUser(entry.utente)
                 if (uid === entry.utente.id) {
-                    setSm1(2)
-                    setSm2(10)
+                    setIsSelf(true)
                 }
             }
         })
@@ -37,16 +36,43 @@ export default function Message(props) {
 
     return (
         <div className={Style.CharacterEntry}>
-                <ListGroup.Item>
-                    <Row>
-                            <b>
-                            {user.username}
-                            </b>
-                    </Row>
-                    <Row>
-                        {props.message.message}
-                    </Row>
-                </ListGroup.Item>
+            <Row>
+                <Col md={6} sm={12}>
+                {!isSelf ? (
 
+                        <ListGroup.Item>
+                            <Row>
+                                <b>
+                                    {user.username}
+                                </b>
+                            </Row>
+                            <Row>
+                                {props.message.message}
+                            </Row>
+                        </ListGroup.Item>
+
+                ) : (
+                    <div>&nbsp;</div>
+                )}
+                </Col>
+                <Col md={6} sm={12}>
+                    {isSelf ? (
+
+                        <ListGroup.Item>
+                            <Row>
+                                <b>
+                                    {user.username}
+                                </b>
+                            </Row>
+                            <Row>
+                                {props.message.message}
+                            </Row>
+                        </ListGroup.Item>
+
+                    ) : (
+                        <div>&nbsp;</div>
+                    )}
+                </Col>
+            </Row>
         </div>)
 }
