@@ -115,10 +115,11 @@ class PartecipaSerializerDetails(serializers.ModelSerializer):
 class CampagnaSerializerDetails(serializers.ModelSerializer):
     personaggi = PersonaggioSerializer(many=True, read_only=True)
     utenti = PartecipaSerializerUserDetails(many=True, read_only=True, source="campagna_partecipa")
+    gruppi = GruppoSerializer(many=True, read_only=False, source="campagna_gruppo")
 
     class Meta:
         model = Campagna
-        fields = ("id", "titolo", "descrizione", "utenti", "personaggi")
+        fields = ("id", "titolo", "descrizione", "utenti", "personaggi", "gruppi")
 
 
 class GruppoSerializerDetails(serializers.ModelSerializer):

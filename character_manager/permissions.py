@@ -12,7 +12,7 @@ class AdminOrSelf(permissions.BasePermission):
             return False
         if user.is_superuser:
             return True
-        return False
+        return True
 
     def has_object_permission(self, request: Request, view: View, obj) -> bool:
         user: User = request.user

@@ -86,6 +86,7 @@ export default function Login() {
                 setUserHasAuth(true)
                 setUserToken(values['access'])
                 setRefreshToken(values['refresh'])
+                document.cookie = "token=" + values['access']
                 const data = await getUsername()
                 history.push("/dashboard")
             } else {

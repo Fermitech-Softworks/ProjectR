@@ -45,8 +45,9 @@ export default function CharacterList() {
         })
         const values = await response.json()
         let charData = values['results']
+        if(charData!==undefined){
         charData.sort(compare)
-        setCharacterList(values['results'])
+        setCharacterList(values['results'])}
     }
 
     const redirect = (path) =>{
