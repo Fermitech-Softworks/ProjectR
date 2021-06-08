@@ -6,6 +6,7 @@ from character_manager.models import *
 
 
 class UserSerializer(serializers.ModelSerializer):
+    is_superuser = serializers.BooleanField(read_only=True, required=False)
     class Meta:
         model = User
         fields = ("id", "email", "username", "characters", "is_superuser")

@@ -11,6 +11,11 @@ import {Link} from "react-router-dom";
 export default function CharacterEntry({titolo, id,...props}) {
     const link = "/campaign/details/"+id+"/"
     const link2 = "/campaign/chat/"+id+"/"
+
+    useEffect(()=>{
+        console.log(props)
+    },[])
+
     return (
         <div className={Style.CharacterEntry}>
                     <ListGroup.Item><Row>

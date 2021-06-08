@@ -43,7 +43,7 @@ export default function Message(props) {
                         <ListGroup.Item>
                             <Row>
                                 <b>
-                                    {user.username}
+                                    {user.username} (#{props.message.room_name})
                                 </b>
                             </Row>
                             <Row>
@@ -61,7 +61,7 @@ export default function Message(props) {
                         <ListGroup.Item>
                             <Row>
                                 <b>
-                                    {user.username}
+                                    {user.username} (#{props.message.room_name})
                                 </b>
                             </Row>
                             <Row>

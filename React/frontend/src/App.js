@@ -25,7 +25,12 @@ function App() {
         setUserToken("");
         setRefreshToken("");
         localStorage.removeItem("token")
+        localStorage.removeItem("uid")
+        localStorage.removeItem("username")
+        localStorage.removeItem("isSuperUser")
+        localStorage.removeItem("login")
         localStorage.removeItem("refresh")
+        document.cookie = "token=; expires = Thu, 01 Jan 1970 00:00:00 GMT"
         history.push("/")
     }
 

@@ -46,7 +46,7 @@ export default function ChatRoom() {
             return
         }
         console.debug("Stabilisco la connessione con il canale " + channelId['id'] + " con modalità " + channelId['type'])
-        if (!(isDm && channelId['master'])) {
+        if (!(isDm && channelId['master'])&&channelId) {
             console.debug(channelId)
             if(chatSocket!== null){
             chatSocket.close()}
@@ -55,9 +55,13 @@ export default function ChatRoom() {
                 if (e.data !== undefined) {
                     let json = JSON.parse(e.data)
                     console.debug(json)
+                    if(json['room_name']===undefined || json['room_name']===null){
+                        return
+                    }
                     setMessageLog(messageLog => [...messageLog, {
                         message: json['message'],
-                        mittente: json['mittente']
+                        mittente: json['mittente'],
+                        room_name: json['room_name']
                     }
                     ])
                 }
@@ -114,6 +118,9 @@ export default function ChatRoom() {
                     'gruppo': dmChannelId['id']
                 }))
             }
+            if(chatSocket!==null){
+                chatSocket.close()}
+            setChannelId(dmChannelId)
         }
         else if(dmChannelId!== null){
             if(chatSocket!==null){
@@ -126,7 +133,8 @@ export default function ChatRoom() {
                     console.debug(json)
                     setMessageLog(messageLog => [...messageLog, {
                         message: json['message'],
-                        mittente: json['mittente']
+                        mittente: json['mittente'],
+                        room_name: json['room_name']
                     }
                     ])
                 }
@@ -204,7 +212,7 @@ export default function ChatRoom() {
                             onChange={(e) => setMessage(e.target.value)}
                         />
                     </Form.Group>
-                    <Button block onClick={event => sendMessage(event)}>Invia</Button>
+                    <Button block onClick={event => sendMessage(event)} disabled={!channelId}>Invia</Button>
                 </Col>
                 <Col>
                     {isDm ? (

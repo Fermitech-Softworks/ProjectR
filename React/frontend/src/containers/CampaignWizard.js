@@ -142,6 +142,8 @@ export default function CampaignWizard(props) {
         })
         const values = await response.json()
         console.log(values)
+        let check = false
+
         setPlayers(values.utenti)
         setNome(values.titolo)
         setDescrizione(values.descrizione)
