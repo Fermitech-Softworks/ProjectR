@@ -13,10 +13,11 @@ import Form from "react-bootstrap/Form";
 export default function GroupElement(props) {
 
     function activate(event) {
-        props.setChannelId({id: props.group.id, type: "standard"})
+        console.debug(props)
+        props.setDmChannelId({id: props.group.id, type: "standard"})
     }
     function move(event){
-        props.setChannelId({id: props.group.id, type: "master"})
+        props.setDmChannelId({id: props.group.id, type: "master"})
     }
 
     if (props.group !== undefined) {

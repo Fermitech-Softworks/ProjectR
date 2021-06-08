@@ -39,38 +39,42 @@ export default function ChatRoom() {
     const [campagna, setCampagna] = useState(null)
     const [listaPlayer, setListaPlayer] = useState([])
     const [groups, setGroups] = useState([])
-    const [dmChannelId, setDmChannelId] = useState()
+    const [dmChannelId, setDmChannelId] = useState(null)
 
     useEffect(() => {
         if (channelId === null) {
             return
         }
-        console.debug(channelId)
-        console.debug("Stabilisco la connessione con il canale "+ channelId['id'] + " con modalità " + channelId['type'] )
-        let s = new WebSocket("ws://localhost:8000/ws/chat/" + channelId['id'] + "/")
-        s.onmessage = function (e) {
-            if (e.data !== undefined) {
-                let json = JSON.parse(e.data)
-                console.debug(json)
-                setMessageLog(messageLog => [...messageLog, {
-                    message: json['message'],
-                    mittente: json['mittente']
+        console.debug("Stabilisco la connessione con il canale " + channelId['id'] + " con modalità " + channelId['type'])
+        if (!(isDm && channelId['master'])) {
+            console.debug(channelId)
+            if(chatSocket!== null){
+            chatSocket.close()}
+            let s = new WebSocket("ws://localhost:8000/ws/chat/" + channelId['id'] + "/")
+            s.onmessage = function (e) {
+                if (e.data !== undefined) {
+                    let json = JSON.parse(e.data)
+                    console.debug(json)
+                    setMessageLog(messageLog => [...messageLog, {
+                        message: json['message'],
+                        mittente: json['mittente']
+                    }
+                    ])
                 }
-                ])
             }
-        }
-        s.onerror = function (e) {
-            console.debug(e)
-        }
-        s.onclose = function (e) {
-            console.debug(e)
-        }
-        setChatSocket(s)
-        return () => {
-            if (chatSocket !== null) {
-                chatSocket.close()
+            s.onerror = function (e) {
+                console.debug(e)
             }
-            setChatSocket(null)
+            s.onclose = function (e) {
+                console.debug(e)
+            }
+            setChatSocket(s)
+            return () => {
+                if (chatSocket !== null) {
+                    chatSocket.close()
+                }
+                setChatSocket(null)
+            }
         }
     }, [channelId])
 
@@ -83,7 +87,7 @@ export default function ChatRoom() {
         s.onmessage = function (e) {
             const data = JSON.parse(e.data)
             console.log("Gruppo: " + e.data)
-            setChannelId({id:data['gruppo'], type:"standard"})
+            setChannelId({id: data['gruppo'], type: "standard"})
         }
         s.onerror = function (e) {
             console.debug(e)
@@ -101,15 +105,47 @@ export default function ChatRoom() {
     }, [id])
 
     useEffect(() => {
-        if (channelId !== null && channelId['type'] !== "master") {
+        console.debug("test")
+        console.debug(dmChannelId)
+        if (dmChannelId !== null && dmChannelId['type'] !== "master" && isDm) {
             console.debug("not master")
             if (campaignSocket !== null) {
                 campaignSocket.send(JSON.stringify({
-                    'gruppo': channelId['id']
+                    'gruppo': dmChannelId['id']
                 }))
             }
         }
-    }, [channelId])
+        else if(dmChannelId!== null){
+            if(chatSocket!==null){
+            chatSocket.close()}
+            console.debug("Collegamento al canale "+ dmChannelId['id'] + "come master.")
+            let s = new WebSocket("ws://localhost:8000/ws/chat/" + dmChannelId['id'] + "/")
+            s.onmessage = function (e) {
+                if (e.data !== undefined) {
+                    let json = JSON.parse(e.data)
+                    console.debug(json)
+                    setMessageLog(messageLog => [...messageLog, {
+                        message: json['message'],
+                        mittente: json['mittente']
+                    }
+                    ])
+                }
+            }
+            s.onerror = function (e) {
+                console.debug(e)
+            }
+            s.onclose = function (e) {
+                console.debug(e)
+            }
+            setChatSocket(s)
+            return () => {
+                if (chatSocket !== null) {
+                    chatSocket.close()
+                }
+                setChatSocket(null)
+            }
+        }
+    }, [dmChannelId])
 
     function sendMessage(event) {
         if (chatSocket !== null) {
@@ -152,7 +188,7 @@ export default function ChatRoom() {
         setGroups(values.gruppi)
     }
 
-    const exporter_groups = {groups, setGroups, channelId, setChannelId}
+    const exporter_groups = {groups, setGroups, dmChannelId, setDmChannelId}
     const exporter_chatlog = {messageLog, listaPlayer}
 
     return (

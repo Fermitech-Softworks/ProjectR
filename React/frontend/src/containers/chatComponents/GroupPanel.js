@@ -4,8 +4,8 @@ import {Accordion, ListGroup} from "react-bootstrap";
 import {useAppContext} from "../../libs/Context";
 import GroupElement from "./GroupElement";
 
-export default function GroupPanel({groups, setGroups, channelId, setChannelId}) {
-    const exporter = {groups, setGroups, channelId, setChannelId}
+export default function GroupPanel({groups, setGroups, dmChannelId, setDmChannelId}) {
+    const exporter = {groups, setGroups, dmChannelId, setDmChannelId}
     const {uid} = useAppContext()
 
     if (groups !== undefined) {
@@ -14,7 +14,7 @@ export default function GroupPanel({groups, setGroups, channelId, setChannelId})
 
                 <div>
                     {groups.map(group => <GroupElement group={group} groups={groups} setGroups={setGroups}
-                                                       channelId={channelId} setChannelId={setChannelId}/>)}
+                                                       dmChannelId={dmChannelId} setDmChannelId={setDmChannelId}/>)}
                 </div>
             </div>)
     }
