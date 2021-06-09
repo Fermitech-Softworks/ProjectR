@@ -1,9 +1,12 @@
 import json
 import jwt
-from asgiref.sync import async_to_sync
+from asgiref.sync import async_to_sync, sync_to_async
 from django.contrib.auth.models import User
 from ProjectR.settings import SECRET_KEY, SIMPLE_JWT
 from channels.generic.websocket import AsyncWebsocketConsumer
+from channels.db import database_sync_to_async
+from bard.models import *
+import datetime
 
 
 class ChatConsumer(AsyncWebsocketConsumer):
@@ -13,7 +16,8 @@ class ChatConsumer(AsyncWebsocketConsumer):
 
     async def connect(self):
         try:
-            self.room_name = "gruppo"+self.scope['url_route']['kwargs']['room_name']
+            self.room_name = "gruppo" + self.scope['url_route']['kwargs']['room_name']
+            self.group_id = self.scope['url_route']['kwargs']['room_name']
             self.room_group_name = 'chat_%s' % self.room_name
             self.token = jwt.decode(self.scope['cookies']['token'], SECRET_KEY, algorithms=[SIMPLE_JWT['ALGORITHM']])
             # Join room group
@@ -34,11 +38,17 @@ class ChatConsumer(AsyncWebsocketConsumer):
             self.channel_name
         )
 
+    @database_sync_to_async
+    def add_message_to_db(self, text_data):
+        m = Messaggio.objects.create(contenuto=text_data['message'], ora=datetime.datetime.now(), utente_id=self.token['user_id'],
+                                 gruppo_id=self.group_id)
+        return m
+
     # Receive message from WebSocket
     async def receive(self, text_data):
         text_data_json = json.loads(text_data)
         message = text_data_json['message']
-
+        m = await self.add_message_to_db(text_data)
         # Send message to room group
         await self.channel_layer.group_send(
             self.room_group_name,
@@ -67,7 +77,7 @@ class CampaignConsumer(AsyncWebsocketConsumer):
 
     async def connect(self):
         try:
-            self.room_name = "campagna"+self.scope['url_route']['kwargs']['room_name']
+            self.room_name = "campagna" + self.scope['url_route']['kwargs']['room_name']
             self.room_group_name = 'chat_%s' % self.room_name
             self.token = jwt.decode(self.scope['cookies']['token'], SECRET_KEY, algorithms=[SIMPLE_JWT['ALGORITHM']])
             # Join room group
