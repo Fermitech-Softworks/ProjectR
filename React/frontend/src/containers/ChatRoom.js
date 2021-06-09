@@ -60,6 +60,7 @@ export default function ChatRoom() {
         })
         if(!(userChannels.includes(channelId['id']))){
             console.debug(userChannels)
+            console.debug(chatSocket)
             return
         }
         console.debug("Stabilisco la connessione con il canale " + channelId['id'] + " con modalità " + channelId['type'])
@@ -181,7 +182,7 @@ export default function ChatRoom() {
                 'message': message
             }))
         } else {
-            alert("Nessun canale è stato attivato. Attendi.")
+            alert("Nessun canale è stato attivato, oppure il canale è in pausa. Attendi.")
         }
     }
 
