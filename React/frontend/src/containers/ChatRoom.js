@@ -199,6 +199,8 @@ export default function ChatRoom() {
         setGroups(values.gruppi)
     }
 
+
+
     const exporter_groups = {groups, setGroups, dmChannelId, setDmChannelId}
     const exporter_chatlog = {messageLog, listaPlayer, autoScroll}
 

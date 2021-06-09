@@ -19,9 +19,14 @@ class IsDM(permissions.BasePermission):
         user: User = request.user
         if user.is_anonymous:
             return False
-        if Partecipa.objects.filter(campagna=obj, utente=user) and request.method in ['GET', 'POST', 'HEAD', 'OPTIONS']:
+        if type(obj).__name__ == 'Gruppo':
+            campagna = obj.campagna
+        else:
+            campagna = obj
+
+        if Partecipa.objects.filter(campagna=campagna, utente=user) and request.method in ['GET', 'POST', 'HEAD', 'OPTIONS']:
             return True
-        if Partecipa.objects.filter(campagna=obj, utente=user, comeDm=True):
+        if Partecipa.objects.filter(campagna=campagna, utente=user, comeDm=True):
             return True
 
         return False
