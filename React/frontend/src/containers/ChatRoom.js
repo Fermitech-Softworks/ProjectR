@@ -23,6 +23,8 @@ import Navbar from "react-bootstrap/Navbar";
 import GroupPanel from "./chatComponents/GroupPanel";
 import ChatLog from "./chatComponents/ChatLog";
 import CharacterSelector from "./chatComponents/CharacterSelector";
+import AccordionBody from "react-bootstrap/Accordion";
+import PlayerCharacters from "./chatComponents/PlayerCharacters";
 
 export default function ChatRoom() {
     const {username} = useAppContext()
@@ -250,6 +252,7 @@ export default function ChatRoom() {
     const exporter_groups = {groups, setGroups, dmChannelId, setDmChannelId}
     const exporter_chatlog = {messageLog, listaPlayer, autoScroll, setMessageLog, userGroups}
     const exporter_character = {character, setCharacter, campagna}
+    const exporter_characters = {campagna, setCampagna}
 
     return (
         <div className={Style.Wizard}>
@@ -276,10 +279,30 @@ export default function ChatRoom() {
                 </Col>
                 <Col md={6} sm={12}>
                     {isDm ? (
-                        <Jumbotron>
-                            <h3>Gestione canali</h3>
-                            <GroupPanel {...exporter_groups}/>
-                        </Jumbotron>
+                            <Accordion defaultActiveKey="0">
+                                <Card>
+                                    <Card.Header>
+                                        <Accordion.Toggle as={Button} variant="link" eventKey="0">
+                                            Gruppi
+                                        </Accordion.Toggle>
+                                    </Card.Header>
+                                    <Accordion.Collapse eventKey="0">
+                                        <AccordionBody>
+                                        <GroupPanel {...exporter_groups}/>
+                                        </AccordionBody>
+                                    </Accordion.Collapse>
+                                </Card>
+                                <Card>
+                                    <Card.Header>
+                                        <Accordion.Toggle as={Button} variant="link" eventKey="1">
+                                            <PlayerCharacters {...exporter_characters}/>
+                                        </Accordion.Toggle>
+                                    </Card.Header>
+                                    <Accordion.Collapse eventKey="1">
+                                        <Card.Body>Hello! I'm another body</Card.Body>
+                                    </Accordion.Collapse>
+                                </Card>
+                            </Accordion>
                     ) : (
                         <div>
                             <CharacterSelector {...exporter_character}/>
