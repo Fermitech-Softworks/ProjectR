@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from bard.models import *
-from character_manager.serializers import PersonaggioSerializer, UserSerializer
+from character_manager.serializers import PersonaggioSerializer, UserSerializer, PersonaggioSerializerReadOnly
 
 
 class PartecipaSerializerUserDetails(serializers.ModelSerializer):
@@ -41,6 +41,14 @@ class PartecipaSerializer(serializers.ModelSerializer):
     class Meta:
         model = Partecipa
         fields = ("id", "comeDm", "utente", "username")
+
+
+class CampagnaCharacterSerializer(serializers.ModelSerializer):
+    personaggi = PersonaggioSerializerReadOnly(many=True, read_only=True)
+
+    class Meta:
+        model = Campagna
+        fields = ("id", "personaggi")
 
 
 class CampagnaCreateSerializer(serializers.ModelSerializer):

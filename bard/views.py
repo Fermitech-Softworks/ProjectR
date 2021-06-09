@@ -2,6 +2,8 @@ from rest_framework.permissions import BasePermission, SAFE_METHODS, IsAuthentic
 from rest_framework.viewsets import ViewSet
 
 from .models import *
+from character_manager.models import Personaggio
+from character_manager.serializers import PersonaggioSerializerReadOnly
 from rest_framework import viewsets
 from rest_framework import permissions
 from bard.serializers import *
@@ -9,7 +11,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 
-from .permissions import IsDM, IsMember
+from .permissions import IsDM, IsMember, IsDmCharacter
 
 
 class ReadOnly(BasePermission):
@@ -120,6 +122,15 @@ class CampagnaDetailsViewSet(viewsets.ModelViewSet):
         return campaigns
 
 
+class CampagnaGetInfoPersonaggio(viewsets.ModelViewSet):
+    serializer_class = PersonaggioSerializerReadOnly
+    permission_classes = [IsDmCharacter | ReadOnly]
+
+    def get_queryset(self):
+        personaggi = Personaggio.objects.all()
+        return personaggi
+
+
 class CampagnaViewSet(viewsets.ModelViewSet):
     serializer_class = CampagnaSerializer
     permission_classes = [IsDM]
@@ -127,6 +138,9 @@ class CampagnaViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         campaigns = Campagna.objects.filter(campagna_partecipa__utente=self.request.user).all()
         return campaigns
+
+
+
 
 
 class CampagnaCreateViewSet(viewsets.ModelViewSet):
