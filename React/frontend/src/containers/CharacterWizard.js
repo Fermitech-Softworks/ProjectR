@@ -20,7 +20,7 @@ import IncantesimiPanel from "./sheetComponents/IncantesimiPanel";
 import InventarioPanel from "./sheetComponents/InventarioPanel";
 import AbilitaList from "./sheetComponents/AbilitaList";
 
-export default function CharacterWizard({id}) {
+export default function CharacterWizard(props) {
     const {username} = useAppContext()
     const {uid} = useAppContext()
     let history = useHistory()
@@ -54,12 +54,13 @@ export default function CharacterWizard({id}) {
     }, [livello])
 
     useEffect(()=> {
-        if(id !== undefined){
-            setCharId(id)
+        console.debug("ID: "+props.id)
+        if(props.id !== undefined && props.id!==0){
+            setCharId(props.id)
             console.debug("Found id.")
-            loadCharData(id)
+            loadCharData(props.id)
         }
-    }, [])
+    }, [props.id])
 
     function updateLevel() {
         let livello = 0

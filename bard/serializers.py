@@ -20,6 +20,20 @@ class GruppoSerializer(serializers.ModelSerializer):
         fields = ("id", "nome", "attivo", "users")
 
 
+class MessaggioSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Messaggio
+        fields = "__all__"
+
+
+class GruppoSerializerMessages(serializers.ModelSerializer):
+    gruppo_messaggio = MessaggioSerializer(allow_null=False, read_only=True, many=True)
+
+    class Meta:
+        model = Gruppo
+        fields = "__all__"
+
+
 class PartecipaSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(required=False, allow_null=True)
     username = serializers.CharField(read_only=True, source="utente")
@@ -131,10 +145,7 @@ class GruppoSerializerDetails(serializers.ModelSerializer):
         fields = "__all__"
 
 
-class MessaggioSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Messaggio
-        fields = "__all__"
+
 
 
 class MessaggioSerializerDetails(serializers.ModelSerializer):

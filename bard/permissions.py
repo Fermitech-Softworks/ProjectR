@@ -43,6 +43,6 @@ class IsMember(permissions.BasePermission):
         user: User = request.user
         if user.is_anonymous:
             return False
-        if user.partecipa_set.filter(campagna=obj.gruppo.campagna) and obj.attivo and user.gruppo_set.filter(
-                gruppo=obj.gruppo):
+        if user.utente_partecipa.filter(campagna=obj.messaggio_gruppo.campagna) and user.utenti_gruppo.filter(id=obj.gruppo_id):
             return True
+        return False

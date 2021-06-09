@@ -22,6 +22,7 @@ import AbilitaList from "./sheetComponents/AbilitaList";
 import Navbar from "react-bootstrap/Navbar";
 import GroupPanel from "./chatComponents/GroupPanel";
 import ChatLog from "./chatComponents/ChatLog";
+import CharacterSelector from "./chatComponents/CharacterSelector";
 
 export default function ChatRoom() {
     const {username} = useAppContext()
@@ -41,6 +42,8 @@ export default function ChatRoom() {
     const [groups, setGroups] = useState([])
     const [dmChannelId, setDmChannelId] = useState(null)
     const [autoScroll, setAutoScroll] = useState(true)
+    const [character, setCharacter] = useState(true)
+    const [userGroups, setUserGroups] = useState([])
 
     useEffect(() => {
         if (channelId === null) {
@@ -78,9 +81,9 @@ export default function ChatRoom() {
                         return
                     }
                     setMessageLog(messageLog => [...messageLog, {
-                        message: json['message'],
-                        mittente: json['mittente'],
-                        room_name: json['room_name']
+                        contenuto: json['message'],
+                        utente: json['mittente'],
+                        gruppo: json['room_name']
                     }
                     ])
                 }
@@ -226,12 +229,27 @@ export default function ChatRoom() {
                 }
             }
         })
+        let userChannels = []
+        values.gruppi.forEach(function(entry){
+            console.debug(entry)
+            console.debug(uid)
+            let uids = []
+            entry.users.forEach(function(entry){
+                uids.push(entry)
+            })
+            if(uids.includes(uid)){
+                userChannels.push(entry.id)
+            }
+        })
+        console.debug(userChannels)
+        setUserGroups(userChannels)
     }
 
 
 
     const exporter_groups = {groups, setGroups, dmChannelId, setDmChannelId}
-    const exporter_chatlog = {messageLog, listaPlayer, autoScroll}
+    const exporter_chatlog = {messageLog, listaPlayer, autoScroll, setMessageLog, userGroups}
+    const exporter_character = {character, setCharacter}
 
     return (
         <div className={Style.Wizard}>
@@ -263,7 +281,9 @@ export default function ChatRoom() {
                             <GroupPanel {...exporter_groups}/>
                         </Jumbotron>
                     ) : (
-                        <p>player</p>
+                        <div>
+                            <CharacterSelector {...exporter_character}/>
+                        </div>
                     )}
                 </Col>
             </Row>

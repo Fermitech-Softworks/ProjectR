@@ -18,6 +18,7 @@ export default function GroupElement(props) {
     function transfer_all(event) {
         console.debug(props)
         props.setDmChannelId({id: props.group.id, type: "standard"})
+        activate(true)
     }
     function move(event){
         props.setDmChannelId({id: props.group.id, type: "master"})

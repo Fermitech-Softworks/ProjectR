@@ -4,7 +4,7 @@ from rest_framework import viewsets
 from rest_framework import permissions
 from character_manager.serializers import UserSerializer, PersonaggioSerializer, SpecieSerializer, ClasseSerializer, \
     AbilitaSerializer, IncantesimoSerializer, OggettoSerializer, PersonaggioSerializerId, PersonaggioSerializerReadOnly
-from .permissions import AdminOrSelf
+from .permissions import AdminOrSelf, AdminOrOwner
 from rest_framework.permissions import BasePermission, IsAuthenticated, SAFE_METHODS
 
 
@@ -39,7 +39,7 @@ class CharacterViewSet(viewsets.ModelViewSet):
     API endpoint that allows characters to be viewed or edited.
     """
     serializer_class = PersonaggioSerializer
-    permission_classes = [AdminOrSelf]
+    permission_classes = [AdminOrOwner]
 
     def get_queryset(self):
         characters = Personaggio.objects.filter(user_id=self.request.user.id).all()
@@ -48,7 +48,7 @@ class CharacterViewSet(viewsets.ModelViewSet):
 
 class CharacterFullViewSet(viewsets.ModelViewSet):
     serializer_class = PersonaggioSerializerReadOnly
-    permission_classes = [AdminOrSelf]
+    permission_classes = [AdminOrOwner]
 
     def get_queryset(self):
         characters = Personaggio.objects.filter(user_id=self.request.user.id).all()
@@ -57,7 +57,7 @@ class CharacterFullViewSet(viewsets.ModelViewSet):
 
 class CharacterCreationViewSet(viewsets.ModelViewSet):
     serializer_class = PersonaggioSerializerId
-    permission_classes = [AdminOrSelf]
+    permission_classes = [AdminOrOwner]
 
     def get_queryset(self):
         characters = Personaggio.objects.filter(user_id=self.request.user.id).all()

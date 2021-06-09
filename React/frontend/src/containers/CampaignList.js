@@ -40,8 +40,9 @@ export default function CampaignList() {
         })
         const values = await response.json()
         let campData = values['results']
+        if(campData!==undefined){
         campData.sort(compare)
-        setCampaignList(values['results'])
+        setCampaignList(values['results'])}
     }
 
     return (

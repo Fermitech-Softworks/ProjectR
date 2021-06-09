@@ -30,6 +30,7 @@ class AdminOrOwner(permissions.BasePermission):
         user: User = request.user
         if user.is_anonymous:
             return False
+        return True
 
     def has_object_permission(self, request: Request, view: View, obj) -> bool:
         user: User = request.user

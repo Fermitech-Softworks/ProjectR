@@ -23,7 +23,7 @@ export default function Message(props) {
 
     function getUser() {
         props.listaPlayer.forEach(function (entry) {
-            if (entry.utente.id === props.message.mittente) {
+            if (entry.utente.id === props.message.utente) {
                 console.debug(entry.utente)
                 setUser(entry.utente)
                 if (uid === entry.utente.id) {
@@ -49,11 +49,11 @@ export default function Message(props) {
                         <ListGroup.Item>
                             <Row>
                                 <b>
-                                    {user.username} (#{props.message.room_name})
+                                    {user.username} (#{props.message.gruppo})
                                 </b>
                             </Row>
                             <Row>
-                                {props.message.message}
+                                {props.message.contenuto}
                             </Row>
                         </ListGroup.Item>
 
@@ -71,7 +71,7 @@ export default function Message(props) {
                                 </b>
                             </Row>
                             <Row>
-                                {props.message.message}
+                                {props.message.contenuto}
                             </Row>
                         </ListGroup.Item>
 
