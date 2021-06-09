@@ -11,8 +11,12 @@ import datetime
 
 class ChatConsumer(AsyncWebsocketConsumer):
 
-    async def getUser(self, token):
-        self.user = User.objects.get(id=self.token['user_id'])
+    @database_sync_to_async
+    def check_permissions(self):
+        g = Gruppo.objects.get(id=self.group_id)
+        if self.token['user_id'] not in [u['id'] for u in g.users.values()]:
+            return False
+        return True
 
     async def connect(self):
         try:
@@ -21,7 +25,9 @@ class ChatConsumer(AsyncWebsocketConsumer):
             self.room_group_name = 'chat_%s' % self.room_name
             self.token = jwt.decode(self.scope['cookies']['token'], SECRET_KEY, algorithms=[SIMPLE_JWT['ALGORITHM']])
             # Join room group
-            async_to_sync(self.getUser)
+            check = await self.check_permissions()
+            if not check:
+                raise Exception
             await self.channel_layer.group_add(
                 self.room_group_name,
                 self.channel_name
@@ -29,7 +35,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
 
             await self.accept()
         except Exception as e:
-            pass
+            await self.disconnect(108)
 
     async def disconnect(self, close_code):
         # Leave room group
@@ -48,7 +54,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
     async def receive(self, text_data):
         text_data_json = json.loads(text_data)
         message = text_data_json['message']
-        m = await self.add_message_to_db(text_data)
+        m = await self.add_message_to_db(text_data_json)
         # Send message to room group
         await self.channel_layer.group_send(
             self.room_group_name,
@@ -75,9 +81,17 @@ class ChatConsumer(AsyncWebsocketConsumer):
 
 class CampaignConsumer(AsyncWebsocketConsumer):
 
+    @database_sync_to_async
+    def check_permissions(self):
+        campagna = Campagna.objects.get(id=self.campagna_id)
+        if self.token['user_id'] not in [u['utente_id'] for u in campagna.campagna_partecipa.values() if u['comeDm']==True]:
+            return False
+        return True
+
     async def connect(self):
         try:
             self.room_name = "campagna" + self.scope['url_route']['kwargs']['room_name']
+            self.campagna_id = self.scope['url_route']['kwargs']['room_name']
             self.room_group_name = 'chat_%s' % self.room_name
             self.token = jwt.decode(self.scope['cookies']['token'], SECRET_KEY, algorithms=[SIMPLE_JWT['ALGORITHM']])
             # Join room group
@@ -101,7 +115,7 @@ class CampaignConsumer(AsyncWebsocketConsumer):
     async def receive(self, text_data):
         text_data_json = json.loads(text_data)
         message = text_data_json['gruppo']
-
+        res = await self.check_permissions()
         # Send message to room group
         await self.channel_layer.group_send(
             self.room_group_name,
