@@ -46,6 +46,22 @@ export default function ChatRoom() {
         if (channelId === null) {
             return
         }
+        let userChannels = []
+        groups.forEach(function(entry){
+            console.debug(entry)
+            console.debug(uid)
+            let uids = []
+            entry.users.forEach(function(entry){
+                uids.push(entry)
+            })
+            if(uids.includes(uid)){
+                userChannels.push(entry.id)
+            }
+        })
+        if(!(userChannels.includes(channelId['id']))){
+            console.debug(userChannels)
+            return
+        }
         console.debug("Stabilisco la connessione con il canale " + channelId['id'] + " con modalità " + channelId['type'])
         if (!(isDm && channelId['master']) && channelId) {
             console.debug(channelId)
@@ -197,6 +213,18 @@ export default function ChatRoom() {
         })
         setListaPlayer(values.utenti)
         setGroups(values.gruppi)
+        values.gruppi.forEach(function(entry){
+            if(entry.attivo){
+                console.debug(entry)
+                if(entry.users.includes(uid)){
+                    if(!isDm){
+                    setChannelId({id:entry.id, type:"standard"})}
+                    else{
+                        setDmChannelId({id:entry.id, type:"standard"})
+                    }
+                }
+            }
+        })
     }
 
 
