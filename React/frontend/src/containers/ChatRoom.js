@@ -40,22 +40,24 @@ export default function ChatRoom() {
     const [listaPlayer, setListaPlayer] = useState([])
     const [groups, setGroups] = useState([])
     const [dmChannelId, setDmChannelId] = useState(null)
+    const [autoScroll, setAutoScroll] = useState(true)
 
     useEffect(() => {
         if (channelId === null) {
             return
         }
         console.debug("Stabilisco la connessione con il canale " + channelId['id'] + " con modalità " + channelId['type'])
-        if (!(isDm && channelId['master'])&&channelId) {
+        if (!(isDm && channelId['master']) && channelId) {
             console.debug(channelId)
-            if(chatSocket!== null){
-            chatSocket.close()}
+            if (chatSocket !== null) {
+                chatSocket.close()
+            }
             let s = new WebSocket("ws://localhost:8000/ws/chat/" + channelId['id'] + "/")
             s.onmessage = function (e) {
                 if (e.data !== undefined) {
                     let json = JSON.parse(e.data)
                     console.debug(json)
-                    if(json['room_name']===undefined || json['room_name']===null){
+                    if (json['room_name'] === undefined || json['room_name'] === null) {
                         return
                     }
                     setMessageLog(messageLog => [...messageLog, {
@@ -118,14 +120,15 @@ export default function ChatRoom() {
                     'gruppo': dmChannelId['id']
                 }))
             }
-            if(chatSocket!==null){
-                chatSocket.close()}
+            if (chatSocket !== null) {
+                chatSocket.close()
+            }
             setChannelId(dmChannelId)
-        }
-        else if(dmChannelId!== null){
-            if(chatSocket!==null){
-            chatSocket.close()}
-            console.debug("Collegamento al canale "+ dmChannelId['id'] + "come master.")
+        } else if (dmChannelId !== null) {
+            if (chatSocket !== null) {
+                chatSocket.close()
+            }
+            console.debug("Collegamento al canale " + dmChannelId['id'] + "come master.")
             let s = new WebSocket("ws://localhost:8000/ws/chat/" + dmChannelId['id'] + "/")
             s.onmessage = function (e) {
                 if (e.data !== undefined) {
@@ -197,12 +200,12 @@ export default function ChatRoom() {
     }
 
     const exporter_groups = {groups, setGroups, dmChannelId, setDmChannelId}
-    const exporter_chatlog = {messageLog, listaPlayer}
+    const exporter_chatlog = {messageLog, listaPlayer, autoScroll}
 
     return (
         <div className={Style.Wizard}>
             <Row>
-                <Col>
+                <Col md={6} sm={12}>
                     <ChatLog {...exporter_chatlog}/>
                     <Form.Group size="lg" controlId="nome">
                         <Form.Control
@@ -212,9 +215,17 @@ export default function ChatRoom() {
                             onChange={(e) => setMessage(e.target.value)}
                         />
                     </Form.Group>
-                    <Button block onClick={event => sendMessage(event)} disabled={!channelId}>Invia</Button>
+                    <Row>
+                        <Col>
+                        <Button block onClick={event => sendMessage(event)} disabled={!channelId}>Invia</Button>
+                        </Col>
+                        <Col>
+                            <Form.Check type="checkbox" checked={autoScroll} label="Autoscroll?"
+                                        onClick={event => setAutoScroll(event.target.checked)}/>
+                        </Col>
+                    </Row>
                 </Col>
-                <Col>
+                <Col md={6} sm={12}>
                     {isDm ? (
                         <Jumbotron>
                             <h3>Gestione canali</h3>

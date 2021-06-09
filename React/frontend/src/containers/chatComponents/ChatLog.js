@@ -4,13 +4,13 @@ import {Accordion, ListGroup} from "react-bootstrap";
 import {useAppContext} from "../../libs/Context";
 import Message from "./Message";
 
-export default function ChatLog({messageLog, listaPlayer}) {
+export default function ChatLog({messageLog, listaPlayer, autoScroll}) {
     const {uid} = useAppContext()
 
     return (
         <div className={Style.GeneralitaPanel}>
             <div>
-                {messageLog.map(message => <Message message={message} listaPlayer={listaPlayer}/>)}
+                {messageLog.map(message => <Message message={message} listaPlayer={listaPlayer} autoScroll={autoScroll}/>)}
             </div>
         </div>)
 }
