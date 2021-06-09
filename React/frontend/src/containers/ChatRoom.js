@@ -249,7 +249,7 @@ export default function ChatRoom() {
 
     const exporter_groups = {groups, setGroups, dmChannelId, setDmChannelId}
     const exporter_chatlog = {messageLog, listaPlayer, autoScroll, setMessageLog, userGroups}
-    const exporter_character = {character, setCharacter}
+    const exporter_character = {character, setCharacter, campagna}
 
     return (
         <div className={Style.Wizard}>

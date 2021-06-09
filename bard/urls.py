@@ -10,6 +10,7 @@ router.register(r'campaign/full', CampagnaCreateViewSet, basename='campaign/crea
 router.register(r'group', GruppoViewSet, basename="group")
 router.register(r'group/details', GruppoDetailsViewSet, basename="group/details")
 router.register(r'messages', GetMessaggiView, basename="group/messages")
+router.register(r'partecipation/set', AppartenenzaView, basename="campaign/characters")
 router.register(r'test', TestView, basename="test")
 
 urlpatterns = router.urls

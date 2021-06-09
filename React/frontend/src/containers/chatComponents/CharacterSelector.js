@@ -8,7 +8,7 @@ import Button from "react-bootstrap/Button";
 import Select from "react-select";
 import CharacterWizard from "../CharacterWizard";
 
-export default function CharacterSelector({character, setCharacter}) {
+export default function CharacterSelector({character, setCharacter, campagna}) {
 
     const [charList, setCharList] = useState([])
     const {userToken} = useAppContext()
@@ -69,6 +69,28 @@ export default function CharacterSelector({character, setCharacter}) {
         setId(value)
     }
 
+    async function selectCharacter(event) {
+        let token = localStorage.getItem("token")
+        const response = await fetch(address + "/bard/partecipation/set/", {
+            method: "POST",
+            credentials: "include",
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'X-CSRFToken': "",
+                'Authorization': "Bearer " + token
+            },
+            body: JSON.stringify({campaign_id:campagna.id, character_id:id})
+        })
+        if(response.status===201){
+            alert("Il personaggio è stato legato a questa campagna.")
+        }
+        else{
+            alert("Qualcosa è andato storto.")
+        }
+
+    }
+
     return (
         <div>
             <Form.Group controlId="exampleForm.ControlSelect1">
@@ -82,7 +104,7 @@ export default function CharacterSelector({character, setCharacter}) {
                         }}/>
                     </Col>
                     <Col md={4} sm={12}>
-                        <Button block type="submit" disabled={!id}>
+                        <Button block type="submit" disabled={!id} onClick={event=>selectCharacter(event)}>
                             Aggiungi
                         </Button>
                     </Col>

@@ -1,4 +1,4 @@
-from rest_framework.permissions import BasePermission, SAFE_METHODS
+from rest_framework.permissions import BasePermission, SAFE_METHODS, IsAuthenticated
 from rest_framework.viewsets import ViewSet
 
 from .models import *
@@ -80,11 +80,11 @@ class GetMessaggiView(ViewSet):
         return [permission() for permission in permission_classes]
 
 
-class AppartenenzaList(APIView):
+class AppartenenzaView(ViewSet):
     """Sets a connection between characters and campaigns"""
 
-    def get(self):
-        return Response("Hi", status=status.HTTP_200_OK)
+    def list(self, request):
+        return Response("why", status=status.HTTP_200_OK)
 
     def post(self, request, format=None):
         character_id = request.data['character_id']
@@ -93,13 +93,18 @@ class AppartenenzaList(APIView):
         if request.user.id != character.user_id:
             return Response("403", status=status.HTTP_403_FORBIDDEN)
         campaign = Campagna.objects.get(id=campaign_id)
-        if request.user.id not in [u['utente_id'] for u in campaign.campagna_partecipa]:
+        if request.user.id not in [u['utente_id'] for u in campaign.campagna_partecipa.values()]:
             return Response("403", status=status.HTTP_403_FORBIDDEN)
-        data = campaign.personaggi
+        data = campaign.personaggi.all()
         for elem in data:
             if elem.user_id == request.user.id:
                 campaign.personaggi.remove(elem)
-        return Response("OK", status.HTTP_200_OK)
+        campaign.personaggi.add(character)
+        return Response("OK", status.HTTP_201_CREATED)
+
+    def get_permissions(self):
+        permission_classes = [IsAuthenticated]
+        return [permission() for permission in permission_classes]
 
 
 class CampagnaDetailsViewSet(viewsets.ModelViewSet):
