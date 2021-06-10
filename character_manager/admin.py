@@ -1,13 +1,27 @@
 from django.contrib import admin
 from character_manager.models import *
+
+
 # Register your models here.
-admin.site.register(Oggetto)
-admin.site.register(Abilita)
+
+
+class SpecieAdmin(admin.ModelAdmin):
+    list_display = ('id', 'nome', 'dettagli')
+    search_fields = ['id', 'nome']
+
+
+class OggettoAdmin(admin.ModelAdmin):
+    list_display = ('id', 'nome', 'costo')
+    search_fields = ['id', 'nome']
+
+
+class AbilitaAdmin(admin.ModelAdmin):
+    list_display = ('id', 'nome', 'attributo')
+    search_fields = ('id', 'nome', 'attributo')
+
+
+admin.site.register(Oggetto, OggettoAdmin)
+admin.site.register(Abilita, AbilitaAdmin)
 admin.site.register(Classe)
 admin.site.register(Incantesimo)
-admin.site.register(Specie)
-admin.site.register(Personaggio)
-admin.site.register(Possiede)
-admin.site.register(SaFare)
-admin.site.register(IstruitoA)
-admin.site.register(Lancia)
+admin.site.register(Specie, SpecieAdmin)

@@ -44,6 +44,7 @@ export default function CharacterWizard(props) {
     const [inventario, setInventario] = useState([])
     const [note, setNote] = useState("")
     const [charId, setCharId] = useState(0)
+    const [editable, setEditable] = useState(true)
 
     useEffect(() => {
         updateLevel();
@@ -109,7 +110,27 @@ export default function CharacterWizard(props) {
                 'Authorization': "Bearer " + token
             },
         })
-        const values = await response.json()
+        let values
+        console.debug(response.status)
+        if(response.status!==200){
+
+            setEditable(false)
+            const resp = await fetch(address + "/bard/campaign/characters/" + id + "/", {
+                method: "GET",
+                credentials: "include",
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': "",
+                    'Authorization': "Bearer " + token
+                },
+            })
+            values = await resp.json()
+            console.debug(values)
+        }
+        else{
+            values = await response.json()
+        }
         console.debug("Now saving data...")
         console.debug(values)
         setNome(values['nome'])
@@ -329,7 +350,7 @@ export default function CharacterWizard(props) {
                 </Col>
 
             </Row>
-            <Button onClick={event => create(event)}>Salva le modifiche</Button>
+            <Button onClick={event => create(event)} disabled={!editable}>Salva le modifiche</Button>
         </div>
     );
 }

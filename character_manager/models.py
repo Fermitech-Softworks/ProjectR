@@ -10,7 +10,7 @@ class Oggetto(models.Model):
     costo = models.CharField(max_length=32)
     dettagli = models.TextField()
 
-    def __repr__(self):
+    def __str__(self):
         return f"[Oggetto] {self.nome}"
 
 
@@ -21,7 +21,7 @@ class Abilita(models.Model):
                          ('CHA', 'carisma'), ('COS', 'costituzione')]
     attributo = models.CharField(max_length=3, choices=attributo_choices, default="STR")
 
-    def __repr__(self):
+    def __str__(self):
         return f"[Abilita] {self.nome}"
 
 
@@ -29,7 +29,7 @@ class Classe(models.Model):
     nome = models.CharField(max_length=64)
     dettagli = models.TextField()
 
-    def __repr__(self):
+    def __str__(self):
         return f"[Classe] {self.nome}"
 
 
@@ -40,7 +40,7 @@ class Incantesimo(models.Model):
     dadi = models.TextField()
     descrizione = models.TextField()
 
-    def __repr__(self):
+    def __str__(self):
         return f"[Incantesimo] {self.nome}"
 
 
@@ -48,7 +48,7 @@ class Specie(models.Model):
     nome = models.CharField(max_length=64)
     dettagli = models.TextField()
 
-    def __repr__(self):
+    def __str__(self):
         return f"[Specie] {self.nome}"
 
 
@@ -74,7 +74,7 @@ class Personaggio(models.Model):
     incantesimi = models.ManyToManyField(Incantesimo, through="Lancia", related_name="incantesimi")
     specie = models.ForeignKey(Specie, on_delete=models.PROTECT, null=False, related_name="specie")
 
-    def __repr__(self):
+    def __str__(self):
         return f"[Personaggio] {self.nome}, di {self.user.username}"
 
 
@@ -83,7 +83,7 @@ class Possiede(models.Model):
     oggetto = models.ForeignKey(Oggetto, on_delete=models.CASCADE)
     quantita = models.IntegerField()
 
-    def __repr__(self):
+    def __str__(self):
         return f"[Possiede] {self.personaggio_id} - {self.oggetto_id}"
 
 
@@ -93,7 +93,7 @@ class SaFare(models.Model):
     proficiencies_choices = [(1, "Mezza proficiency"), (2, "Proficiency"), (3, "Expertise")]
     grado = models.IntegerField(choices=proficiencies_choices, default=2)
 
-    def __repr__(self):
+    def __str__(self):
         return f"[SaFare] {self.personaggio_id} - {self.abilita_id}"
 
 
@@ -102,7 +102,7 @@ class IstruitoA(models.Model):
     classe = models.ForeignKey(Classe, on_delete=models.CASCADE)
     livello = models.IntegerField(default=1)
 
-    def __repr__(self):
+    def __str__(self):
         return f"[IstruitoA] {self.personaggio_id} - {self.classe_id}"
 
 
@@ -111,5 +111,5 @@ class Lancia(models.Model):
     incantesimo = models.ForeignKey(Incantesimo, on_delete=models.CASCADE)
     preparato = models.BooleanField(default=False)
 
-    def __repr__(self):
+    def __str__(self):
         return f"[Lancia] {self.personaggio_id} - {self.incantesimo_id}"

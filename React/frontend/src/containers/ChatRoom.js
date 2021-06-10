@@ -257,7 +257,7 @@ export default function ChatRoom() {
     return (
         <div className={Style.Wizard}>
             <Row>
-                <Col md={6} sm={12}>
+                <Col md={5} sm={12}>
                     <ChatLog {...exporter_chatlog}/>
                     <Form.Group size="lg" controlId="nome">
                         <Form.Control
@@ -277,7 +277,7 @@ export default function ChatRoom() {
                         </Col>
                     </Row>
                 </Col>
-                <Col md={6} sm={12}>
+                <Col md={7} sm={12}>
                     {isDm ? (
                             <Accordion defaultActiveKey="0">
                                 <Card>
@@ -295,11 +295,11 @@ export default function ChatRoom() {
                                 <Card>
                                     <Card.Header>
                                         <Accordion.Toggle as={Button} variant="link" eventKey="1">
-                                            <PlayerCharacters {...exporter_characters}/>
+                                            Personaggi dei giocatori
                                         </Accordion.Toggle>
                                     </Card.Header>
                                     <Accordion.Collapse eventKey="1">
-                                        <Card.Body>Hello! I'm another body</Card.Body>
+                                        <Card.Body><PlayerCharacters {...exporter_characters}/></Card.Body>
                                     </Accordion.Collapse>
                                 </Card>
                             </Accordion>
