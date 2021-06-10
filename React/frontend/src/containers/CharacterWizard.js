@@ -246,6 +246,26 @@ export default function CharacterWizard(props) {
         await update(values.id)
     }
 
+    async function del(event){
+        let token = localStorage.getItem("token")
+        const response = await fetch(address + "/artificier/characters/"+charId+"/", {
+            method: "DELETE",
+            credentials: "include",
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'X-CSRFToken': "",
+                'Authorization': "Bearer " + token
+            }})
+        if(response.status!==204){
+            alert("Si è verificato un errore durante l'eliminazione.")
+            return
+        }
+        alert("Eliminazione personaggio completata.")
+        history.push("/dashboard")
+
+    }
+
     function check() {
         return !(nome || forza || destrezza || costituzione || intelligenza || saggezza || carisma || pvAttuali || pvMax || livello || proficiency || classeArmatura || specie || note)
     }
@@ -386,7 +406,8 @@ export default function CharacterWizard(props) {
                 </Col>
 
             </Row>
-            <Button onClick={event => create(event)} disabled={!editable}>Salva le modifiche</Button>
+            <Button block onClick={event => create(event)} disabled={!editable}>Salva le modifiche</Button>
+            <Button block variant={"danger"} onClick={event => del(event)} disabled={!editable||!charId}>Elimina</Button>
         </div>
     );
 }

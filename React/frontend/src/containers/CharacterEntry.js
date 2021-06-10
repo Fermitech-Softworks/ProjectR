@@ -1,7 +1,5 @@
-import React, {useEffect, useState} from "react";
+import React from "react";
 import Style from "./CharacterEntry.module.css";
-import {useAppContext} from "../libs/Context";
-import Jumbotron from "react-bootstrap/Jumbotron";
 import {ListGroup} from "react-bootstrap";
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
@@ -19,8 +17,6 @@ export default function CharacterEntry({nome, livello, id,...props}) {
                                 <Link to={link}>
                                 <FontAwesomeIcon icon={faPencilAlt}/>
                                 </Link>
-                                &nbsp;
-                                <FontAwesomeIcon icon={faTrashAlt}/>
                             </div>
                         </Col>
                     </Row></ListGroup.Item>
