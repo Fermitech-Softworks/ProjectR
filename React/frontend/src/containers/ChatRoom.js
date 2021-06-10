@@ -47,7 +47,8 @@ export default function ChatRoom() {
     const [character, setCharacter] = useState(true)
     const [userGroups, setUserGroups] = useState([])
     const [replyId, setReplyId] = useState(null)
-
+    const [socketAddress, setSocketAddress] = useState("")
+    const addr = address.substring(7)
     useEffect(() => {
         if (channelId === null) {
             return
@@ -75,7 +76,7 @@ export default function ChatRoom() {
             if (chatSocket !== null) {
                 chatSocket.close()
             }
-            let s = new WebSocket("ws://localhost:8000/ws/chat/" + channelId['id'] + "/")
+            let s = new WebSocket("ws://"+addr+"/ws/chat/" + channelId['id'] + "/")
             s.onmessage = function (e) {
                 if (e.data !== undefined) {
                     let json = JSON.parse(e.data)
@@ -115,7 +116,7 @@ export default function ChatRoom() {
         if (id === null) {
             return
         }
-        let s = new WebSocket("ws://localhost:8000/ws/campaign/" + id + "/")
+        let s = new WebSocket("ws://"+addr+"/ws/campaign/" + id + "/")
         s.onmessage = function (e) {
             const data = JSON.parse(e.data)
             console.log("Gruppo: " + e.data)
@@ -159,7 +160,7 @@ export default function ChatRoom() {
                 chatSocket.close()
             }
             console.debug("Collegamento al canale " + dmChannelId['id'] + "come master.")
-            let s = new WebSocket("ws://localhost:8000/ws/chat/" + dmChannelId['id'] + "/")
+            let s = new WebSocket("ws://"+addr+"/ws/chat/" + dmChannelId['id'] + "/")
             s.onmessage = function (e) {
                 if (e.data !== undefined) {
                     let json = JSON.parse(e.data)
@@ -285,6 +286,9 @@ export default function ChatRoom() {
         })
         console.debug(userChannels)
         setUserGroups(userChannels)
+
+
+        setSocketAddress(addr)
     }
 
 
