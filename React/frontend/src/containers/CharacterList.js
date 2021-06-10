@@ -38,6 +38,9 @@ export default function CharacterList() {
                 'Authorization': "Bearer "+token
             },
         })
+        if(response.status===404){
+            return
+        }
         const values = await response.json()
         let charData = values['results']
         if(charData!==undefined){

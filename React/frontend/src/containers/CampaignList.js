@@ -1,23 +1,25 @@
 import React, {useEffect, useState} from "react";
 import {useAppContext} from "../libs/Context";
 import Jumbotron from "react-bootstrap/Jumbotron";
-import {Link} from "react-router-dom";
+import {Link, useHistory} from "react-router-dom";
 import ListGroup from "react-bootstrap/ListGroup"
 import CampaignEntry from "./CampaignEntry";
+
 export default function CampaignList() {
     const [campaignList, setCampaignList] = useState([]);
     const {userToken} = useAppContext()
     const {address} = useAppContext()
+    const history = useHistory()
 
-    useEffect(()=>{
+    useEffect(() => {
         onLoad()
-    }, [userToken])
+    }, [address])
 
-    function compare( a, b ) {
-        if ( a.nome < b.nome ){
+    function compare(a, b) {
+        if (a.nome < b.nome) {
             return -1;
         }
-        if ( a.nome > b.nome ){
+        if (a.nome > b.nome) {
             return 1;
         }
         return 0;
@@ -36,11 +38,17 @@ export default function CampaignList() {
                 'Authorization': "Bearer " + token
             },
         })
+        if(response.status===404){
+            history.push("/dashboard/reload")
+            return
+        }
         const values = await response.json()
         let campData = values['results']
-        if(campData!==undefined){
-        campData.sort(compare)
-        setCampaignList(values['results'])}
+        console.debug(values)
+        if (campData !== undefined) {
+            campData.sort(compare)
+            setCampaignList(values['results'])
+        }
     }
 
     return (

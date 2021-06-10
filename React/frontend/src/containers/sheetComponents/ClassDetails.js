@@ -10,7 +10,7 @@ export default function ClasseDetails(props) {
     function setLevel(value) {
         console.debug(value)
         if (value === "") {
-            value = "0"
+            value = "1"
         }
         value = parseInt(value)
         if (value <= -1 || value > 20) {
@@ -19,11 +19,15 @@ export default function ClasseDetails(props) {
         console.debug(value)
         props.setClasse(classe => {
                 classe = classe.map(function (entry) {
-                    if (entry.classe_id === props.classe.classe_id) {
-                        console.debug(entry)
-                        entry.livello = value
+                    if (entry !== undefined) {
+                        if (entry.classe_id === props.classe.classe_id) {
+                            console.debug(entry)
+                            entry.livello = value
+                        }
+                        if (value != 0) {
+                            return entry
+                        }
                     }
-                    return entry
                 })
                 return classe
             }
@@ -31,10 +35,12 @@ export default function ClasseDetails(props) {
         console.debug(props.listaClassi)
     }
 
+    if(props.classe){
     return (
         <Card className={Style.CustomCard}>
             <Card.Header>
-                <Accordion.Toggle as={Button} className={Style.CustomAccordionHeaderText} variant="link" eventKey={props.classe.classe_id}>
+                <Accordion.Toggle as={Button} className={Style.CustomAccordionHeaderText} variant="link"
+                                  eventKey={props.classe.classe_id}>
                     {props.classe.classe.nome} (lv. {props.classe.livello})
                 </Accordion.Toggle>
             </Card.Header>
@@ -54,5 +60,6 @@ export default function ClasseDetails(props) {
                     </div>
                 </div>
             </Accordion.Collapse>
-        </Card>)
+        </Card>)}
+    else return(<div></div>)
 }

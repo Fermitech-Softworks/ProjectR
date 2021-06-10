@@ -20,9 +20,9 @@ export default function ClassSelector({classe, setClasse}) {
         onLoad();
     }, []);
 
-    useEffect(() =>{
-        setSelectInput(classList.map(function(entry){
-            return {label: entry.nome, value:entry.id}
+    useEffect(() => {
+        setSelectInput(classList.map(function (entry) {
+            return {label: entry.nome, value: entry.id}
         }))
     }, [classList])
 
@@ -72,27 +72,30 @@ export default function ClassSelector({classe, setClasse}) {
         })
     }
 
-    function addClass(event){
+    function addClass(event) {
         let present = false;
-        classe.forEach(function (entry){
-            if(classeId == entry.classe_id){
-                present = true;
+        classe.forEach(function (entry) {
+            if (entry !== undefined) {
+                if (classeId == entry.classe_id) {
+                    present = true;
+                }
             }
         })
-        if(!present){
+        if (!present) {
             classList.forEach(function (entry) {
+                if(entry !== undefined){
                 if (entry.id == classeId) {
                     setClasse(classe => [...classe, {
                         livello: 1,
                         id: null,
                         classe_id: classeId,
-                        classe:{
+                        classe: {
                             nome: entry.nome,
                             dettagli: entry.dettagli
                         }
                     }])
 
-                }
+                }}
             })
         }
     }
@@ -101,16 +104,18 @@ export default function ClassSelector({classe, setClasse}) {
         <div>
             <Form.Group controlId="exampleForm.ControlSelect1">
 
-                        <Form.Label>Aggiungi una classe</Form.Label>
+                <Form.Label>Aggiungi una classe</Form.Label>
                 <Row>
 
                     <Col md={8} sm={12}>
-                        <Select  options={selectInput} name="incantesimi" placeholder="..." onChange={event => {
+                        <Select options={selectInput} name="incantesimi" placeholder="..." onChange={event => {
                             update(event)
                         }}/>
                     </Col>
                     <Col md={4} sm={12}>
-                        <Button block type="submit" disabled={!descrizione} onClick={event => {addClass(event)}}>
+                        <Button block type="submit" disabled={!descrizione} onClick={event => {
+                            addClass(event)
+                        }}>
                             Aggiungi
                         </Button>
                     </Col>

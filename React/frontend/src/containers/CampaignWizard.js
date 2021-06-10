@@ -125,7 +125,9 @@ export default function CampaignWizard(props) {
             const values = await response.json()
             alert("Salvataggio completato.")
             history.push("/dashboard")
+            return
         }
+        alert("Qualcosa è andato storto.")
 
     }
 
@@ -148,6 +150,7 @@ export default function CampaignWizard(props) {
         if(response.status===204){
             alert("Campagna eliminata.")
             history.push("/dashboard")
+            return
         }
         alert("Qualcosa è andato storto.")
     }

@@ -61,7 +61,9 @@ export default function CharacterWizard(props) {
     function updateLevel() {
         let livello = 0
         classe.forEach(function (entry) {
-            livello += parseInt(entry.livello)
+            if (entry !== undefined) {
+                livello += parseInt(entry.livello)
+            }
         })
         setLivello(livello)
     }
@@ -120,7 +122,7 @@ export default function CharacterWizard(props) {
                     'Authorization': "Bearer " + token
                 },
             })
-            if (resp.status!==200){
+            if (resp.status !== 200) {
                 alert("Non si dispone dei privilegi per accedere alla risorsa.")
                 history.push("/dashboard")
                 return
@@ -230,7 +232,7 @@ export default function CharacterWizard(props) {
                 specie: specie.id
             })
         })
-        if(response.status!==201){
+        if (response.status !== 201) {
             alert("Verificare di aver inserito tutti i campi necessari nel pannello generalità.")
             return
         }
@@ -241,9 +243,9 @@ export default function CharacterWizard(props) {
         await update(values.id)
     }
 
-    async function del(event){
+    async function del(event) {
         let token = localStorage.getItem("token")
-        const response = await fetch(address + "/artificier/characters/"+charId+"/", {
+        const response = await fetch(address + "/artificier/characters/" + charId + "/", {
             method: "DELETE",
             credentials: "include",
             headers: {
@@ -251,8 +253,9 @@ export default function CharacterWizard(props) {
                 'Content-Type': 'application/json',
                 'X-CSRFToken': "",
                 'Authorization': "Bearer " + token
-            }})
-        if(response.status!==204){
+            }
+        })
+        if (response.status !== 204) {
             alert("Si è verificato un errore durante l'eliminazione.")
             return
         }
@@ -402,7 +405,8 @@ export default function CharacterWizard(props) {
 
             </Row>
             <Button block onClick={event => create(event)} disabled={!editable}>Salva le modifiche</Button>
-            <Button block variant={"danger"} onClick={event => del(event)} disabled={!editable||!charId}>Elimina</Button>
+            <Button block variant={"danger"} onClick={event => del(event)}
+                    disabled={!editable || !charId}>Elimina</Button>
         </div>
     );
 }

@@ -27,7 +27,7 @@ export default function PlayerSelector({players, setPlayers, playerList}) {
         setSelectInput(userList.map(function (entry) {
             return {label: entry.username, value: entry.id}
         }))
-    }, [userList])
+    }, [userList, players])
 
 
     function compare(a, b) {
@@ -83,8 +83,8 @@ export default function PlayerSelector({players, setPlayers, playerList}) {
     function addUser(event) {
         let present = false;
         players.forEach(function (entry) {
-            if (entry != undefined) {
-                if (userId == entry.id || entry.id == uid) {
+            if (entry !== undefined) {
+                if (userId == entry.utente) {
                     present = true;
                 }
             }
