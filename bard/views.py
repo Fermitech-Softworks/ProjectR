@@ -26,6 +26,7 @@ class GruppoDetailsViewSet(viewsets.ModelViewSet):
     queryset = Gruppo.objects.all()
     serializer_class = GruppoSerializerDetails
     permission_classes = [IsDM]
+    http_method_names = ['get', 'put', 'head', 'options']
 
     def get_queryset(self):
         gruppi = Gruppo.objects.filter(campagna__campagna_partecipa__utente=self.request.user).all()
@@ -39,6 +40,7 @@ class GruppoViewSet(viewsets.ModelViewSet):
     queryset = Gruppo.objects.all()
     serializer_class = GruppoSerializer
     permission_classes = [IsDM]
+    http_method_names = ['get', 'put', 'head', 'options']
 
     def get_queryset(self):
         gruppi = Gruppo.objects.filter(campagna__campagna_partecipa__utente=self.request.user).all()
@@ -48,6 +50,7 @@ class GruppoViewSet(viewsets.ModelViewSet):
 class MessaggiGruppoViewSet(viewsets.ModelViewSet):
     serializer_class = MessaggioSerializer
     permission_classes = [IsMember | ReadOnly]
+    http_method_names = ['get', 'options', 'head']
 
     def get_queryset(self):
         messaggi = Messaggio.objects.filter(gruppo_id=int(self.kwargs['pk'])).order_by("-id").all()
@@ -57,7 +60,7 @@ class MessaggiGruppoViewSet(viewsets.ModelViewSet):
 class GetMessaggiView(ViewSet):
 
     def list(self, request):
-        return Response("ciao", status=status.HTTP_200_OK)
+        return Response("200 OK", status=status.HTTP_200_OK)
 
     def post(self, request):
         messaggi = Messaggio.objects.filter(gruppo_id=int(request.data['gid'])).order_by("-id")[:100]
@@ -73,7 +76,7 @@ class AppartenenzaView(ViewSet):
     """Sets a connection between characters and campaigns"""
 
     def list(self, request):
-        return Response("why", status=status.HTTP_200_OK)
+        return Response("200 OK", status=status.HTTP_200_OK)
 
     def post(self, request, format=None):
         character_id = request.data['character_id']
@@ -98,11 +101,12 @@ class AppartenenzaView(ViewSet):
 
 class CampagnaDetailsViewSet(viewsets.ModelViewSet):
     """
-    API endpoint that allows groups to be viewed or edited.
+    API endpoint that allows campaigns to be viewed or edited.
     """
     queryset = Campagna.objects.all()
     serializer_class = CampagnaSerializerDetails
     permission_classes = [IsDM]
+    http_method_names = ['get', 'post', 'delete', 'head', 'options']
 
     def get_queryset(self):
         campaigns = Campagna.objects.filter(campagna_partecipa__utente=self.request.user).all()
@@ -112,6 +116,7 @@ class CampagnaDetailsViewSet(viewsets.ModelViewSet):
 class CampagnaGetInfoPersonaggio(viewsets.ModelViewSet):
     serializer_class = PersonaggioSerializerReadOnly
     permission_classes = [IsDmCharacter | ReadOnly]
+    http_method_names = ['get']
 
     def get_queryset(self):
         personaggi = Personaggio.objects.all()
@@ -121,6 +126,7 @@ class CampagnaGetInfoPersonaggio(viewsets.ModelViewSet):
 class CampagnaViewSet(viewsets.ModelViewSet):
     serializer_class = CampagnaSerializer
     permission_classes = [IsDM]
+    http_method_names = ['get', 'post', 'head', 'options']
 
     def get_queryset(self):
         campaigns = Campagna.objects.filter(campagna_partecipa__utente=self.request.user).all()

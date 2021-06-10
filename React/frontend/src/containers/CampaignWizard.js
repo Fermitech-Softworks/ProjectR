@@ -137,7 +137,7 @@ export default function CampaignWizard(props) {
             return
         }
         let token = localStorage.getItem("token")
-        const response = await fetch(address + "/bard/campaign/" + id + "/", {
+        const response = await fetch(address + "/bard/campaign/details/" + id + "/", {
             method: "DELETE",
             credentials: "include",
             headers: {

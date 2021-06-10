@@ -20,6 +20,7 @@ class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
     permission_classes = [ReadOnly]
+    http_method_names = ["get", "head", "options"]
 
 
 class UserDetailViewSet(viewsets.ModelViewSet):
@@ -28,6 +29,7 @@ class UserDetailViewSet(viewsets.ModelViewSet):
     """
     serializer_class = UserSerializer
     permission_classes = [AdminOrSelf]
+    http_method_names = ["get", "head", "options"]
 
     def get_queryset(self):
         user = User.objects.filter(id=self.request.user.id).all()
@@ -40,6 +42,7 @@ class CharacterViewSet(viewsets.ModelViewSet):
     """
     serializer_class = PersonaggioSerializer
     permission_classes = [AdminOrOwner]
+    http_method_names = ["get", "head", "options", "post"]
 
     def get_queryset(self):
         characters = Personaggio.objects.filter(user_id=self.request.user.id).all()
@@ -49,6 +52,7 @@ class CharacterViewSet(viewsets.ModelViewSet):
 class CharacterFullViewSet(viewsets.ModelViewSet):
     serializer_class = PersonaggioSerializerReadOnly
     permission_classes = [AdminOrOwner]
+    http_method_names = ["get", "head", "options", "post", "put", "delete"]
 
     def get_queryset(self):
         characters = Personaggio.objects.filter(user_id=self.request.user.id).all()
@@ -58,6 +62,7 @@ class CharacterFullViewSet(viewsets.ModelViewSet):
 class CharacterCreationViewSet(viewsets.ModelViewSet):
     serializer_class = PersonaggioSerializerId
     permission_classes = [AdminOrOwner]
+    http_method_names = ["get", "head", "options", "post", "put", "delete"]
 
     def get_queryset(self):
         characters = Personaggio.objects.filter(user_id=self.request.user.id).all()
@@ -71,6 +76,7 @@ class SpecieViewSet(viewsets.ModelViewSet):
     queryset = Specie.objects.all()
     serializer_class = SpecieSerializer
     permission_classes = [IsAuthenticated | ReadOnly]
+    http_method_names = ["get", "head", "options"]
 
 
 class ClassViewSet(viewsets.ModelViewSet):
@@ -80,28 +86,25 @@ class ClassViewSet(viewsets.ModelViewSet):
     queryset = Classe.objects.all()
     serializer_class = ClasseSerializer
     permission_classes = [IsAuthenticated | ReadOnly]
-
-
-class CampaignViewSet(viewsets.ModelViewSet):
-    """
-    API endpoint that allows campaigns to be listed
-    """
-    pass
+    http_method_names = ["get", "head", "options"]
 
 
 class AbilitaViewSet(viewsets.ModelViewSet):
     queryset = Abilita.objects.all()
     serializer_class = AbilitaSerializer
     permission_classes = [IsAuthenticated | ReadOnly]
+    http_method_names = ["get", "head", "options"]
 
 
 class IncantesimoViewSet(viewsets.ModelViewSet):
     queryset = Incantesimo.objects.all()
     serializer_class = IncantesimoSerializer
     permission_classes = [IsAuthenticated | ReadOnly]
+    http_method_names = ["get", "head", "options"]
 
 
 class OggettiViewSet(viewsets.ModelViewSet):
     queryset = Oggetto.objects.all()
     serializer_class = OggettoSerializer
     permission_classes = [IsAuthenticated | ReadOnly]
+    http_method_names = ["get", "head", "options"]

@@ -245,7 +245,7 @@ export default function CharacterWizard(props) {
 
     async function del(event) {
         let token = localStorage.getItem("token")
-        const response = await fetch(address + "/artificier/characters/" + charId + "/", {
+        const response = await fetch(address + "/artificier/characters/full/" + charId + "/", {
             method: "DELETE",
             credentials: "include",
             headers: {
