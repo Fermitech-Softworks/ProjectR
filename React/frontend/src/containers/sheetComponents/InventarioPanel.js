@@ -1,15 +1,8 @@
 import Card from "react-bootstrap/Card";
 import Accordion from "react-bootstrap/Accordion";
 import Button from "react-bootstrap/Button";
-import {Jumbotron} from "react-bootstrap";
 import Style from "./GeneralitaPanel.module.css";
-import Form from "react-bootstrap/Form";
-import Row from "react-bootstrap/Row";
-import Col from "react-bootstrap/Col";
-import SpecieSelector from "./SpecieSelector";
 import React from "react";
-import IncantesimiSelector from "./IncantesimiSelector";
-import IncantesimiDetails from "./IncantesimiDetails";
 import InventarioSelector from "./InventarioSelector";
 import InventarioDetails from "./InventarioDetails";
 

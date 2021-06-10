@@ -170,7 +170,7 @@ class PersonaggioSerializerId(serializers.ModelSerializer):
                                                 personaggio_id=instance.id)
         for elem in list(set([e['id'] for e in instance.classi.values()]) - set(
                     [classe.get('classe').id for classe in validated_data.get('istruitoa_set')])):
-            istruito = IstruitoA.objects.get(oggetto_id=elem, personaggio_id=instance.id)
+            istruito = IstruitoA.objects.get(classe_id=elem, personaggio_id=instance.id)
             istruito.delete()
         for classe in validated_data.get('istruitoa_set'):
             istruito_id = classe.get("id")
@@ -188,7 +188,7 @@ class PersonaggioSerializerId(serializers.ModelSerializer):
                                                  personaggio_id=instance.id)
         for elem in list(set([e['id'] for e in instance.abilita.values()]) - set(
                 [abilita.get('abilita').id for abilita in validated_data.get('safare_set')])):
-            abilita = SaFare.objects.get(oggetto_id=elem, personaggio_id=instance.id)
+            abilita = SaFare.objects.get(abilita_id=elem, personaggio_id=instance.id)
             abilita.delete()
         for abilita in validated_data.get('safare_set'):
             safare_id = abilita.get("id")

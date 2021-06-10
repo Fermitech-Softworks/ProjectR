@@ -1,10 +1,8 @@
 import React, {useEffect, useState} from "react";
-import Style from "./Dashboard.module.css";
 import {useAppContext} from "../libs/Context";
 import Jumbotron from "react-bootstrap/Jumbotron";
 import {Link} from "react-router-dom";
 import ListGroup from "react-bootstrap/ListGroup"
-import CharacterEntry from "./CharacterEntry";
 import CampaignEntry from "./CampaignEntry";
 export default function CampaignList() {
     const [campaignList, setCampaignList] = useState([]);

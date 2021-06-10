@@ -1,12 +1,7 @@
 import Card from "react-bootstrap/Card";
 import Accordion from "react-bootstrap/Accordion";
 import Button from "react-bootstrap/Button";
-import {Jumbotron} from "react-bootstrap";
 import Style from "./Panel.module.css";
-import Form from "react-bootstrap/Form";
-import Row from "react-bootstrap/Row";
-import Col from "react-bootstrap/Col";
-import PlayerPanel from "./PlayerPanel";
 import React, {useState} from "react";
 import GroupMember from "./GroupMember";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";

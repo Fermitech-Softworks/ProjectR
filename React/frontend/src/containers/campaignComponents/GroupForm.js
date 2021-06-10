@@ -1,13 +1,9 @@
 import React, {useEffect, useState} from "react";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col"
-import Style from "./Selector.module.css";
 import Form from "react-bootstrap/Form";
 import {useAppContext} from "../../libs/Context";
 import Button from "react-bootstrap/Button";
-import Select from "react-select";
-import {C} from "react-select/dist/index-4bd03571.esm";
-import {func} from "prop-types";
 
 export default function GroupForm({groups, setGroups}) {
 

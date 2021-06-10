@@ -1,12 +1,7 @@
 import React, {useEffect, useState} from "react";
-import Row from "react-bootstrap/Row";
-import Col from "react-bootstrap/Col"
-import {Jumbotron} from "react-bootstrap";
 import Style from "./SpecieSelector.module.css";
 import Form from "react-bootstrap/Form";
-import Input from "reactstrap";
 import {useAppContext} from "../../libs/Context";
-import CharacterEntry from "../CharacterEntry";
 
 export default function SpecieSelector({specie, setSpecie}) {
 

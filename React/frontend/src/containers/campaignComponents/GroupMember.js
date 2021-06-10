@@ -3,11 +3,7 @@ import Style from "../CharacterEntry.module.css";
 import {Button, ListGroup} from "react-bootstrap";
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
-import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
-import {faPencilAlt, faTrashAlt} from '@fortawesome/free-solid-svg-icons'
-import {Link} from "react-router-dom";
 import Form from "react-bootstrap/Form"
-import {func} from "prop-types";
 import {useAppContext} from "../../libs/Context";
 
 export default function PlayerEntry(props) {

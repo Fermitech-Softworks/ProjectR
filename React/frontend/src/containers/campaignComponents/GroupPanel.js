@@ -1,6 +1,5 @@
 import Style from "./Panel.module.css";
 import React, {useEffect} from "react";
-import PlayerSelector from "./PlayerSelector";
 import GroupEntry from "./GroupEntry.js";
 import {Accordion, ListGroup} from "react-bootstrap";
 import GroupForm from "./GroupForm";

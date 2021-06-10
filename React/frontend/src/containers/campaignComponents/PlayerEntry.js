@@ -5,7 +5,6 @@ import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import {faPencilAlt, faTrashAlt} from '@fortawesome/free-solid-svg-icons'
-import {Link} from "react-router-dom";
 import Form from "react-bootstrap/Form"
 import {useAppContext} from "../../libs/Context";
 

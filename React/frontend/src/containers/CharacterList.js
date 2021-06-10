@@ -1,13 +1,8 @@
 import React, {useEffect, useState} from "react";
-import Style from "./Dashboard.module.css";
 import {useAppContext} from "../libs/Context";
 import Jumbotron from "react-bootstrap/Jumbotron";
 import {ListGroup} from "react-bootstrap";
 import CharacterEntry from "./CharacterEntry";
-import CharacterTable from "./tables/characterTable";
-
-import Form from "react-bootstrap/Form";
-import Button from "react-bootstrap/Button";
 import {Link, useHistory} from "react-router-dom";
 
 export default function CharacterList() {

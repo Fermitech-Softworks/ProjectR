@@ -6,10 +6,8 @@ import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row"
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
-import PlayerSelector from "./campaignComponents/PlayerSelector";
 import PlayerPanel from "./campaignComponents/PlayerPanel";
 import GroupPanel from "./campaignComponents/GroupPanel";
-import {func} from "prop-types";
 import {useHistory} from "react-router-dom";
 
 export default function CampaignWizard(props) {

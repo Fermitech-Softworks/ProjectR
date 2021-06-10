@@ -1,17 +1,12 @@
 import React, {useEffect, useState} from "react";
 import Style from "./CharacterWizard.module.css";
-import CampaignList from "./CampaignList";
-import CharacterList from "./CharacterList";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col"
 import {useAppContext} from "../libs/Context";
-import {Jumbotron} from "react-bootstrap";
 import StatValue from "./sheetComponents/StatValue";
-import SpecieSelector from "./sheetComponents/SpecieSelector";
 import {useHistory} from "react-router-dom";
 import Form from "react-bootstrap/Form";
 import Accordion from "react-bootstrap/Accordion";
-import Card from "react-bootstrap/Card"
 import Button from "react-bootstrap/Button"
 import GeneralitaPanel from "./sheetComponents/GeneralitaPanel";
 import ClassPanel from "./sheetComponents/ClassPanel";

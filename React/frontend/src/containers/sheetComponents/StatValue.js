@@ -1,10 +1,5 @@
 import React, {useEffect, useState} from "react";
 import Style from "./statValue.module.css";
-import Row from "react-bootstrap/Row";
-import Col from "react-bootstrap/Col"
-import {Jumbotron} from "react-bootstrap";
-import Form from "react-bootstrap/Form";
-import Input from "reactstrap";
 
 export default function StatValue(props) {
 

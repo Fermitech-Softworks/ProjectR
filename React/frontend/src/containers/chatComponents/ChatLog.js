@@ -1,6 +1,5 @@
 import Style from "./Panel.module.css";
 import React, {useEffect, useState} from "react";
-import {Accordion, ListGroup} from "react-bootstrap";
 import {useAppContext} from "../../libs/Context";
 import Message from "./Message";
 

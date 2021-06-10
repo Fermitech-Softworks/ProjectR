@@ -1,7 +1,6 @@
 import Card from "react-bootstrap/Card";
 import Accordion from "react-bootstrap/Accordion";
 import Button from "react-bootstrap/Button";
-import {Jumbotron} from "react-bootstrap";
 import Style from "./GeneralitaPanel.module.css";
 import Form from "react-bootstrap/Form";
 import Row from "react-bootstrap/Row";

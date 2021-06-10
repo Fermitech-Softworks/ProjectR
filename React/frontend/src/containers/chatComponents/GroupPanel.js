@@ -1,6 +1,5 @@
 import Style from "./Panel.module.css";
 import React, {useEffect} from "react";
-import {Accordion, ListGroup} from "react-bootstrap";
 import {useAppContext} from "../../libs/Context";
 import GroupElement from "./GroupElement";
 

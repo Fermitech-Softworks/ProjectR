@@ -1,7 +1,6 @@
 import React, {useEffect, useState} from "react";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col"
-import Style from "./Selector.module.css";
 import Form from "react-bootstrap/Form";
 import {useAppContext} from "../../libs/Context";
 import Button from "react-bootstrap/Button";
