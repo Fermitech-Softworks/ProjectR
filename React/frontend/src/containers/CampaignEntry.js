@@ -9,7 +9,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPencilAlt, faTrashAlt } from '@fortawesome/free-solid-svg-icons'
 import {Link} from "react-router-dom";
 export default function CharacterEntry({titolo, id,...props}) {
-    const link = "/campaign/details/"+id+"/"
     const link2 = "/campaign/chat/"+id+"/"
 
     useEffect(()=>{
@@ -21,9 +20,7 @@ export default function CharacterEntry({titolo, id,...props}) {
                     <ListGroup.Item><Row>
                         <Col><Link to={link2}>{titolo}</Link></Col>
                         <Col>
-                            <Link to={link}>
-                                <FontAwesomeIcon icon={faPencilAlt}/>
-                            </Link>
+
                             &nbsp;
                             <FontAwesomeIcon icon={faTrashAlt}/>
                         </Col>

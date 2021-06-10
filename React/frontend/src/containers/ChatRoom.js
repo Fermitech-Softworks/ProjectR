@@ -25,6 +25,8 @@ import ChatLog from "./chatComponents/ChatLog";
 import CharacterSelector from "./chatComponents/CharacterSelector";
 import AccordionBody from "react-bootstrap/Accordion";
 import PlayerCharacters from "./chatComponents/PlayerCharacters";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {faPencilAlt} from "@fortawesome/free-solid-svg-icons";
 
 export default function ChatRoom() {
     const {username} = useAppContext()
@@ -49,6 +51,7 @@ export default function ChatRoom() {
     const [replyId, setReplyId] = useState(null)
     const [socketAddress, setSocketAddress] = useState("")
     const addr = address.substring(7)
+    const link = "/campaign/details/" + id + "/"
     useEffect(() => {
         if (channelId === null) {
             return
@@ -76,7 +79,7 @@ export default function ChatRoom() {
             if (chatSocket !== null) {
                 chatSocket.close()
             }
-            let s = new WebSocket("ws://"+addr+"/ws/chat/" + channelId['id'] + "/")
+            let s = new WebSocket("ws://" + addr + "/ws/chat/" + channelId['id'] + "/")
             s.onmessage = function (e) {
                 if (e.data !== undefined) {
                     let json = JSON.parse(e.data)
@@ -116,7 +119,7 @@ export default function ChatRoom() {
         if (id === null) {
             return
         }
-        let s = new WebSocket("ws://"+addr+"/ws/campaign/" + id + "/")
+        let s = new WebSocket("ws://" + addr + "/ws/campaign/" + id + "/")
         s.onmessage = function (e) {
             const data = JSON.parse(e.data)
             console.log("Gruppo: " + e.data)
@@ -137,7 +140,7 @@ export default function ChatRoom() {
         }
     }, [id])
 
-    useEffect(()=>{
+    useEffect(() => {
         console.debug(replyId)
     }, [replyId])
 
@@ -160,7 +163,7 @@ export default function ChatRoom() {
                 chatSocket.close()
             }
             console.debug("Collegamento al canale " + dmChannelId['id'] + "come master.")
-            let s = new WebSocket("ws://"+addr+"/ws/chat/" + dmChannelId['id'] + "/")
+            let s = new WebSocket("ws://" + addr + "/ws/chat/" + dmChannelId['id'] + "/")
             s.onmessage = function (e) {
                 if (e.data !== undefined) {
                     let json = JSON.parse(e.data)
@@ -248,6 +251,11 @@ export default function ChatRoom() {
                 'Authorization': "Bearer " + token
             }
         })
+        if(response.status!== 200){
+            alert("Qualcosa è andato storto.")
+            history.push("/dashboard")
+            return
+        }
         const values = await response.json()
         setCampagna(values)
         console.log(values)
@@ -301,9 +309,11 @@ export default function ChatRoom() {
         <div className={Style.Wizard}>
             <Row>
                 <Col md={5} sm={12}>
+
                     <ChatLog {...exporter_chatlog}/>
-                    {replyId ? (<div> In risposta ad un messaggio... <a href="#" onClick={event => setReplyId(null)}>Annulla</a>
-                    </div>) : ( <div></div> )}
+                    {replyId ? (
+                        <div> In risposta ad un messaggio... <a href="#" onClick={event => setReplyId(null)}>Annulla</a>
+                        </div>) : (<div></div>)}
                     <Form.Group size="lg" controlId="nome">
                         <Form.Control
                             autoFocus
@@ -327,30 +337,35 @@ export default function ChatRoom() {
                 </Col>
                 <Col md={7} sm={12}>
                     {isDm ? (
-                        <Accordion defaultActiveKey="0">
-                            <Card>
-                                <Card.Header>
-                                    <Accordion.Toggle as={Button} variant="link" eventKey="0">
-                                        Gruppi
-                                    </Accordion.Toggle>
-                                </Card.Header>
-                                <Accordion.Collapse eventKey="0">
-                                    <AccordionBody>
-                                        <GroupPanel {...exporter_groups}/>
-                                    </AccordionBody>
-                                </Accordion.Collapse>
-                            </Card>
-                            <Card>
-                                <Card.Header>
-                                    <Accordion.Toggle as={Button} variant="link" eventKey="1">
-                                        Personaggi dei giocatori
-                                    </Accordion.Toggle>
-                                </Card.Header>
-                                <Accordion.Collapse eventKey="1">
-                                    <Card.Body><PlayerCharacters {...exporter_characters}/></Card.Body>
-                                </Accordion.Collapse>
-                            </Card>
-                        </Accordion>
+                        <div>
+                            <Link to={link}>
+                                <FontAwesomeIcon icon={faPencilAlt}/> Modifica la campagna
+                            </Link>
+                            <Accordion defaultActiveKey="0">
+                                <Card>
+                                    <Card.Header>
+                                        <Accordion.Toggle as={Button} variant="link" eventKey="0">
+                                            Gruppi
+                                        </Accordion.Toggle>
+                                    </Card.Header>
+                                    <Accordion.Collapse eventKey="0">
+                                        <AccordionBody>
+                                            <GroupPanel {...exporter_groups}/>
+                                        </AccordionBody>
+                                    </Accordion.Collapse>
+                                </Card>
+                                <Card>
+                                    <Card.Header>
+                                        <Accordion.Toggle as={Button} variant="link" eventKey="1">
+                                            Personaggi dei giocatori
+                                        </Accordion.Toggle>
+                                    </Card.Header>
+                                    <Accordion.Collapse eventKey="1">
+                                        <Card.Body><PlayerCharacters {...exporter_characters}/></Card.Body>
+                                    </Accordion.Collapse>
+                                </Card>
+                            </Accordion>
+                        </div>
                     ) : (
                         <div>
                             <CharacterSelector {...exporter_character}/>

@@ -54,19 +54,6 @@ class MessaggiGruppoViewSet(viewsets.ModelViewSet):
         return messaggi
 
 
-class TestView(ViewSet):
-
-    def list(self, request):
-        return Response("ciao", status=status.HTTP_200_OK)
-
-    def post(self, request):
-        return Response("hi", status=status.HTTP_200_OK)
-
-    def get_permissions(self):
-        permission_classes = [IsMember|ReadOnly]
-        return [permission() for permission in permission_classes]
-
-
 class GetMessaggiView(ViewSet):
 
     def list(self, request):

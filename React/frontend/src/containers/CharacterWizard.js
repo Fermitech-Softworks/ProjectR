@@ -54,9 +54,9 @@ export default function CharacterWizard(props) {
         updateProficiency();
     }, [livello])
 
-    useEffect(()=> {
-        console.debug("ID: "+props.id)
-        if(props.id !== undefined && props.id!==0){
+    useEffect(() => {
+        console.debug("ID: " + props.id)
+        if (props.id !== undefined && props.id !== 0) {
             setCharId(props.id)
             console.debug("Found id.")
             loadCharData(props.id)
@@ -112,7 +112,7 @@ export default function CharacterWizard(props) {
         })
         let values
         console.debug(response.status)
-        if(response.status!==200){
+        if (response.status !== 200) {
 
             setEditable(false)
             const resp = await fetch(address + "/bard/campaign/characters/" + id + "/", {
@@ -125,10 +125,14 @@ export default function CharacterWizard(props) {
                     'Authorization': "Bearer " + token
                 },
             })
+            if (resp.status!==200){
+                alert("Non si dispone dei privilegi per accedere alla risorsa.")
+                history.push("/dashboard")
+                return
+            }
             values = await resp.json()
             console.debug(values)
-        }
-        else{
+        } else {
             values = await response.json()
         }
         console.debug("Now saving data...")
@@ -148,30 +152,49 @@ export default function CharacterWizard(props) {
         setCarisma(values['carisma'])
         setCostituzione(values['costituzione'])
         setNote(values['note'])
-        setSpecie({id:values['specie']['id'], nome:values['specie']['nome'], dettagli:values['specie']['dettagli']})
+        setSpecie({id: values['specie']['id'], nome: values['specie']['nome'], dettagli: values['specie']['dettagli']})
         let inv = []
-        values['oggetti'].forEach(function(entry){
-            inv.push({id: entry['id'], quantita:entry['quantita'], oggetto_id:entry['oggetto']['id'], oggetto:{
-                nome: entry['oggetto']['nome'], dettagli: entry['oggetto']['dettagli'], costo: entry['oggetto']['costo']
-                }})
+        values['oggetti'].forEach(function (entry) {
+            inv.push({
+                id: entry['id'], quantita: entry['quantita'], oggetto_id: entry['oggetto']['id'], oggetto: {
+                    nome: entry['oggetto']['nome'],
+                    dettagli: entry['oggetto']['dettagli'],
+                    costo: entry['oggetto']['costo']
+                }
+            })
         })
         let abi = []
-        values['abilita'].forEach(function(entry){
-            abi.push({id: entry['id'], grado:entry['grado'], abilita_id:entry['abilita']['id'], abilita:{
-                nome: entry['abilita']['nome'], dettagli: entry['abilita']['dettagli'], attributo: entry['abilita']['attributo']
-                }})
+        values['abilita'].forEach(function (entry) {
+            abi.push({
+                id: entry['id'], grado: entry['grado'], abilita_id: entry['abilita']['id'], abilita: {
+                    nome: entry['abilita']['nome'],
+                    dettagli: entry['abilita']['dettagli'],
+                    attributo: entry['abilita']['attributo']
+                }
+            })
         })
         let cla = []
-        values['classi'].forEach(function(entry){
-            cla.push({id: entry['id'], livello:entry['livello'], classe_id:entry['classe']['id'], classe:{
-                nome:entry['classe']['nome'], dettagli:entry['classe']['dettagli']
-                }})
+        values['classi'].forEach(function (entry) {
+            cla.push({
+                id: entry['id'], livello: entry['livello'], classe_id: entry['classe']['id'], classe: {
+                    nome: entry['classe']['nome'], dettagli: entry['classe']['dettagli']
+                }
+            })
         })
         let inc = []
-        values['incantesimi'].forEach(function (entry){
-            inc.push({id: entry['id'], preparata:entry['preparato'], incantesimo_id:entry['incantesimo']['id'], incantesimo:{
-                nome:entry['incantesimo']['nome'] , dettagli:entry['incantesimo']['descrizione'] , scuola:entry['incantesimo']['scuola'] , componenti:entry['incantesimo']['componenti'] , dadi:entry['incantesimo']['dadi']
-                }})
+        values['incantesimi'].forEach(function (entry) {
+            inc.push({
+                id: entry['id'],
+                preparata: entry['preparato'],
+                incantesimo_id: entry['incantesimo']['id'],
+                incantesimo: {
+                    nome: entry['incantesimo']['nome'],
+                    dettagli: entry['incantesimo']['descrizione'],
+                    scuola: entry['incantesimo']['scuola'],
+                    componenti: entry['incantesimo']['componenti'],
+                    dadi: entry['incantesimo']['dadi']
+                }
+            })
         })
         setInventario(inv)
         setAbilita(abi)
@@ -180,7 +203,7 @@ export default function CharacterWizard(props) {
     }
 
     async function create(event) {
-        if(charId !== 0){
+        if (charId !== 0) {
             await update(charId)
             return
         }
@@ -212,6 +235,10 @@ export default function CharacterWizard(props) {
                 specie: specie.id
             })
         })
+        if(response.status!==201){
+            alert("Verificare di aver inserito tutti i campi necessari nel pannello generalità.")
+            return
+        }
         const values = await response.json()
         console.debug(values)
         setCharId(values.id)
@@ -227,42 +254,46 @@ export default function CharacterWizard(props) {
         console.debug("updating...")
         let oggetti_upload = []
         inventario.forEach(function (entry) {
-            if(entry !== undefined){
-            oggetti_upload.push({
-                id: entry.id,
-                quantita: entry.quantita,
-                oggetto: entry.oggetto_id
-            })}
+            if (entry !== undefined) {
+                oggetti_upload.push({
+                    id: entry.id,
+                    quantita: entry.quantita,
+                    oggetto: entry.oggetto_id
+                })
+            }
         })
         let classi_upload = []
         classe.forEach(function (entry) {
-            if(entry!== undefined){
-            classi_upload.push({
-                id: entry.id,
-                livello: entry.livello,
-                classe: entry.classe_id
-            })}
+            if (entry !== undefined) {
+                classi_upload.push({
+                    id: entry.id,
+                    livello: entry.livello,
+                    classe: entry.classe_id
+                })
+            }
         })
         let abilita_upload = []
         abilita.forEach(function (entry) {
-            if(entry!== undefined){
-            abilita_upload.push({
-                id: entry.id,
-                grado: entry.grado,
-                abilita: entry.abilita_id
-            })}
+            if (entry !== undefined) {
+                abilita_upload.push({
+                    id: entry.id,
+                    grado: entry.grado,
+                    abilita: entry.abilita_id
+                })
+            }
         })
         let incantesimi_upload = []
         incantesimi.forEach(function (entry) {
-            if(entry!==undefined){
-            incantesimi_upload.push({
-                id: entry.id,
-                preparato: entry.preparata,
-                incantesimo: entry.incantesimo_id
-            })}
+            if (entry !== undefined) {
+                incantesimi_upload.push({
+                    id: entry.id,
+                    preparato: entry.preparata,
+                    incantesimo: entry.incantesimo_id
+                })
+            }
         })
         let token = localStorage.getItem("token")
-        const response = await fetch(address + "/artificier/characters/details/"+id+"/", {
+        const response = await fetch(address + "/artificier/characters/details/" + id + "/", {
             method: "PUT",
             credentials: "include",
             headers: {
@@ -292,8 +323,13 @@ export default function CharacterWizard(props) {
                 incantesimi: incantesimi_upload
             })
         })
-        const values = await response.json()
-        console.debug(values)
+        if (response.status === 200) {
+            const values = await response.json()
+            console.debug(values)
+            alert("Dati salvati con successo.")
+            return
+        }
+        alert("Si è verificato un errore.")
     }
 
     return (

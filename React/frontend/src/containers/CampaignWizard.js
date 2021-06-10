@@ -61,6 +61,10 @@ export default function CampaignWizard(props) {
                 admin_id: uid
             })
         })
+        if(response.status!==201){
+            alert("Verificare di aver inserito valori nel campo delle informazioni generali.")
+            return
+        }
         const values = await response.json()
         setId(values['id'])
         console.log(values['id'])
@@ -119,8 +123,35 @@ export default function CampaignWizard(props) {
                 corpo
             )
         })
-        const values = await response.json()
-        history.push("/dashboard")
+        if(response.status===200){
+            const values = await response.json()
+            alert("Salvataggio completato.")
+            history.push("/dashboard")
+        }
+
+    }
+
+
+    async function del(entry){
+        if(id === undefined){
+            return
+        }
+        let token = localStorage.getItem("token")
+        const response = await fetch(address + "/bard/campaign/" + id + "/", {
+            method: "DELETE",
+            credentials: "include",
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'X-CSRFToken': "",
+                'Authorization': "Bearer " + token
+            }
+        })
+        if(response.status===204){
+            alert("Campagna eliminata.")
+            history.push("/dashboard")
+        }
+        alert("Qualcosa è andato storto.")
     }
 
 
@@ -140,7 +171,13 @@ export default function CampaignWizard(props) {
                 'Authorization': "Bearer " + token
             }
         })
+        if(response.status!==200){
+            alert("Qualcosa è andato storto.")
+            history.push("/dashboard")
+            return
+        }
         const values = await response.json()
+
         console.log(values)
         let check = false
 
@@ -213,6 +250,7 @@ export default function CampaignWizard(props) {
                         </Row>
                     </Jumbotron>
                     <Button block onClick={event => createCampaign(event)}>Salva le modifiche</Button>
+                    <Button block variant={"danger"} onClick={event => del(event)} disabled={!id}>Cancella</Button>
                 </Col>
             </Row>
         </div>
