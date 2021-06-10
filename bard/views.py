@@ -74,7 +74,7 @@ class GetMessaggiView(ViewSet):
 
     def post(self, request):
         messaggi = Messaggio.objects.filter(gruppo_id=int(request.data['gid'])).order_by("-id")[:100]
-        serializer = MessaggioSerializer(messaggi, many=True)
+        serializer = MessaggioSerializerReplies(messaggi, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     def get_permissions(self):

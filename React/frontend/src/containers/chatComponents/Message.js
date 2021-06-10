@@ -17,14 +17,17 @@ export default function Message(props) {
     const [user, setUser] = useState("")
     const {uid} = useAppContext()
     const [isSelf, setIsSelf] = useState(false)
+    const [hasImage, setHasImage] = useState(false)
+    const [imageAddress, setImageAddress] = useState("")
+    const [inResponse, setInResponse] = useState(false)
     const ref = useRef(null)
+    const {address} = useAppContext()
 
     const scroll = () => ref.current.scrollIntoView()
 
     function getUser() {
         props.listaPlayer.forEach(function (entry) {
             if (entry.utente.id === props.message.utente) {
-                console.debug(entry.utente)
                 setUser(entry.utente)
                 if (uid === entry.utente.id) {
                     setIsSelf(true)
@@ -37,6 +40,14 @@ export default function Message(props) {
         getUser()
         if (props.autoScroll) {
             scroll()
+        }
+        if (props.message.immagine!==null){
+            setHasImage(true)
+            setImageAddress(address+props.message.immagine)
+        }
+        if (props.message.in_risposta){
+            console.debug(props.message)
+            setInResponse(true)
         }
     }, [])
 
@@ -53,12 +64,14 @@ export default function Message(props) {
                                 </b>
                             </Row>
                             <Row>
+                                {inResponse ? (<div>R:[{props.message.in_risposta.contenuto}]&nbsp;</div>):(<div></div>)}
                                 {props.message.contenuto}
+                                {hasImage ? (<div>&nbsp;<a href={imageAddress} target="_blank">Link</a></div>) : ( <div></div> )}
                             </Row>
                         </ListGroup.Item>
 
                     ) : (
-                        <div>&nbsp;</div>
+                        <div><Button variant={"light"} onClick={event => props.setReplyId(props.message.id)}>Rispondi</Button></div>
                     )}
                 </Col>
                 <Col md={6} sm={12}>
@@ -71,12 +84,14 @@ export default function Message(props) {
                                 </b>
                             </Row>
                             <Row>
+                                {inResponse ? (<div>R:[{props.message.in_risposta.contenuto}]&nbsp;</div>):(<div></div>)}
                                 {props.message.contenuto}
+                                {hasImage ? (<div>&nbsp;<a href={imageAddress} target="_blank">Link</a></div>) : ( <div></div> )}
                             </Row>
                         </ListGroup.Item>
 
                     ) : (
-                        <div>&nbsp;</div>
+                        <div><Button variant={"light"} onClick={event => props.setReplyId(props.message.id)}>Rispondi</Button></div>
                     )}
                 </Col>
             </Row>

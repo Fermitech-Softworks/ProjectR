@@ -21,9 +21,17 @@ class GruppoSerializer(serializers.ModelSerializer):
 
 
 class MessaggioSerializer(serializers.ModelSerializer):
+
     class Meta:
         model = Messaggio
         fields = "__all__"
+
+
+class MessaggioSerializerReplies(serializers.ModelSerializer):
+    in_risposta = MessaggioSerializer(many=False, read_only=True)
+    class Meta:
+        model = Messaggio
+        fields = ("id", "tipo", "contenuto", "ora", "gruppo", "utente", "immagine", "in_risposta")
 
 
 class GruppoSerializerMessages(serializers.ModelSerializer):

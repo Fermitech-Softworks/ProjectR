@@ -30,6 +30,7 @@ class Messaggio(models.Model):
     messaggi_tipo = [(1, "Testo"), (2, "Messaggi")]
     tipo = models.PositiveSmallIntegerField(choices=messaggi_tipo, default=1)
     contenuto = models.TextField()
+    immagine = models.ImageField(upload_to='messages', null=True)
     ora = models.DateTimeField()
     in_risposta = models.ForeignKey('self', null=True, on_delete=models.CASCADE, related_name="risposta")
     gruppo = models.ForeignKey(Gruppo, on_delete=models.CASCADE, related_name="gruppo_messaggio")

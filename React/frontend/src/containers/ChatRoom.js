@@ -46,24 +46,25 @@ export default function ChatRoom() {
     const [autoScroll, setAutoScroll] = useState(true)
     const [character, setCharacter] = useState(true)
     const [userGroups, setUserGroups] = useState([])
+    const [replyId, setReplyId] = useState(null)
 
     useEffect(() => {
         if (channelId === null) {
             return
         }
         let userChannels = []
-        groups.forEach(function(entry){
+        groups.forEach(function (entry) {
             console.debug(entry)
             console.debug(uid)
             let uids = []
-            entry.users.forEach(function(entry){
+            entry.users.forEach(function (entry) {
                 uids.push(entry)
             })
-            if(uids.includes(uid)){
+            if (uids.includes(uid)) {
                 userChannels.push(entry.id)
             }
         })
-        if(!(userChannels.includes(channelId['id']))){
+        if (!(userChannels.includes(channelId['id']))) {
             console.debug(userChannels)
             console.debug(chatSocket)
             return
@@ -85,7 +86,10 @@ export default function ChatRoom() {
                     setMessageLog(messageLog => [...messageLog, {
                         contenuto: json['message'],
                         utente: json['mittente'],
-                        gruppo: json['room_name']
+                        gruppo: json['room_name'],
+                        immagine: json['immagine'],
+                        id: json['id'],
+                        in_risposta: json['messaggioRisposta']
                     }
                     ])
                 }
@@ -132,6 +136,10 @@ export default function ChatRoom() {
         }
     }, [id])
 
+    useEffect(()=>{
+        console.debug(replyId)
+    }, [replyId])
+
     useEffect(() => {
         console.debug("test")
         console.debug(dmChannelId)
@@ -157,9 +165,12 @@ export default function ChatRoom() {
                     let json = JSON.parse(e.data)
                     console.debug(json)
                     setMessageLog(messageLog => [...messageLog, {
-                        message: json['message'],
-                        mittente: json['mittente'],
-                        room_name: json['room_name']
+                        contenuto: json['message'],
+                        utente: json['mittente'],
+                        gruppo: json['room_name'],
+                        immagine: json['immagine'],
+                        id: json['id'],
+                        in_risposta: json['messaggioRisposta']
                     }
                     ])
                 }
@@ -184,8 +195,37 @@ export default function ChatRoom() {
         if (chatSocket !== null) {
             console.debug("Invio...")
             chatSocket.send(JSON.stringify({
-                'message': message
+                'message': message,
+                'image': '',
+                'responseMessage': replyId
             }))
+        } else {
+            alert("Nessun canale è stato attivato, oppure il canale è in pausa. Attendi.")
+        }
+    }
+
+    const toBase64 = file => new Promise((resolve, reject) => {
+        const reader = new FileReader()
+        reader.readAsDataURL(file)
+        reader.onload = () => resolve(reader.result)
+        reader.onerror = error => reject(error)
+    })
+
+    async function sendFile(event) {
+
+        if (chatSocket !== null) {
+            console.debug("Invio...")
+            console.debug(event.target.files)
+            let b64file = await toBase64(event.target.files[0])
+            if (b64file instanceof Error) {
+                alert("Il file potrebbe essere in un formato incompatibile.")
+            } else {
+                chatSocket.send(JSON.stringify({
+                    'message': "Immagine",
+                    'image': b64file,
+                    'responseMessage': replyId
+                }))
+            }
         } else {
             alert("Nessun canale è stato attivato, oppure il canale è in pausa. Attendi.")
         }
@@ -219,27 +259,27 @@ export default function ChatRoom() {
         })
         setListaPlayer(values.utenti)
         setGroups(values.gruppi)
-        values.gruppi.forEach(function(entry){
-            if(entry.attivo){
+        values.gruppi.forEach(function (entry) {
+            if (entry.attivo) {
                 console.debug(entry)
-                if(entry.users.includes(uid)){
-                    if(!isDm){
-                    setChannelId({id:entry.id, type:"standard"})}
-                    else{
-                        setDmChannelId({id:entry.id, type:"standard"})
+                if (entry.users.includes(uid)) {
+                    if (!isDm) {
+                        setChannelId({id: entry.id, type: "standard"})
+                    } else {
+                        setDmChannelId({id: entry.id, type: "standard"})
                     }
                 }
             }
         })
         let userChannels = []
-        values.gruppi.forEach(function(entry){
+        values.gruppi.forEach(function (entry) {
             console.debug(entry)
             console.debug(uid)
             let uids = []
-            entry.users.forEach(function(entry){
+            entry.users.forEach(function (entry) {
                 uids.push(entry)
             })
-            if(uids.includes(uid)){
+            if (uids.includes(uid)) {
                 userChannels.push(entry.id)
             }
         })
@@ -248,9 +288,8 @@ export default function ChatRoom() {
     }
 
 
-
     const exporter_groups = {groups, setGroups, dmChannelId, setDmChannelId}
-    const exporter_chatlog = {messageLog, listaPlayer, autoScroll, setMessageLog, userGroups}
+    const exporter_chatlog = {messageLog, listaPlayer, autoScroll, setMessageLog, userGroups, setReplyId}
     const exporter_character = {character, setCharacter, campagna}
     const exporter_characters = {campagna, setCampagna}
 
@@ -259,6 +298,8 @@ export default function ChatRoom() {
             <Row>
                 <Col md={5} sm={12}>
                     <ChatLog {...exporter_chatlog}/>
+                    {replyId ? (<div> In risposta ad un messaggio... <a href="#" onClick={event => setReplyId(null)}>Annulla</a>
+                    </div>) : ( <div></div> )}
                     <Form.Group size="lg" controlId="nome">
                         <Form.Control
                             autoFocus
@@ -269,40 +310,43 @@ export default function ChatRoom() {
                     </Form.Group>
                     <Row>
                         <Col>
-                        <Button block onClick={event => sendMessage(event)} disabled={!channelId}>Invia</Button>
+                            <Button block onClick={event => sendMessage(event)} disabled={!channelId}>Invia</Button>
                         </Col>
                         <Col>
                             <Form.Check type="checkbox" checked={autoScroll} label="Autoscroll?"
                                         onClick={event => setAutoScroll(event.target.checked)}/>
                         </Col>
+                        <Col>
+                            <input type="file" onChange={event => sendFile(event)} disabled={!channelId}/>
+                        </Col>
                     </Row>
                 </Col>
                 <Col md={7} sm={12}>
                     {isDm ? (
-                            <Accordion defaultActiveKey="0">
-                                <Card>
-                                    <Card.Header>
-                                        <Accordion.Toggle as={Button} variant="link" eventKey="0">
-                                            Gruppi
-                                        </Accordion.Toggle>
-                                    </Card.Header>
-                                    <Accordion.Collapse eventKey="0">
-                                        <AccordionBody>
+                        <Accordion defaultActiveKey="0">
+                            <Card>
+                                <Card.Header>
+                                    <Accordion.Toggle as={Button} variant="link" eventKey="0">
+                                        Gruppi
+                                    </Accordion.Toggle>
+                                </Card.Header>
+                                <Accordion.Collapse eventKey="0">
+                                    <AccordionBody>
                                         <GroupPanel {...exporter_groups}/>
-                                        </AccordionBody>
-                                    </Accordion.Collapse>
-                                </Card>
-                                <Card>
-                                    <Card.Header>
-                                        <Accordion.Toggle as={Button} variant="link" eventKey="1">
-                                            Personaggi dei giocatori
-                                        </Accordion.Toggle>
-                                    </Card.Header>
-                                    <Accordion.Collapse eventKey="1">
-                                        <Card.Body><PlayerCharacters {...exporter_characters}/></Card.Body>
-                                    </Accordion.Collapse>
-                                </Card>
-                            </Accordion>
+                                    </AccordionBody>
+                                </Accordion.Collapse>
+                            </Card>
+                            <Card>
+                                <Card.Header>
+                                    <Accordion.Toggle as={Button} variant="link" eventKey="1">
+                                        Personaggi dei giocatori
+                                    </Accordion.Toggle>
+                                </Card.Header>
+                                <Accordion.Collapse eventKey="1">
+                                    <Card.Body><PlayerCharacters {...exporter_characters}/></Card.Body>
+                                </Accordion.Collapse>
+                            </Card>
+                        </Accordion>
                     ) : (
                         <div>
                             <CharacterSelector {...exporter_character}/>

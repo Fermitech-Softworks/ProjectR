@@ -4,7 +4,7 @@ import {Accordion, ListGroup} from "react-bootstrap";
 import {useAppContext} from "../../libs/Context";
 import Message from "./Message";
 
-export default function ChatLog({messageLog, listaPlayer, autoScroll, setMessageLog, userGroups}) {
+export default function ChatLog({messageLog, listaPlayer, autoScroll, setMessageLog, userGroups, setReplyId}) {
     const {uid} = useAppContext()
     const {address} = useAppContext()
 
@@ -55,7 +55,7 @@ export default function ChatLog({messageLog, listaPlayer, autoScroll, setMessage
     return (
         <div className={Style.GeneralitaPanel}>
             <div>
-                {messageLog.map(message => <Message message={message} listaPlayer={listaPlayer} autoScroll={autoScroll}/>)}
+                {messageLog.map(message => <Message message={message} listaPlayer={listaPlayer} autoScroll={autoScroll} setReplyId={setReplyId}/>)}
             </div>
         </div>)
 }
