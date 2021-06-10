@@ -125,10 +125,10 @@ class PersonaggioSerializer(serializers.ModelSerializer):
 
 
 class PersonaggioSerializerId(serializers.ModelSerializer):
-    oggetti = PossiedeSerializerId(many=True, source="possiede_set")
-    abilita = SaFareSerializerId(many=True, source="safare_set")
-    classi = IstruitoASerializerId(many=True, source="istruitoa_set")
-    incantesimi = LanciaSerializerId(many=True, source="lancia_set")
+    oggetti = PossiedeSerializerId(many=True, source="possiede_set", allow_null=True, required=False)
+    abilita = SaFareSerializerId(many=True, source="safare_set", allow_null=True, required=False)
+    classi = IstruitoASerializerId(many=True, source="istruitoa_set", allow_null=True, required=False)
+    incantesimi = LanciaSerializerId(many=True, source="lancia_set", allow_null=True, required=False)
 
     class Meta:
         model = Personaggio
@@ -150,77 +150,81 @@ class PersonaggioSerializerId(serializers.ModelSerializer):
         instance.costituzione = validated_data.get("costituzione", instance.costituzione)
         instance.note = validated_data.get("note", instance.note)
         instance.specie = validated_data.get("specie", instance.specie)
-        for elem in list(set([e['id'] for e in instance.oggetti.values()]) - set(
-                [oggetto.get('oggetto').id for oggetto in validated_data.get('possiede_set')])):
-            possiede = Possiede.objects.get(oggetto_id=elem, personaggio_id=instance.id)
-            possiede.delete()
-        for oggetto in validated_data.get('possiede_set'):
-            possiede_id = oggetto.get('id')
-            if possiede_id:
-                possiede = Possiede.objects.get(id=possiede_id)
-                possiede.quantita = oggetto.get("quantita", possiede.quantita)
-                possiede.save()
-            else:
-                elem = oggetto.get('oggetto')
-                if not elem:
-                    pass
+        if validated_data.get('possiede_set'):
+            for elem in list(set([e['id'] for e in instance.oggetti.values()]) - set(
+                    [oggetto.get('oggetto').id for oggetto in validated_data.get('possiede_set')])):
+                possiede = Possiede.objects.get(oggetto_id=elem, personaggio_id=instance.id)
+                possiede.delete()
+            for oggetto in validated_data.get('possiede_set'):
+                possiede_id = oggetto.get('id')
+                if possiede_id:
+                    possiede = Possiede.objects.get(id=possiede_id)
+                    possiede.quantita = oggetto.get("quantita", possiede.quantita)
+                    possiede.save()
                 else:
-                    if elem.id not in [e['id'] for e in instance.oggetti.values()]:
-                        Possiede.objects.create(quantita=oggetto.get("quantita"), oggetto_id=elem.id,
-                                                personaggio_id=instance.id)
-        for elem in list(set([e['id'] for e in instance.classi.values()]) - set(
-                    [classe.get('classe').id for classe in validated_data.get('istruitoa_set')])):
-            istruito = IstruitoA.objects.get(classe_id=elem, personaggio_id=instance.id)
-            istruito.delete()
-        for classe in validated_data.get('istruitoa_set'):
-            istruito_id = classe.get("id")
-            if istruito_id:
-                istruito = IstruitoA.objects.get(id=istruito_id)
-                istruito.livello = classe.get("livello", istruito.livello)
-                istruito.save()
-            else:
-                elem = classe.get("classe")
-                if not elem:
-                    pass
+                    elem = oggetto.get('oggetto')
+                    if not elem:
+                        pass
+                    else:
+                        if elem.id not in [e['id'] for e in instance.oggetti.values()]:
+                            Possiede.objects.create(quantita=oggetto.get("quantita"), oggetto_id=elem.id,
+                                                    personaggio_id=instance.id)
+        if validated_data.get('istruitoa_set'):
+            for elem in list(set([e['id'] for e in instance.classi.values()]) - set(
+                        [classe.get('classe').id for classe in validated_data.get('istruitoa_set')])):
+                istruito = IstruitoA.objects.get(classe_id=elem, personaggio_id=instance.id)
+                istruito.delete()
+            for classe in validated_data.get('istruitoa_set'):
+                istruito_id = classe.get("id")
+                if istruito_id:
+                    istruito = IstruitoA.objects.get(id=istruito_id)
+                    istruito.livello = classe.get("livello", istruito.livello)
+                    istruito.save()
                 else:
-                    if elem.id not in [e['id'] for e in instance.classi.values()]:
-                        IstruitoA.objects.create(livello=classe.get("livello"), classe_id=elem.id,
-                                                 personaggio_id=instance.id)
-        for elem in list(set([e['id'] for e in instance.abilita.values()]) - set(
-                [abilita.get('abilita').id for abilita in validated_data.get('safare_set')])):
-            abilita = SaFare.objects.get(abilita_id=elem, personaggio_id=instance.id)
-            abilita.delete()
-        for abilita in validated_data.get('safare_set'):
-            safare_id = abilita.get("id")
-            if safare_id:
-                safare = SaFare.objects.get(id=safare_id)
-                safare.grado = abilita.get("grado", safare.grado)
-                safare.save()
-            else:
-                elem = abilita.get("abilita")
-                if not elem:
-                    pass
+                    elem = classe.get("classe")
+                    if not elem:
+                        pass
+                    else:
+                        if elem.id not in [e['id'] for e in instance.classi.values()]:
+                            IstruitoA.objects.create(livello=classe.get("livello"), classe_id=elem.id,
+                                                     personaggio_id=instance.id)
+        if validated_data.get('safare_set'):
+            for elem in list(set([e['id'] for e in instance.abilita.values()]) - set(
+                    [abilita.get('abilita').id for abilita in validated_data.get('safare_set')])):
+                abilita = SaFare.objects.get(abilita_id=elem, personaggio_id=instance.id)
+                abilita.delete()
+            for abilita in validated_data.get('safare_set'):
+                safare_id = abilita.get("id")
+                if safare_id:
+                    safare = SaFare.objects.get(id=safare_id)
+                    safare.grado = abilita.get("grado", safare.grado)
+                    safare.save()
                 else:
-                    if elem.id not in [e['id'] for e in instance.abilita.values()]:
-                        SaFare.objects.create(grado=abilita.get("grado"), abilita_id=elem.id,
-                                              personaggio_id=instance.id)
-        for elem in list(set([e['id'] for e in instance.incantesimi.values()]) - set(
-                [incantesimo.get('incantesimo').id for incantesimo in validated_data.get('lancia_set')])):
-            incantesimo = Lancia.objects.get(incantesimo_id=elem, personaggio_id=instance.id)
-            incantesimo.delete()
-        for incantesimo in validated_data.get('lancia_set'):
-            lancia_id = incantesimo.get("id")
-            if lancia_id:
-                lancia = Lancia.objects.get(id=lancia_id)
-                lancia.preparato = incantesimo.get("preparato", lancia.preparato)
-                lancia.save()
-            else:
-                elem = incantesimo.get("incantesimo")
-                if not elem:
-                    pass
+                    elem = abilita.get("abilita")
+                    if not elem:
+                        pass
+                    else:
+                        if elem.id not in [e['id'] for e in instance.abilita.values()]:
+                            SaFare.objects.create(grado=abilita.get("grado"), abilita_id=elem.id,
+                                                  personaggio_id=instance.id)
+        if validated_data.get('lancia_set'):
+            for elem in list(set([e['id'] for e in instance.incantesimi.values()]) - set(
+                    [incantesimo.get('incantesimo').id for incantesimo in validated_data.get('lancia_set')])):
+                incantesimo = Lancia.objects.get(incantesimo_id=elem, personaggio_id=instance.id)
+                incantesimo.delete()
+            for incantesimo in validated_data.get('lancia_set'):
+                lancia_id = incantesimo.get("id")
+                if lancia_id:
+                    lancia = Lancia.objects.get(id=lancia_id)
+                    lancia.preparato = incantesimo.get("preparato", lancia.preparato)
+                    lancia.save()
                 else:
-                    if elem.id not in [e['id'] for e in instance.incantesimi.values()]:
-                        Lancia.objects.create(preparato=incantesimo.get("preparato"), incantesimo_id=elem.id,
-                                              personaggio_id=instance.id)
+                    elem = incantesimo.get("incantesimo")
+                    if not elem:
+                        pass
+                    else:
+                        if elem.id not in [e['id'] for e in instance.incantesimi.values()]:
+                            Lancia.objects.create(preparato=incantesimo.get("preparato"), incantesimo_id=elem.id,
+                                                  personaggio_id=instance.id)
         instance.save()
         return instance
