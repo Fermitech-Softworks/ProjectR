@@ -46,8 +46,6 @@ export default function ChatRoom() {
         }
         let userChannels = []
         groups.forEach(function (entry) {
-            console.debug(entry)
-            console.debug(uid)
             let uids = []
             entry.users.forEach(function (entry) {
                 uids.push(entry)
@@ -57,13 +55,10 @@ export default function ChatRoom() {
             }
         })
         if (!(userChannels.includes(channelId['id']))) {
-            console.debug(userChannels)
-            console.debug(chatSocket)
             return
         }
         console.debug("Stabilisco la connessione con il canale " + channelId['id'] + " con modalità " + channelId['type'])
         if (!(isDm && channelId['master']) && channelId) {
-            console.debug(channelId)
             if (chatSocket !== null) {
                 chatSocket.close()
             }
@@ -71,7 +66,6 @@ export default function ChatRoom() {
             s.onmessage = function (e) {
                 if (e.data !== undefined) {
                     let json = JSON.parse(e.data)
-                    console.debug(json)
                     if (json['room_name'] === undefined || json['room_name'] === null) {
                         return
                     }
@@ -110,7 +104,6 @@ export default function ChatRoom() {
         let s = new WebSocket("ws://" + addr + "/ws/campaign/" + id + "/")
         s.onmessage = function (e) {
             const data = JSON.parse(e.data)
-            console.log("Gruppo: " + e.data)
             setChannelId({id: data['gruppo'], type: "standard"})
         }
         s.onerror = function (e) {
@@ -133,10 +126,7 @@ export default function ChatRoom() {
     }, [replyId])
 
     useEffect(() => {
-        console.debug("test")
-        console.debug(dmChannelId)
         if (dmChannelId !== null && dmChannelId['type'] !== "master" && isDm) {
-            console.debug("not master")
             if (campaignSocket !== null) {
                 campaignSocket.send(JSON.stringify({
                     'gruppo': dmChannelId['id']
@@ -155,7 +145,6 @@ export default function ChatRoom() {
             s.onmessage = function (e) {
                 if (e.data !== undefined) {
                     let json = JSON.parse(e.data)
-                    console.debug(json)
                     setMessageLog(messageLog => [...messageLog, {
                         contenuto: json['message'],
                         utente: json['mittente'],
@@ -185,7 +174,6 @@ export default function ChatRoom() {
 
     function sendMessage(event) {
         if (chatSocket !== null) {
-            console.debug("Invio...")
             chatSocket.send(JSON.stringify({
                 'message': message,
                 'image': '',
@@ -206,8 +194,6 @@ export default function ChatRoom() {
     async function sendFile(event) {
 
         if (chatSocket !== null) {
-            console.debug("Invio...")
-            console.debug(event.target.files)
             let b64file = await toBase64(event.target.files[0])
             if (b64file instanceof Error) {
                 alert("Il file potrebbe essere in un formato incompatibile.")
@@ -246,10 +232,7 @@ export default function ChatRoom() {
         }
         const values = await response.json()
         setCampagna(values)
-        console.log(values)
         values.utenti.forEach(function (entry) {
-            console.log(entry)
-            console.log(uid)
             if (entry.utente.id === uid && entry.comeDm) {
                 setIsDm(true)
             }
@@ -258,7 +241,6 @@ export default function ChatRoom() {
         setGroups(values.gruppi)
         values.gruppi.forEach(function (entry) {
             if (entry.attivo) {
-                console.debug(entry)
                 if (entry.users.includes(uid)) {
                     if (!isDm) {
                         setChannelId({id: entry.id, type: "standard"})
@@ -270,8 +252,6 @@ export default function ChatRoom() {
         })
         let userChannels = []
         values.gruppi.forEach(function (entry) {
-            console.debug(entry)
-            console.debug(uid)
             let uids = []
             entry.users.forEach(function (entry) {
                 uids.push(entry)
@@ -280,7 +260,6 @@ export default function ChatRoom() {
                 userChannels.push(entry.id)
             }
         })
-        console.debug(userChannels)
         setUserGroups(userChannels)
 
 

@@ -32,7 +32,6 @@ export default function CampaignWizard(props) {
     useEffect(() =>{
         if(props.id !== undefined){
             setId(props.id)
-            console.debug("Found id.")
             load(props.id).then(r => console.debug("Loading complete."))
         }
     },[])
@@ -65,14 +64,12 @@ export default function CampaignWizard(props) {
         }
         const values = await response.json()
         setId(values['id'])
-        console.log(values['id'])
         await update(values['id'])
     }
 
     async function update(id) {
         let utenti = []
         players.forEach(function (entry) {
-            console.debug(entry)
             if (entry !== undefined) {
                 utenti.push({
                     id: entry.id,
@@ -83,7 +80,6 @@ export default function CampaignWizard(props) {
         })
         let gruppi = []
         groups.forEach(function (entry) {
-            console.debug(entry)
             if (entry !== undefined) {
                 let utentiGruppo = []
                 entry.users.forEach(function (user) {
@@ -106,7 +102,6 @@ export default function CampaignWizard(props) {
             gruppi: gruppi,
             id: id
         }
-        console.debug(corpo)
         let token = localStorage.getItem("token")
         const response = await fetch(address + "/bard/campaign/full/" + id + "/", {
             method: "PUT",
@@ -160,7 +155,6 @@ export default function CampaignWizard(props) {
         if(id === undefined){
             return
         }
-        console.debug("Now loading...")
         let token = localStorage.getItem("token")
         const response = await fetch(address + "/bard/campaign/full/" + id + "/", {
             method: "GET",
@@ -179,7 +173,6 @@ export default function CampaignWizard(props) {
         }
         const values = await response.json()
 
-        console.log(values)
         let check = false
 
         setPlayers(values.utenti)
@@ -190,11 +183,8 @@ export default function CampaignWizard(props) {
             let users = []
             if(entry!==undefined){
             entry.users.forEach(function(user){
-                console.debug(user)
                 values.utenti.forEach(function(data){
                     if(data!==undefined){
-                    console.debug(data)
-                    console.debug(user)
                     if(data['utente']===user){
                         users.push(data)
                     }}

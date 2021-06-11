@@ -43,7 +43,6 @@ export default function AbilitaSelector({incantesimi, setIncantesimi}) {
 
     async function onLoad() {
         let token = localStorage.getItem("token")
-        console.debug(address)
         const response = await fetch(address + "/artificier/spells/", {
             method: "GET",
             credentials: "include",
@@ -62,9 +61,7 @@ export default function AbilitaSelector({incantesimi, setIncantesimi}) {
     }
 
     function update(event) {
-        console.debug(incantesimi)
         let value = event.value
-        console.debug(value)
         if (value < 0) {
             setDescrizione("")
             return
@@ -81,7 +78,6 @@ export default function AbilitaSelector({incantesimi, setIncantesimi}) {
 
     function addIncantesimo(event){
         let present = false;
-        console.log(incantesimi)
         incantesimi.forEach(function (entry){
             if(typeof entry !== 'undefined'){
             if(incantesimoId == entry.incantesimo_id){
@@ -105,7 +101,6 @@ export default function AbilitaSelector({incantesimi, setIncantesimi}) {
                     }])
                 }
             })
-            console.log(incantesimi)
         }
     }
 

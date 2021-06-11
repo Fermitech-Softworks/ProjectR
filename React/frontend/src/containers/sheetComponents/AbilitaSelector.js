@@ -41,7 +41,6 @@ export default function AbilitaSelector({abilita, setAbilita}) {
 
     async function onLoad() {
         let token = localStorage.getItem("token")
-        console.debug(address)
         const response = await fetch(address + "/artificier/abilities/", {
             method: "GET",
             credentials: "include",
@@ -60,7 +59,6 @@ export default function AbilitaSelector({abilita, setAbilita}) {
 
     function update(event) {
         let value = event.value
-        console.debug(value)
         if (value < 0) {
             setDescrizione("")
             return
@@ -75,8 +73,6 @@ export default function AbilitaSelector({abilita, setAbilita}) {
 
     function addAbilita(event){
         let present = false;
-        console.debug(abilita)
-        console.debug(typeof abilita[0])
 
         abilita.forEach(function (entry){
             if(typeof entry !== 'undefined'){

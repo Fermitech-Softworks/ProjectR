@@ -40,7 +40,6 @@ export default function ClassSelector({classe, setClasse}) {
 
     async function onLoad() {
         let token = localStorage.getItem("token")
-        console.debug(address)
         const response = await fetch(address + "/artificier/classes/", {
             method: "GET",
             credentials: "include",
@@ -59,7 +58,6 @@ export default function ClassSelector({classe, setClasse}) {
 
     function update(event) {
         let value = event.value
-        console.debug(value)
         if (value < 0) {
             setDescrizione("")
             return

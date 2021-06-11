@@ -50,14 +50,12 @@ export default function Login() {
             }
         })
         const values = await response.json()
-        console.debug(values)
         setUsername(values.results[0].username)
         setSuperUser(values.results[0].is_superuser)
         setUid(values.results[0].id)
         localStorage.setItem("username", values.results[0].username)
         localStorage.setItem("isSuperUser", values.results[0].is_superuser)
         localStorage.setItem("uid", values.results[0].id)
-        console.log(values)
     }
 
     async function HandleSubmit(event) {
@@ -78,7 +76,6 @@ export default function Login() {
             })
             if (response.status === 200) {
                 const values = await response.json()
-                console.log(values)
                 localStorage.setItem("token", values['access'])
                 localStorage.setItem("refresh", values['refresh'])
                 localStorage.setItem("serverAddress", address)
@@ -86,7 +83,6 @@ export default function Login() {
                 setUserHasAuth(true)
                 setUserToken(values['access'])
                 setRefreshToken(values['refresh'])
-                console.debug("what")
                 document.cookie = "token=" + values['access']
                 const data = await getUsername()
                 history.push("/dashboard")

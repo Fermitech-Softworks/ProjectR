@@ -29,7 +29,6 @@ export default function PlayerCharacters({campagna}) {
 
     function update(event) {
         let value = event.value
-        console.debug(value)
         if (value < 0) {
             setId(0)
             return

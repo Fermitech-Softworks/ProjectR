@@ -12,7 +12,6 @@ export default function GroupElement(props) {
     const {address} = useAppContext()
 
     function transfer_all(event) {
-        console.debug(props)
         props.setDmChannelId({id: props.group.id, type: "standard"})
         activate(true)
     }
@@ -37,7 +36,6 @@ export default function GroupElement(props) {
     }
 
     async function updateGroupStatus(target){
-        console.debug("Aggiornamento...")
         let token = localStorage.getItem("token")
         const response = await fetch(address + "/bard/group/" + target.id + "/", {
             method: "PUT",
@@ -52,7 +50,6 @@ export default function GroupElement(props) {
 
         })
         let res = await response.json()
-        console.debug(res)
     }
 
     if (props.group !== undefined) {

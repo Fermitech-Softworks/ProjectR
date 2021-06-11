@@ -27,7 +27,6 @@ export default function ChatLog({messageLog, listaPlayer, autoScroll, setMessage
         let token = localStorage.getItem("token")
         console.debug(userGroups)
         for (const entry of userGroups) {
-            console.debug(entry)
             const response = await fetch(address + "/bard/messages/", {
                 method: "POST",
                 credentials: "include",
@@ -40,14 +39,11 @@ export default function ChatLog({messageLog, listaPlayer, autoScroll, setMessage
                 body:JSON.stringify({"gid":entry})
             })
             let data = await response.json()
-            console.debug(data)
             data.forEach(function (e){
                 list.push(e)
             })
         }
-        console.debug(list)
         list.sort(compare)
-        console.debug(list)
         setMessageLog(list)
     }
 

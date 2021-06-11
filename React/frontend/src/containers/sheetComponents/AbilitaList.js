@@ -80,15 +80,12 @@ export default function AbilitaList({abilita, setAbilita, statistiche, proficien
                 switch (grado) {
                     case 1:
                         value = value + Math.floor(proficiency / 2)
-                        console.debug("HP")
                         break;
                     case 2:
                         value = value + proficiency
-                        console.debug("FP")
                         break;
                     case 3:
                         value = value + proficiency * 2
-                        console.debug("E")
                         break;
                 }
                 let data = {

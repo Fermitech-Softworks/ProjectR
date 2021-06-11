@@ -8,7 +8,7 @@ export default function CharacterEntry({titolo, id,...props}) {
     const link2 = "/campaign/chat/"+id+"/"
 
     useEffect(()=>{
-        console.log(props)
+        console.debug(props)
     },[])
 
     return (

@@ -12,7 +12,7 @@ export default function PlayerEntry({player, players, setPlayers}) {
     const {uid} = useAppContext()
 
     function remove() {
-        if (player.utente !== uid) {
+        if (player.utente !== uid && player.comeDm !== true) {
             setPlayers(players => {
                     players = players.map(function (entry) {
                         if (typeof entry !== 'undefined') {
@@ -34,7 +34,6 @@ export default function PlayerEntry({player, players, setPlayers}) {
 
     function update(event) {
         let value = event.target.checked
-        console.debug(player)
         if (player.utente !== uid) {
             setPlayers(players => {
                     players = players.map(function (entry) {

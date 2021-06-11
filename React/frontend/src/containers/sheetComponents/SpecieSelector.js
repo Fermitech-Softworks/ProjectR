@@ -32,7 +32,6 @@ export default function SpecieSelector({specie, setSpecie}) {
 
     async function onLoad() {
         let token = localStorage.getItem("token")
-        console.log(token)
         const response = await fetch(address + "/artificier/species/", {
             method: "GET",
             credentials: "include",
@@ -51,7 +50,6 @@ export default function SpecieSelector({specie, setSpecie}) {
 
     function update(event) {
         let value = event.target.value
-        console.debug(value)
         if (value < 0) {
             setDescrizione("")
             return

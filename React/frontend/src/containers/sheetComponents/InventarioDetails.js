@@ -8,12 +8,10 @@ import React from "react";
 export default function InventarioDetails(props) {
 
     function setQuantity(value) {
-        console.debug(value)
         if (value === "") {
             value = "1"
         }
         value = parseInt(value)
-        console.debug(value)
         if (value === 0) {
             props.setInventario(inventario => {
                     inventario = inventario.map(function (entry) {

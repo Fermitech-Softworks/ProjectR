@@ -43,7 +43,6 @@ export default function PlayerSelector({players, setPlayers, playerList}) {
 
     async function onLoad() {
         let token = localStorage.getItem("token")
-        console.debug(address)
         const response = await fetch(address + "/artificier/users/", {
             method: "GET",
             credentials: "include",
@@ -57,7 +56,6 @@ export default function PlayerSelector({players, setPlayers, playerList}) {
         const values = await response.json()
         let userData = values['results']
         userData.sort(compare)
-        console.debug(userData)
         let array = []
         userData.forEach(function(entry){
             if(entry.id===uid){
@@ -72,7 +70,6 @@ export default function PlayerSelector({players, setPlayers, playerList}) {
 
     function update(event) {
         let value = event.value
-        console.debug(value)
         if (value < 0) {
             setUserId(0)
             return

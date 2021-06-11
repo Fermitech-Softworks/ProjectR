@@ -11,10 +11,7 @@ export default function PlayerEntry(props) {
     const {uid} = useAppContext()
 
     function onLoad() {
-        console.debug(props.group)
-        console.debug(props.player)
         if (props.group.users.includes(props.player)) {
-            console.debug("CIAO")
             setSelected(true)
         }
     }
@@ -25,7 +22,6 @@ export default function PlayerEntry(props) {
 
     function update(event) {
         let value = event.target.checked
-        console.debug(value)
         if (props.player.utente !== uid) {
             props.setGroups(group => {
                     group = group.map(function (entry) {
@@ -34,7 +30,6 @@ export default function PlayerEntry(props) {
                                 if (value) {
                                     if (!entry.users.includes(props.player)) {
                                         entry.users.push(props.player)
-                                        console.debug(props.player)
                                         setSelected(true)
                                     }
                                 } else {
@@ -48,7 +43,6 @@ export default function PlayerEntry(props) {
                                             }
                                         }
                                     })
-                                    console.debug(array)
                                     entry.users = array
                                     setSelected(false)
                                 }

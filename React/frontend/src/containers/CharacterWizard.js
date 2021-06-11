@@ -37,7 +37,7 @@ export default function CharacterWizard(props) {
     const [abilita, setAbilita] = useState([])
     const [incantesimi, setIncantesimi] = useState([])
     const [inventario, setInventario] = useState([])
-    const [note, setNote] = useState("")
+    const [note, setNote] = useState("...")
     const [charId, setCharId] = useState(0)
     const [editable, setEditable] = useState(true)
 
@@ -50,10 +50,8 @@ export default function CharacterWizard(props) {
     }, [livello])
 
     useEffect(() => {
-        console.debug("ID: " + props.id)
         if (props.id !== undefined && props.id !== 0) {
             setCharId(props.id)
-            console.debug("Found id.")
             loadCharData(props.id)
         }
     }, [props.id])
@@ -94,8 +92,6 @@ export default function CharacterWizard(props) {
     const exporter_inventario = {inventario, setInventario}
 
     async function loadCharData(id) {
-        console.debug("Loading data for character " + id)
-        console.debug("Connecting...")
         let token = localStorage.getItem("token")
         const response = await fetch(address + "/artificier/characters/full/" + id + "/", {
             method: "GET",
@@ -108,7 +104,6 @@ export default function CharacterWizard(props) {
             },
         })
         let values
-        console.debug(response.status)
         if (response.status !== 200) {
 
             setEditable(false)
@@ -128,27 +123,26 @@ export default function CharacterWizard(props) {
                 return
             }
             values = await resp.json()
-            console.debug(values)
         } else {
             values = await response.json()
         }
-        console.debug("Now saving data...")
-        console.debug(values)
         setNome(values['nome'])
         setPvAttuali(values['pv_attuali'])
         setPvMax(values['pv_max'])
         setClasseArmatura(values['classe_armatura'])
         setProficiency(values['capacita'])
         setLivello(values['livello'])
-        console.debug(livello)
         setForza(values['forza'])
         setDestrezza(values['destrezza'])
         setIntelligenza(values['intelligenza'])
         setSaggezza(values['saggezza'])
-        console.debug(values['saggezza'])
         setCarisma(values['carisma'])
         setCostituzione(values['costituzione'])
-        setNote(values['note'])
+        if(values['note']!==null){
+            setNote(values['note'])
+        }
+        console.debug(values['note'])
+        console.debug(values['note']!==null)
         setSpecie({id: values['specie']['id'], nome: values['specie']['nome'], dettagli: values['specie']['dettagli']})
         let inv = []
         values['oggetti'].forEach(function (entry) {
@@ -205,7 +199,6 @@ export default function CharacterWizard(props) {
             return
         }
         let token = localStorage.getItem("token")
-        console.debug("Saving...")
         const response = await fetch(address + "/artificier/characters/", {
             method: "POST",
             credentials: "include",
@@ -237,9 +230,7 @@ export default function CharacterWizard(props) {
             return
         }
         const values = await response.json()
-        console.debug(values)
         setCharId(values.id)
-        console.debug(values.id)
         await update(values.id)
     }
 
@@ -269,7 +260,6 @@ export default function CharacterWizard(props) {
     }
 
     async function update(id) {
-        console.debug("updating...")
         let oggetti_upload = []
         inventario.forEach(function (entry) {
             if (entry !== undefined) {
@@ -338,12 +328,12 @@ export default function CharacterWizard(props) {
                 oggetti: oggetti_upload,
                 abilita: abilita_upload,
                 classi: classi_upload,
-                incantesimi: incantesimi_upload
+                incantesimi: incantesimi_upload,
+                note: note,
             })
         })
         if (response.status === 200) {
             const values = await response.json()
-            console.debug(values)
             alert("Dati salvati con successo.")
             return
         }
@@ -395,7 +385,7 @@ export default function CharacterWizard(props) {
                             <div className={Style.LeftAlign}>
                                 <Form.Group className="mb-3" controlId="exampleForm.ControlTextarea1">
                                     <Form.Label>Note</Form.Label>
-                                    <Form.Control as="textarea" rows={13} onChange={setNote}/>
+                                    <Form.Control as="textarea" rows={13} onChange={event => setNote(event.target.value)} value={note}/>
                                 </Form.Group>
                             </div>
                         </Col>

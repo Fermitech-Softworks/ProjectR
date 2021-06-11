@@ -8,7 +8,6 @@ import React from "react";
 export default function ClasseDetails(props) {
 
     function setLevel(value) {
-        console.debug(value)
         if (value === "") {
             value = "1"
         }
@@ -16,12 +15,10 @@ export default function ClasseDetails(props) {
         if (value <= -1 || value > 20) {
             return
         }
-        console.debug(value)
         props.setClasse(classe => {
                 classe = classe.map(function (entry) {
                     if (entry !== undefined) {
                         if (entry.classe_id === props.classe.classe_id) {
-                            console.debug(entry)
                             entry.livello = value
                         }
                         if (value != 0) {
@@ -32,7 +29,6 @@ export default function ClasseDetails(props) {
                 return classe
             }
         )
-        console.debug(props.listaClassi)
     }
 
     if(props.classe){

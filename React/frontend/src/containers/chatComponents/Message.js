@@ -41,7 +41,6 @@ export default function Message(props) {
             setImageAddress(address+props.message.immagine)
         }
         if (props.message.in_risposta){
-            console.debug(props.message)
             setInResponse(true)
         }
     }, [])

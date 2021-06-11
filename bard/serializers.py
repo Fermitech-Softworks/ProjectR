@@ -115,6 +115,7 @@ class CampagnaCreateSerializer(serializers.ModelSerializer):
                     user = User.objects.get(id=elem.id)
                     g.users.add(elem)
             g.save()
+        instance.save()
         return instance
 
 

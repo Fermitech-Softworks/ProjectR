@@ -41,7 +41,6 @@ export default function CharacterSelector({character, setCharacter, campagna}) {
 
     async function onLoad() {
         let token = localStorage.getItem("token")
-        console.debug(address)
         const response = await fetch(address + "/artificier/characters/", {
             method: "GET",
             credentials: "include",
@@ -55,13 +54,11 @@ export default function CharacterSelector({character, setCharacter, campagna}) {
         const values = await response.json()
         let charData = values['results']
         charData.sort(compare)
-        console.debug(charData)
         setCharList(charData)
     }
 
     function update(event) {
         let value = event.value
-        console.debug(value)
         if (value < 0) {
             setId(0)
             return

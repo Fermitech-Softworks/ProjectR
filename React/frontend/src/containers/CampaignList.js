@@ -27,7 +27,6 @@ export default function CampaignList() {
 
     async function onLoad() {
         let token = localStorage.getItem("token")
-        console.log(token)
         const response = await fetch(address + "/bard/campaign/", {
             method: "GET",
             credentials: "include",
@@ -44,7 +43,6 @@ export default function CampaignList() {
         }
         const values = await response.json()
         let campData = values['results']
-        console.debug(values)
         if (campData !== undefined) {
             campData.sort(compare)
             setCampaignList(values['results'])

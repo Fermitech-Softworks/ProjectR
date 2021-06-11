@@ -29,8 +29,7 @@ export default function IncantesimoDetails(props) {
                 incantesimi = incantesimi.map(function (entry) {
                     if (typeof entry !== 'undefined') {
                         if (entry.incantesimo_id === props.incantesimo.incantesimo_id) {
-                            console.debug(entry.incantesimo_id)
-                            console.debug(props.incantesimo.incantesimo_id)
+
                         } else {
                             return entry
                         }

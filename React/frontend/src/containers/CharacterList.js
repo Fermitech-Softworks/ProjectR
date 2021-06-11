@@ -27,7 +27,6 @@ export default function CharacterList() {
 
     async function onLoad() {
         let token = localStorage.getItem("token")
-        console.log(token)
         const response = await fetch(address+"/artificier/characters/", {
             method: "GET",
             credentials: "include",
