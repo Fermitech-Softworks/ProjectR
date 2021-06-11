@@ -132,3 +132,25 @@ class CharacterTest(TestCase):
         force_authenticate(request, impostor)
         response = view(request, pk='{}'.format(character.id))
         self.assertEqual(response.status_code, 404)
+
+    def test_character_validity(self):
+        specie = Specie.objects.create(nome="Elfi", dettagli="Bla bla")
+        user = User.objects.create(username="gastani", is_superuser=False, password="test")
+        character = Personaggio.objects.create(nome="Frinzi", pv_max=100, pv_attuali=100, classe_armatura=15,
+                                               capacita=3, livello=6, forza=10, destrezza=10, intelligenza=10,
+                                               saggezza=10, carisma=10, costituzione=10, note="",
+                                               specie_id=specie.id,
+                                               user_id=user.id)
+        res = character.is_sheet_valid()
+        self.assertEqual(res, True)
+        lista = [6, 10, 10, 10, 10, 10, 10]
+        for elem in range(0, len(lista), 1):
+            lista[elem] = lista[elem]*10
+            character = Personaggio.objects.create(nome="Frinzi", pv_max=100, pv_attuali=100, classe_armatura=15,
+                                                   capacita=3, livello=lista[0], forza=lista[1], destrezza=lista[2], intelligenza=lista[3],
+                                                   saggezza=lista[4], carisma=lista[5], costituzione=lista[6], note="",
+                                                   specie_id=specie.id,
+                                                   user_id=user.id)
+            res = character.is_sheet_valid()
+            self.assertEqual(res, False)
+            lista[elem] = int(lista[elem]/10)

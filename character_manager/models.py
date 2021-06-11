@@ -77,6 +77,23 @@ class Personaggio(models.Model):
     def __str__(self):
         return f"[Personaggio] {self.nome}, di {self.user.username}"
 
+    def is_sheet_valid(self):
+        if self.livello > 20:
+            return False
+        if self.forza > 30:
+            return False
+        if self.destrezza > 30:
+            return False
+        if self.carisma > 30:
+            return False
+        if self.costituzione > 30:
+            return False
+        if self.intelligenza > 30:
+            return False
+        if self.saggezza > 30:
+            return False
+        return True
+
 
 class Possiede(models.Model):
     personaggio = models.ForeignKey(Personaggio, on_delete=models.CASCADE)
