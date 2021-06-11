@@ -82,36 +82,8 @@ class CharacterTest(TestCase):
         response = view(request, pk='{}'.format(character.id))
         self.assertEqual(response.status_code, 200)
 
-        spada = Oggetto.objects.create(nome="Spada", costo="5GP", dettagli="Fa male.")
-        incantesimo = Incantesimo.objects.create(nome="Palla di fuoco", scuola="Evocazione", dadi="Tanti",
-                                                 componenti="V,S,M", descrizione="La soluzione a tutto.")
-        abilita = Abilita.objects.create(nome="Insight", descrizione="Bla bla", attributo="WIS")
-        classe = Classe.objects.create(nome="Mago", dettagli="Magic")
         view = CharacterCreationViewSet.as_view(
-            {'post': 'create', 'get': 'retrieve', 'put': 'update', 'delete': 'destroy'})
-        request = factory.put('/artificier/characters/details', {"nome": "Frinzoni", "pv_max": 100, "pv_attuali": 100,
-                                                                 'classe_armatura': 15, 'capacita': 3, "livello": 6,
-                                                                 "forza": 10, "destrezza": 10, "intelligenza": 10,
-                                                                 "saggezza": 10,
-                                                                 "carisma": 10, "costituzione": 10,
-                                                                 "note": "Bla bla bla",
-                                                                 "specie": specie.id, "user": user.id,
-                                                                 "oggetti": [{"id": "",
-                                                                              "quantita": 1,
-                                                                              "oggetto": spada.id}],
-                                                                 "abilita": [{"id": "",
-                                                                              "grado": 3,
-                                                                              "abilita": abilita.id}],
-                                                                 "classi": [{"id": "",
-                                                                             "livello": 6,
-                                                                             "classe": classe.id}],
-                                                                 "incantesimi": [{"id": "",
-                                                                                  "preparato": "true",
-                                                                                  "incantesimo": incantesimo.id}]})
-        force_authenticate(request, user)
-        response = view(request, pk='{}'.format(character.id))
-        self.assertEqual(response.status_code, 200)
-
+            {'delete': 'destroy'})
         request = factory.delete('/artificier/characters/details')
         force_authenticate(request, user)
         response = view(request, pk='{}'.format(character.id))
