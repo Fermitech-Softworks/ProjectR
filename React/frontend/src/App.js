@@ -65,10 +65,13 @@ function App() {
                 )}
                 <Navbar.Toggle/>
                 <Navbar.Collapse className="justify-content-end">
+
                     {isAuth ? (
                         <Nav>
+                            {isSuper ? (<Nav.Link href={address+"/admin"} target="_blank">Admin</Nav.Link>) : (<div></div>)}
                             <Nav.Link onClick={logoff}>Disconnettiti</Nav.Link>
                         </Nav>
+
                     ) : (
                         <>
                             <Nav>

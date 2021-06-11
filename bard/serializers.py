@@ -76,8 +76,7 @@ class CampagnaCreateSerializer(serializers.ModelSerializer):
                          set([partecipa.get('id') for partecipa in validated_data.get('campagna_partecipa') if
                               partecipa.get('id')])):
             partecipa = Partecipa.objects.get(id=elem)
-            if not partecipa.comeDm:
-                partecipa.delete()
+            partecipa.delete()
         for partecipazione in validated_data.get('campagna_partecipa'):
             partecipa_id = partecipazione.get("id")
             if partecipa_id:
