@@ -52,7 +52,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
         if text_data['image']:
             format, imgstr = text_data['image'].split(';base64,')
             ext = format.split('/')[-1]
-            if ext == 'png' or ext == 'jpg':
+            if ext in ["png", "jpg", "jpeg", "gif"]:
                 immagine = ContentFile(base64.b64decode(imgstr),
                                        name=str(datetime.datetime.now().timestamp()) + "." + ext)
         m = Messaggio.objects.create(contenuto=text_data['message'], ora=datetime.datetime.now(),
@@ -66,51 +66,57 @@ class ChatConsumer(AsyncWebsocketConsumer):
 
     # Receive message from WebSocket
     async def receive(self, text_data):
-        text_data_json = json.loads(text_data)
-        message = text_data_json['message']
-        m = await self.add_message_to_db(text_data_json)
-        messaggio_risposta = None
-        if text_data_json['responseMessage']:
-            messaggio: Messaggio = await self.get_message(text_data_json['responseMessage'])
-            image_url = None
-            if messaggio.immagine:
-                image_url = messaggio.immagine.url
-            messaggio_risposta = {"id": messaggio.id, "contenuto": messaggio.contenuto, "gruppo": messaggio.gruppo_id,
-                                 "utente": messaggio.utente_id, "immagine":image_url}
-        # Send message to room group
-        await self.channel_layer.group_send(
-            self.room_group_name,
-            {
-                'type': 'chat_message',
-                'message': message,
-                'mittente': self.token['user_id'],
-                'room_name': self.group_id,
-                'id': m.id,
-                'immagine': m.immagine,
-                'messaggioRisposta': messaggio_risposta
-            }
-        )
+        try:
+            text_data_json = json.loads(text_data)
+            message = text_data_json['message']
+            m = await self.add_message_to_db(text_data_json)
+            messaggio_risposta = None
+            if text_data_json['responseMessage']:
+                messaggio: Messaggio = await self.get_message(text_data_json['responseMessage'])
+                image_url = None
+                if messaggio.immagine:
+                    image_url = messaggio.immagine.url
+                messaggio_risposta = {"id": messaggio.id, "contenuto": messaggio.contenuto, "gruppo": messaggio.gruppo_id,
+                                     "utente": messaggio.utente_id, "immagine":image_url}
+            # Send message to room group
+            await self.channel_layer.group_send(
+                self.room_group_name,
+                {
+                    'type': 'chat_message',
+                    'message': message,
+                    'mittente': self.token['user_id'],
+                    'room_name': self.group_id,
+                    'id': m.id,
+                    'immagine': m.immagine,
+                    'messaggioRisposta': messaggio_risposta
+                }
+            )
+        except Exception:
+            await self.disconnect(108)
 
     # Receive message from room group
     async def chat_message(self, event):
-        message = event['message']
-        mittente = event['mittente']
-        room_name = event['room_name']
-        message_id = event['id']
-        immagine = event['immagine']
-        risposta = event['messaggioRisposta']
-        # Send message to WebSocket
-        immagine_url = None
-        if immagine:
-            immagine_url = immagine.url
-        await self.send(text_data=json.dumps({
-            'message': message,
-            'mittente': mittente,
-            'room_name': room_name,
-            'id': message_id,
-            'immagine': immagine_url,
-            'messaggioRisposta': risposta
-        }))
+        try:
+            message = event['message']
+            mittente = event['mittente']
+            room_name = event['room_name']
+            message_id = event['id']
+            immagine = event['immagine']
+            risposta = event['messaggioRisposta']
+            # Send message to WebSocket
+            immagine_url = None
+            if immagine:
+                immagine_url = immagine.url
+            await self.send(text_data=json.dumps({
+                'message': message,
+                'mittente': mittente,
+                'room_name': room_name,
+                'id': message_id,
+                'immagine': immagine_url,
+                'messaggioRisposta': risposta
+            }))
+        except Exception:
+            await self.disconnect(108)
 
 
 class CampaignConsumer(AsyncWebsocketConsumer):
@@ -148,23 +154,29 @@ class CampaignConsumer(AsyncWebsocketConsumer):
 
     # Receive message from WebSocket
     async def receive(self, text_data):
-        text_data_json = json.loads(text_data)
-        message = text_data_json['gruppo']
-        res = await self.check_permissions()
-        # Send message to room group
-        await self.channel_layer.group_send(
-            self.room_group_name,
-            {
-                'type': 'chat_message',
-                'gruppo': message
-            }
-        )
+        try:
+            text_data_json = json.loads(text_data)
+            message = text_data_json['gruppo']
+            res = await self.check_permissions()
+            # Send message to room group
+            await self.channel_layer.group_send(
+                self.room_group_name,
+                {
+                    'type': 'chat_message',
+                    'gruppo': message
+                }
+            )
+        except Exception:
+            await self.disconnect(108)
 
     # Receive message from room group
     async def chat_message(self, event):
-        message = event['gruppo']
+        try:
+            message = event['gruppo']
 
-        # Send message to WebSocket
-        await self.send(text_data=json.dumps({
-            'gruppo': message
-        }))
+            # Send message to WebSocket
+            await self.send(text_data=json.dumps({
+                'gruppo': message
+            }))
+        except Exception:
+            await self.disconnect(108)

@@ -63,6 +63,8 @@ class GetMessaggiView(ViewSet):
         return Response("200 OK", status=status.HTTP_200_OK)
 
     def post(self, request):
+        if not request.data.get('gid'):
+            return Response("400", status=status.HTTP_400_BAD_REQUEST)
         messaggi = Messaggio.objects.filter(gruppo_id=int(request.data['gid'])).order_by("-id")[:100]
         serializer = MessaggioSerializerReplies(messaggi, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
@@ -79,6 +81,8 @@ class AppartenenzaView(ViewSet):
         return Response("200 OK", status=status.HTTP_200_OK)
 
     def post(self, request, format=None):
+        if not request.data.get('character_id') or not request.data.get('campaign_id'):
+            return Response("400", status=status.HTTP_400_BAD_REQUEST)
         character_id = request.data['character_id']
         campaign_id = request.data['campaign_id']
         character = Personaggio.objects.get(id=character_id)
