@@ -127,7 +127,7 @@ export default function ChatRoom() {
 
     useEffect(() => {
         if (dmChannelId !== null && dmChannelId['type'] !== "master" && isDm) {
-            if (campaignSocket !== null) {
+            if (campaignSocket !== null && campaignSocket.readyState === 1) {
                 campaignSocket.send(JSON.stringify({
                     'gruppo': dmChannelId['id']
                 }))
@@ -173,7 +173,7 @@ export default function ChatRoom() {
     }, [dmChannelId])
 
     function sendMessage(event) {
-        if (chatSocket !== null) {
+        if (chatSocket !== null && chatSocket.readyState === 1) {
             chatSocket.send(JSON.stringify({
                 'message': message,
                 'image': '',
@@ -181,6 +181,7 @@ export default function ChatRoom() {
             }))
         } else {
             alert("Nessun canale è stato attivato, oppure il canale è in pausa. Attendi.")
+            history.push("/dashboard")
         }
     }
 
@@ -193,7 +194,7 @@ export default function ChatRoom() {
 
     async function sendFile(event) {
 
-        if (chatSocket !== null) {
+        if (chatSocket !== null && chatSocket.readyState === 1) {
             let b64file = await toBase64(event.target.files[0])
             if (b64file instanceof Error) {
                 alert("Il file potrebbe essere in un formato incompatibile.")
@@ -214,7 +215,9 @@ export default function ChatRoom() {
     }, [])
 
     async function getCampaignData() {
+
         let token = localStorage.getItem("token")
+        document.cookie = "token=" + token
         const response = await fetch(address + "/bard/campaign/details/" + id + "/", {
             method: "GET",
             credentials: "include",
